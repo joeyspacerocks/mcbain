@@ -34,7 +34,7 @@ public class RenderEngineTest {
     
     @Test
     public void testRenderer() {
-        RenderEngine engine = new RenderEngine();
+        RenderEngine engine = new RenderEngine(null);
         
         Renderer renderer = new Renderer() {
             public void render(Writer writer) {

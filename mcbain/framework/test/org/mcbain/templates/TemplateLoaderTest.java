@@ -16,9 +16,7 @@ package org.mcbain.templates;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.testng.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
@@ -26,10 +24,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import org.mcbain.ComponentFactory;
+import javax.servlet.ServletContext;
+
 import org.mcbain.template.Template;
 import org.mcbain.template.TemplateElement;
-import org.mcbain.template.TemplateLoader;
+import org.mcbain.template.TemplateFactory;
 import org.mcbain.template.TemplateText;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -78,15 +77,13 @@ public class TemplateLoaderTest {
     @Test(dataProvider = "plain")
     public void testPlainHtml(String html) {
         InputStream in = new ByteArrayInputStream(html.getBytes());
-        ComponentFactory factory = createMock(ComponentFactory.class);
-        expect( factory.createComponent(isA(String.class)) ).andReturn(null).anyTimes();
         
-        replay(factory);
+        ServletContext context = createMock(ServletContext.class);
+        expect( context.getResourceAsStream("/test.html") ).andReturn(in);
+        replay(context);
         
-        TemplateLoader loader = new TemplateLoader(factory);
-        Template t = loader.loadTemplate("test", in);
-
-        verify(factory);
+        TemplateFactory templateFactory = new TemplateFactory(context);
+        Template t = templateFactory.parseTemplate("test", in);
 
         List<TemplateElement> children = t.root().children();
         
@@ -105,15 +102,12 @@ public class TemplateLoaderTest {
         String html = "<html><head><title>Test</title></head><body><div id=\"test\">Some text</div></body></html>";
         InputStream in = new ByteArrayInputStream(html.getBytes());
         
-        ComponentFactory factory = createMock(ComponentFactory.class);
-        expect( factory.createComponent(isA(String.class)) ).andReturn(null).anyTimes();
-
-        replay(factory);
+        ServletContext context = createMock(ServletContext.class);
+        expect( context.getResourceAsStream("/test.html") ).andReturn(in);
+        replay(context);
         
-        TemplateLoader loader = new TemplateLoader(factory);
-        Template t = loader.loadTemplate("test", in);
-        
-        verify(factory);
+        TemplateFactory templateFactory = new TemplateFactory(context);
+        Template t = templateFactory.parseTemplate("test", in);
         
         List<TemplateElement> children = t.root().children();
         
@@ -133,15 +127,12 @@ public class TemplateLoaderTest {
         String html = "<div>Part one</div><div>Part two</div>";
         InputStream in = new ByteArrayInputStream(html.getBytes());
         
-        ComponentFactory factory = createMock(ComponentFactory.class);
-        expect( factory.createComponent(isA(String.class)) ).andReturn(null).anyTimes();
-
-        replay(factory);
+        ServletContext context = createMock(ServletContext.class);
+        expect( context.getResourceAsStream("/test.html") ).andReturn(in);
+        replay(context);
         
-        TemplateLoader loader = new TemplateLoader(factory);
-        Template t = loader.loadTemplate("test", in);
-        
-        verify(factory);
+        TemplateFactory templateFactory = new TemplateFactory(context);
+        Template t = templateFactory.parseTemplate("test", in);
         
         List<TemplateElement> children = t.root().children();
         
@@ -157,7 +148,7 @@ public class TemplateLoaderTest {
     
     @Test(dataProvider = "wrapper")
     public void testWrappedInputStream(String input, String expected) throws IOException {
-        InputStream in = new TemplateLoader.WrappedInputStream( new ByteArrayInputStream(input.getBytes()) );
+        InputStream in = new TemplateFactory.WrappedInputStream( new ByteArrayInputStream(input.getBytes()) );
         
         StringBuilder actual = new StringBuilder();
         int b = 0;

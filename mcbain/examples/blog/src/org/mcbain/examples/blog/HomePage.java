@@ -23,6 +23,7 @@ import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.BlogService;
 import org.mcbain.examples.blog.model.Post;
 import org.mcbain.template.Template;
+import org.mcbain.template.TemplateFactory;
 
 
 /************************************************************************
@@ -63,18 +64,11 @@ public class HomePage implements Templated {
             .add("posts", posts);
     }
 
-    
-    // @see org.redneck.Templated#templateName()
-    
-    public String templateName() {
-        return "home";
-    }
 
+    // @see org.mcbain.Templated#templateFactory(org.mcbain.template.TemplateFactory)
     
-    // @see org.redneck.Templated#attachComponent(org.redneck.template.Component)
-    
-    public void attachTemplate(Template template) {
-        this.template = template;
+    public void templateFactory(TemplateFactory factory) {
+        template = factory.findTemplate("home");
     }
 
     

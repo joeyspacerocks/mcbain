@@ -14,7 +14,7 @@
 
 package org.mcbain;
 
-import org.mcbain.template.Template;
+import org.mcbain.template.TemplateFactory;
 
 /************************************************************************
  * Renderer that provides a template to use for rendering.
@@ -26,20 +26,10 @@ import org.mcbain.template.Template;
 public interface Templated extends Renderer {
 
     /************************************************************************
-     * Gets the template name to use when rendering the component.
+     * Supplies the template factory to be used to find templates.
      * 
-     * @return      Template name
+     * @param   factory         Template factory
      */
     
-    public String templateName();
-    
-    
-    /************************************************************************
-     * Provides components with a chance to hookup child components to their
-     * templated specifications using the Template.bind method.
-     * 
-     * @param   template       Template to attach
-     */
-    
-    public void attachTemplate(Template template);
+    public void templateFactory(TemplateFactory factory);
 }

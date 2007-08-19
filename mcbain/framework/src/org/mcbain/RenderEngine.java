@@ -14,8 +14,7 @@
 
 package org.mcbain;
 
-import org.mcbain.template.Template;
-import org.mcbain.template.TemplateLoader;
+import org.mcbain.template.TemplateFactory;
 
 
 /************************************************************************
@@ -28,37 +27,27 @@ import org.mcbain.template.TemplateLoader;
 
 public class RenderEngine {
 
-    private TemplateLoader templateLoader;
-    private ComponentFactory componentFactory;
+    private TemplateFactory templateFactory;
     
     
     /************************************************************************
      * Constructs a new render engine.
      */
 
-    public RenderEngine() {
-        this.componentFactory = new ComponentFactory() {
-            public Renderer createComponent(String name) {
-                return null;
-            }
-        };
-        
-        this.templateLoader = new TemplateLoader(componentFactory);
+    public RenderEngine(TemplateFactory templateFactory) {
+        this.templateFactory = templateFactory;
     }
     
     
     /************************************************************************
-     * Renders the specified renderer.
+     * Renders the specified templated renderer.
      * 
      * @param   renderer        Renderer to render
      * @return                  Markup writer containing result
      */
     
     public Writer render(Templated renderer) {
-        Template template = templateLoader.findTemplate(renderer);
-        
-        renderer.attachTemplate(template);
-        
+        renderer.templateFactory(templateFactory);
         return render((Renderer) renderer);
     }
     
@@ -72,9 +61,7 @@ public class RenderEngine {
     
     public Writer render(Renderer renderer) {
         Writer writer = new Writer();
-        
         renderer.render(writer);
-        
         return writer;
     }
 }

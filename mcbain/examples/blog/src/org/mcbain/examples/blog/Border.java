@@ -23,6 +23,7 @@ import org.mcbain.components.Loop;
 import org.mcbain.components.Value;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.template.Template;
+import org.mcbain.template.TemplateFactory;
 
 
 /************************************************************************
@@ -90,18 +91,10 @@ public class Border implements Templated, Container {
     }
 
     
-    // @see org.redneck.Templated#attachComponent(org.redneck.template.Template)
+    // @see org.mcbain.Templated#templateFactory(org.mcbain.template.TemplateFactory)
     
-    public void attachTemplate(Template template) {
-        this.template = template;
-        components.put("content", content);
-    }
-    
-    
-    // @see org.redneck.Templated#templateName()
-    
-    public String templateName() {
-        return "border";
+    public void templateFactory(TemplateFactory factory) {
+        template = factory.findTemplate("border");
     }
     
     
@@ -116,6 +109,8 @@ public class Border implements Templated, Container {
 
     public void render(Writer writer) {
         timestamp = System.currentTimeMillis();
+
+        components.put("content", content);
         
         writer.reset();
         template.render(writer, components);

@@ -26,6 +26,7 @@ import javax.servlet.ServletResponse;
 import org.mcbain.RenderEngine;
 import org.mcbain.Writer;
 import org.mcbain.examples.blog.model.BlogService;
+import org.mcbain.template.TemplateFactory;
 
 /************************************************************************
  * Application filter - gateway to framework.
@@ -43,7 +44,7 @@ public class ApplicationFilter implements Filter {
     // @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
     
     public void init(FilterConfig config) throws ServletException {
-        renderEngine = new RenderEngine();
+        renderEngine = new RenderEngine( new TemplateFactory(config.getServletContext()) );
         homepage = new HomePage( new BlogService() );
     }
 

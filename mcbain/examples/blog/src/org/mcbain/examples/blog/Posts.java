@@ -24,6 +24,7 @@ import org.mcbain.components.Loop;
 import org.mcbain.components.Value;
 import org.mcbain.examples.blog.model.Post;
 import org.mcbain.template.Template;
+import org.mcbain.template.TemplateFactory;
 
 
 /************************************************************************
@@ -82,16 +83,9 @@ public class Posts implements Renderer, Templated {
     }
 
 
-    // @see org.redneck.Templated#attachTemplate(org.redneck.template.Template)
+    // @see org.mcbain.Templated#templateFactory(org.mcbain.template.TemplateFactory)
     
-    public void attachTemplate(Template template) {
-        this.template = template;
-    }
-
-
-    // @see org.redneck.Templated#templateName()
-    
-    public String templateName() {
-        return "posts";
+    public void templateFactory(TemplateFactory factory) {
+        template = factory.findTemplate("posts");
     }
 }
