@@ -17,6 +17,7 @@ package org.mcbain.template;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +41,8 @@ import org.xml.sax.helpers.ParserAdapter;
 
 public class TemplateLoader {
 
+    protected static final String FAKE_ROOT = "ROOT";
+    
     private ComponentFactory factory;
     private Map<String,Template> templates;
     
@@ -77,8 +80,7 @@ public class TemplateLoader {
                 // TODO: synchronise
                 // TODO: move location code
 
-                System.out.println("[redneck] Loading template " + file.getName());
-                
+                System.out.println("[mcbain] Loading template " + file.getName());
                 
                 InputStream in;
                 try {
@@ -119,7 +121,8 @@ public class TemplateLoader {
             ParserAdapter pa = new ParserAdapter(saxParser.getParser());
             pa.setContentHandler(handler);
             pa.setEntityResolver(handler);
-            pa.parse(new InputSource(in));
+            
+            pa.parse(new InputSource( new WrappedInputStream(in) ));
             
             in.close();
             
@@ -128,5 +131,94 @@ public class TemplateLoader {
         }
         
         return root;
+    }
+    
+    
+    /************************************************************************
+     * Input wrapper that wraps the XML with a root element to ensure that
+     * if the input is a fragment then a root exists.
+     */
+    
+    public static class WrappedInputStream extends InputStream {
+
+        private static final String OPEN = FAKE_ROOT + "><";
+        private static final String CLOSE = "/" + FAKE_ROOT + ">";
+        
+        private enum State { SEEK, ENTITY, FOUND, OPEN, BODY, CLOSE };
+        
+        private InputStream in;
+        private State state;
+        
+        private int cursor;
+        private StringBuilder buffered;
+        
+        public WrappedInputStream(InputStream in) {
+            this.in = in;
+            state = State.SEEK;
+            buffered = new StringBuilder();
+        }
+        
+        public int read() throws IOException {
+            int b = -1;
+            
+            switch (state) {
+            case BODY:
+                if ((b = in.read()) < 0) {
+                    state = State.CLOSE;
+                    b = '<';
+                }
+                break;
+                
+            case SEEK:
+                b = in.read();
+                if (b == '<') {
+                    state = State.FOUND;
+                    buffered.setLength(0);
+                }
+                break;
+                
+            case ENTITY:
+                b = in.read();
+                if (b == '>') {
+                    String ent = buffered.toString();
+                    boolean comment = ent.startsWith("!--");
+                    if ((comment && ent.endsWith("--")) || !comment) {
+                        state = State.SEEK;
+                    }
+                }
+                
+                buffered.append((char) b);
+                break;
+                
+            case FOUND:
+                b = in.read();
+                buffered.append((char) b);
+
+                if (b == '?' || b == '!') {
+                    state = State.ENTITY;
+                    break;
+                }
+                
+                state = State.OPEN;
+
+                // Fall through deliberately to OPEN case
+                
+            case OPEN:
+                if (cursor >= OPEN.length()) {
+                    state = State.BODY;
+                    b = buffered.charAt(0);
+                    cursor = 0;
+                } else {
+                    b = OPEN.charAt(cursor++);
+                }
+                break;
+                
+            case CLOSE:
+                b = (cursor >= CLOSE.length() ? -1 : CLOSE.charAt(cursor++));
+                break;
+            }
+            
+            return b;
+        }
     }
 }

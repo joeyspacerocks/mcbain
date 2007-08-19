@@ -22,6 +22,7 @@ import static org.easymock.EasyMock.verify;
 import static org.testng.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -57,6 +58,15 @@ public class TemplateLoaderTest {
     public Object[][] createBasicHtmlTestData() {
         return new Object[][] {
             { "<html><head><title>Test</title></head><body><h1>Heading</h1></body></html>" }
+        };
+    }
+
+    @DataProvider(name = "wrapper")
+    public Object[][] createWrappedInputStreamTestData() {
+        return new Object[][] {
+            { "<div>actual</div>", "<ROOT><div>actual</div></ROOT>" },
+            { "<!--comment--><div>actual</div>", "<!--comment--><ROOT><div>actual</div></ROOT>" },
+            { "<!-- <div>comment</div> --><div>actual</div>", "<!-- <div>comment</div> --><ROOT><div>actual</div></ROOT>" }
         };
     }
 
@@ -110,6 +120,52 @@ public class TemplateLoaderTest {
         assertEquals(children.size(), 3);
         assertContent(children.get(0), "<html><head><title>Test</title></head><body>");
         assertContent(children.get(2), "</body></html>");
+    }
+    
+    
+    /************************************************************************
+     * Tests that an HTML template with no root element is correctly loaded
+     * and parsed. Such HTML may form the body of a component template.
+     */
+    
+    @Test
+    public void testHtmlWithNoRoot() {
+        String html = "<div>Part one</div><div>Part two</div>";
+        InputStream in = new ByteArrayInputStream(html.getBytes());
+        
+        ComponentFactory factory = createMock(ComponentFactory.class);
+        expect( factory.createComponent(isA(String.class)) ).andReturn(null).anyTimes();
+
+        replay(factory);
+        
+        TemplateLoader loader = new TemplateLoader(factory);
+        Template t = loader.loadTemplate("test", in);
+        
+        verify(factory);
+        
+        List<TemplateElement> children = t.root().children();
+        
+        assertEquals(children.size(), 1);
+        assertContent(children.get(0), "<div>Part one</div><div>Part two</div>");
+    }
+    
+
+    /************************************************************************
+     * Tests that the input stream wrapper inserts the fake root element in
+     * the correct place.
+     */
+    
+    @Test(dataProvider = "wrapper")
+    public void testWrappedInputStream(String input, String expected) throws IOException {
+        InputStream in = new TemplateLoader.WrappedInputStream( new ByteArrayInputStream(input.getBytes()) );
+        
+        StringBuilder actual = new StringBuilder();
+        int b = 0;
+        while ((b = in.read()) > 0) {
+            actual.append((char) b);
+        }
+        
+        assertEquals(actual.toString(), expected);
     }
     
     
