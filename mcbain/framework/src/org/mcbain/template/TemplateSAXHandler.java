@@ -124,6 +124,8 @@ public class TemplateSAXHandler extends DefaultHandler2 {
     // @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
     
     public void startElement(String uri, String localName, String name, Attributes attributes) throws SAXException {
+        if (name.equals(TemplateLoader.FAKE_ROOT)) return;
+        
         String id = attributes.getValue(idAttribute);
         
         if (id != null) {           // if has id attribute, create a component to be later bound
@@ -153,6 +155,8 @@ public class TemplateSAXHandler extends DefaultHandler2 {
     // @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
     
     public void endElement(String uri, String localName, String name) throws SAXException {
+        if (name.equals(TemplateLoader.FAKE_ROOT)) return;
+        
         depth--;
         
         String latestTag = tagStack.peek();
