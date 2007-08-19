@@ -14,19 +14,16 @@
 
 package org.mcbain.template;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.mcbain.ComponentFactory;
-import org.mcbain.Templated;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.ParserAdapter;
@@ -39,22 +36,23 @@ import org.xml.sax.helpers.ParserAdapter;
  * @author  Joe Trewin
  */
 
-public class TemplateLoader {
+public class TemplateFactory {
 
     protected static final String FAKE_ROOT = "ROOT";
     
     private ComponentFactory factory;
+    private ServletContext context;
     private Map<String,Template> templates;
     
     
     /************************************************************************
      * Constructs a new template loader.
      * 
-     * @param   factory     Component factory
+     * @param   context     Servlet context
      */
     
-    public TemplateLoader(ComponentFactory factory) {
-        this.factory = factory;
+    public TemplateFactory(ServletContext context) {
+        this.context = context;
         this.templates = new HashMap<String,Template>();
     }
     
@@ -66,36 +64,25 @@ public class TemplateLoader {
      * @return              Template
      */
     
-    public Template findTemplate(Templated renderer) {
-        Template template = null;
-        String name = renderer.templateName();
-
-        String fileName = "examples/blog/web/" + name + ".html";
-        File file = new File(fileName);
+    public Template findTemplate(String name) {
+        Template template = templates.get(name);
         
-        if (file.exists()) {
-            template = templates.get(name);
+        if (template == null) {
+            String path = "/" + name + ".html";
 
-            if (template == null || template.olderThan(file.lastModified())) {
-                // TODO: synchronise
-                // TODO: move location code
-
-                System.out.println("[mcbain] Loading template " + file.getName());
-                
-                InputStream in;
-                try {
-                    in = new FileInputStream(fileName);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException("Template file not found : " + file.getAbsolutePath());
-                }
-                
-                template = loadTemplate(name, in);
-                templates.put(name, template);
-                
-                renderer.attachTemplate(template);
-            }
+            System.out.println("[mcbain] Loading template " + path);
+            
+            InputStream in = context.getResourceAsStream(path);
+//            try {
+//                in = new FileInputStream(fileName);
+//            } catch (FileNotFoundException e) {
+//                throw new RuntimeException("Template file not found : " + file.getAbsolutePath());
+//            }
+            
+            template = parseTemplate(name, in);
+            templates.put(name, template);
         }
-        
+
         return template;
     }
     
@@ -108,7 +95,7 @@ public class TemplateLoader {
      * @return              Template specification
      */
     
-    public Template loadTemplate(String id, InputStream in) {
+    public Template parseTemplate(String id, InputStream in) {
         Template root = new Template(id, this);
         
         DefaultHandler handler = new TemplateSAXHandler(factory, root);

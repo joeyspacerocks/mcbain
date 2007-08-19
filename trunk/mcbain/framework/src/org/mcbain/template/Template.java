@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.mcbain.Components;
-import org.mcbain.Templated;
 import org.mcbain.Writer;
 
 /************************************************************************
@@ -33,7 +32,7 @@ import org.mcbain.Writer;
 
 public class Template implements TemplateElement {
 
-    private TemplateLoader loader;
+    private TemplateFactory loader;
     private ComponentSpec root;
     private List<ComponentSpec> components;
     private Map<String,ComponentSpec> lookup;
@@ -47,7 +46,7 @@ public class Template implements TemplateElement {
      * @param   id          Template id
      */
     
-    public Template(String id, TemplateLoader loader) {
+    public Template(String id, TemplateFactory loader) {
         this.loader = loader;
         root = new ComponentSpec(this);
         components = new ArrayList<ComponentSpec>();
@@ -104,6 +103,11 @@ public class Template implements TemplateElement {
     // @see org.redneck.template.TemplateElement#render(org.redneck.Writer, org.redneck.Components)
     
     public void render(Writer writer, Components components) {
+        
+        // TODO: check if template source has changed
+//        if (olderThan(file.lastModified())) {
+//        }
+
         root.render(writer, components);
     }
 
@@ -133,13 +137,12 @@ public class Template implements TemplateElement {
 
     
     /************************************************************************
-     * Gets a template by name.
+     * Gets the template factory that this template was loaded with.
      * 
-     * @param   name        Template name
-     * @return              Template
+     * @return      Template factory
      */
     
-    public Template findTemplate(Templated renderer) {
-        return loader.findTemplate(renderer);
+    public TemplateFactory factory() {
+        return loader;
     }
 }

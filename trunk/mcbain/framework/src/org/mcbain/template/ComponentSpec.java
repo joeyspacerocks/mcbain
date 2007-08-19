@@ -174,15 +174,14 @@ public class ComponentSpec implements TemplateElement{
                 });
             }
             
-            if (component instanceof Templated) {
-                Template t = template.findTemplate((Templated) component);
-                ((Templated) component).attachTemplate(t);
-            }
-            
             if (component instanceof Elemental) {
                 ((Elemental) component).element(spec.element, spec.attributes);
             }
             
+            if (component instanceof Templated) {
+                ((Templated) component).templateFactory(template.factory());
+            }
+
             component.render(writer);
         }
     }
