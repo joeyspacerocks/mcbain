@@ -60,8 +60,8 @@ public class HomePage implements Templated {
         };
 
         components = new Components()
-            .add("border", border)
-            .add("posts", posts);
+            .bind("border", border)
+            .bind("posts", posts);
     }
 
 
