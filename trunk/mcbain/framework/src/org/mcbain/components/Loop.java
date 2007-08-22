@@ -65,7 +65,7 @@ public class Loop<T> implements Renderer, Container, Elemental {
      * @return      Current loop value
      */
     
-    public T currentValue() {
+    public T value() {
         return currentValue;
     }
     
