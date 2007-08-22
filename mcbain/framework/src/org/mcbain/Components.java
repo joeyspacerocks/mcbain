@@ -16,6 +16,8 @@ package org.mcbain;
 
 import java.util.HashMap;
 
+import org.mcbain.components.Value;
+
 /************************************************************************
  * Collection of components keyed by id.
  *
@@ -36,8 +38,26 @@ public class Components extends HashMap<String, Renderer> {
      * @return                  This object
      */
     
-    public Components add(String id, Renderer component) {
+    public Components bind(final String id, final Renderer component) {
         put(id, component);
+        return this;
+    }
+    
+    
+    /************************************************************************
+     * Adds an object to the collection. The object will be rendered using
+     * its toString method.
+     * 
+     * @param   id              Component id in the context of it's container
+     * @param   value           Object to be rendererd
+     * @return                  This object
+     */
+    
+    public Components bind(final String id, final Object value) {
+        put(id, new Value() {
+            public Object value() { return value; }
+        });
+
         return this;
     }
 }

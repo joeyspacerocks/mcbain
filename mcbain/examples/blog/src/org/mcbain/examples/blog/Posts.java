@@ -54,20 +54,20 @@ public class Posts implements Renderer, Templated {
         
         Value title = new Value() {
             public Object value() {
-                return loop.currentValue().getTitle();
+                return loop.value().getTitle();
             }
         };
 
         Value body = new Value() {
             public Object value() {
-                return loop.currentValue().getContent();
+                return loop.value().getContent();
             }
         };
         
         components = new Components()
-            .add("posts", loop)
-            .add("title", title)
-            .add("body", body);
+            .bind("posts", loop)
+            .bind("title", title)
+            .bind("body", body);
     }
 
     

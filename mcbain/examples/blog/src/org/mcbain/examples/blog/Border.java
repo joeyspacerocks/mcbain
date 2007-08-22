@@ -40,7 +40,6 @@ public class Border implements Templated, Container {
     private Components components;
     
     private Renderer content;
-    private long timestamp;
     
     
     /************************************************************************
@@ -48,18 +47,6 @@ public class Border implements Templated, Container {
      */
 
     public Border() {
-        Value title = new Value() {
-            public Object value() {
-                return "Blog: " + blog().getName();
-            }
-        };
-        
-        Value time = new Value() {
-            public Object value() {
-                return String.valueOf(System.currentTimeMillis() - timestamp);
-            }
-        };
-
         final Loop<String> archives = new Loop<String>() {
             public Iterable<String> source() {
                 return blog().getArchives();
@@ -68,15 +55,13 @@ public class Border implements Templated, Container {
         
         Value archive = new Value() {
             public Object value() {
-                return archives.currentValue();
+                return archives.value();
             }
         };
 
         components = new Components()
-            .add("title", title)
-            .add("time", time)
-            .add("archives", archives)
-            .add("archive", archive);
+            .bind("archives", archives)
+            .bind("archive", archive);
     }
 
     
@@ -108,9 +93,12 @@ public class Border implements Templated, Container {
     // @see org.redneck.Renderer#render(org.redneck.Writer)
 
     public void render(Writer writer) {
-        timestamp = System.currentTimeMillis();
+        long timestamp = System.currentTimeMillis();
 
-        components.put("content", content);
+        components
+            .bind("title", "Blog: " + blog().getName())
+            .bind("time", System.currentTimeMillis() - timestamp)
+            .bind("content", content);
         
         writer.reset();
         template.render(writer, components);
