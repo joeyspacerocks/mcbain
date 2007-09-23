@@ -51,6 +51,6 @@ public class BlogService {
      */
     
     public Blog getBlog(String name) {
-        return blog;
+        return (blog.getName().equalsIgnoreCase(name) ? blog : null);
     }
 }
