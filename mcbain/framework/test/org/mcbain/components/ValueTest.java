@@ -37,7 +37,7 @@ public class ValueTest {
         
         Writer w = new Writer();
         
-        c.render(w);
+        c.render(null, w);
         
         Assert.assertEquals(w.toString(), "");
     }
@@ -55,7 +55,7 @@ public class ValueTest {
         
         Writer w = new Writer();
         
-        c.render(w);
+        c.render(null, w);
         
         Assert.assertEquals(w.toString(), "");
     }
@@ -67,13 +67,11 @@ public class ValueTest {
     
     @Test
     public void testValueNoTag() {
-        Value c = new Value() {
-            public Object value() { return "content"; }
-        };
+        Value c = new Value("content");
         
         Writer w = new Writer();
         
-        c.render(w);
+        c.render(null, w);
         
         Assert.assertEquals(w.toString(), "content");
     }
@@ -85,15 +83,13 @@ public class ValueTest {
     
     @Test
     public void testValueWithTag() {
-        Value c = new Value() {
-            public Object value() { return "content"; }
-        };
+        Value c = new Value("content");
         
         c.element("tag", null);
         
         Writer w = new Writer();
         
-        c.render(w);
+        c.render(null, w);
         
         Assert.assertEquals(w.toString(), "<tag>content</tag>");
     }

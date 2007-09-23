@@ -17,6 +17,7 @@ package org.mcbain.components;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
+import org.mcbain.rest.Resources;
 import org.mcbain.template.Attributes;
 
 /************************************************************************
@@ -29,8 +30,26 @@ import org.mcbain.template.Attributes;
 
 public class Value implements Renderer, Elemental {
 
+    private Object value;
     private String element;
     private Attributes attributes;
+
+    
+    /************************************************************************
+     * Constructs a new component with an unspecified value.
+     */
+
+    public Value() {
+    }
+
+    
+    /************************************************************************
+     * Constructs a new component to render the specified value.
+     */
+
+    public Value(Object value) {
+        this.value = value;
+    }
     
     
     // @see org.redneck.Attributes#attributes(java.util.Map)
@@ -42,23 +61,19 @@ public class Value implements Renderer, Elemental {
 
     
     /************************************************************************
-     * Gets the value to render.
+     * Sets the value to render.
      * 
-     * @return      Value
+     * @param   value       Value to render
      */
     
-    public Object value() {
-        return null;
+    public void value(Object value) {
+        this.value = value;
     }
     
     
-    // @see org.redneck.Renderer#render(org.redneck.Writer)
+    // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
-    public void render(Writer writer) {
-        // FIXME: value translation - from object to string?
-
-        Object value = value();
-        
+    public void render(Resources context, Writer writer) {
         if (value != null) {
             if (element != null) {
                 writer
