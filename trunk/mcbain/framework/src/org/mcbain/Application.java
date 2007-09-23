@@ -14,7 +14,7 @@
 
 package org.mcbain;
 
-import org.mcbain.rest.Resources;
+import org.mcbain.rest.Context;
 
 /************************************************************************
  * Declares configuration of an application.
@@ -23,10 +23,8 @@ import org.mcbain.rest.Resources;
 public interface Application {
 
     /************************************************************************
-     * Gets a collection of declared resources that the application handles.
-     * 
-     * @return      Resources collection
+     * Provides the application with a chance to initialise.
      */
     
-    public Resources resources();
+    public void initialise(Context context);
 }

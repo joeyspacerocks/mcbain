@@ -18,7 +18,7 @@ import java.util.List;
 
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
-import org.mcbain.rest.Resources;
+import org.mcbain.rest.Context;
 import org.mcbain.util.Lists;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -81,7 +81,7 @@ public class LoopTest {
     
     private Writer loop(Loop<String> loop) {
         Renderer content = new Renderer() {
-            public void render(Resources context, Writer writer) {
+            public void render(Context context, Writer writer) {
                 writer.print("content", false);
             }
         };

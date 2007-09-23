@@ -17,7 +17,7 @@ package org.mcbain.components;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
-import org.mcbain.rest.Resources;
+import org.mcbain.rest.Context;
 import org.mcbain.template.Attributes;
 
 /************************************************************************
@@ -73,7 +73,7 @@ public class Value implements Renderer, Elemental {
     
     // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
-    public void render(Resources context, Writer writer) {
+    public void render(Context context, Writer writer) {
         if (value != null) {
             if (element != null) {
                 writer

@@ -23,9 +23,8 @@ import org.mcbain.Container;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.TemplateInstance;
-import org.mcbain.Templated;
 import org.mcbain.Writer;
-import org.mcbain.rest.Resources;
+import org.mcbain.rest.Context;
 
 /************************************************************************
  * Specification of a component, usually defined through by template.
@@ -147,7 +146,7 @@ public class ComponentSpec implements TemplateElement{
 
     // @see org.mcbain.template.TemplateElement#render(org.mcbain.rest.Resources, org.mcbain.Writer, org.mcbain.TemplateInstance)
     
-    public void render(Resources context, Writer writer, TemplateInstance templateInstance) {
+    public void render(Context context, Writer writer, TemplateInstance templateInstance) {
         for (TemplateElement e : children) {
             if (e instanceof ComponentSpec) {
                 renderElement(context, (ComponentSpec) e, writer, templateInstance);
@@ -167,13 +166,13 @@ public class ComponentSpec implements TemplateElement{
      * @param   templateInstance    Template instance
      */
 
-    private void renderElement(final Resources context, final ComponentSpec spec, final Writer writer, final TemplateInstance templateInstance) {
+    private void renderElement(final Context context, final ComponentSpec spec, final Writer writer, final TemplateInstance templateInstance) {
         Renderer component = templateInstance.get(spec.id);
         
         if (component != null) {
             if (component instanceof Container) {
                 ((Container) component).contents( new Renderer() {
-                    public void render(Resources context, Writer writer) {
+                    public void render(Context context, Writer writer) {
                         spec.render(context, writer, templateInstance);
                     }
                 });
@@ -183,10 +182,6 @@ public class ComponentSpec implements TemplateElement{
                 ((Elemental) component).element(spec.element, spec.attributes);
             }
             
-            if (component instanceof Templated) {
-                ((Templated) component).templateFactory(template.factory());
-            }
-
             component.render(context, writer);
         }
     }

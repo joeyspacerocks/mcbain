@@ -18,10 +18,10 @@ import org.mcbain.Application;
 import org.mcbain.Renderer;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.BlogService;
+import org.mcbain.rest.Context;
 import org.mcbain.rest.Controller;
 import org.mcbain.rest.Resources;
 import org.mcbain.rest.Uri;
-import org.mcbain.template.TemplateFactory;
 
 
 /************************************************************************
@@ -31,67 +31,48 @@ import org.mcbain.template.TemplateFactory;
 public class BlogApplication implements Application{
 
     private BlogService blogService;
-    private TemplateFactory templateFactory;
     
     
     /************************************************************************
      * Constructs a new application.
      */
 
-    public BlogApplication(TemplateFactory templateFactory) {
+    public BlogApplication() {
         this.blogService = new BlogService();
-        this.templateFactory = templateFactory;
     }
     
     
-    // @see org.mcbain.Application#resources()
+    // @see org.mcbain.Application#initialise(org.mcbain.rest.Context)
     
-    public Resources resources() {
+    public void initialise(final Context context) {
+        Resources resources = context.resources();
         
-        Resources resources = new Resources();
-        
-        // url: /
-
         resources
             .add("index", "/", new Controller() {
                 public Renderer get(Uri uri) {
-                    return templateFactory.instance("index");
+                    return context.template("index");
                 }
             });
 
-        // url: /blog/$name
-        
         resources
             .add("blog", "/blog/$name", new Controller() {
                 public Renderer get(Uri uri) {
                     Blog blog = blogService.getBlog(uri.parameter("name"));
-                    if (blog != null) {
-                        BlogHome bh = new BlogHome(blog);
-                        bh.templateFactory(templateFactory);
-                        return bh;
-                    } else {
-                        return null;
-                    }
+                    return (blog == null ? null : new BlogHome(blog));
                 }
             });
 
-        // url: /blog/$name/$archive
-        
         resources
             .add("archive", "/blog/$name/$archive", new Controller() {
                 public Renderer get(Uri uri) {
                     Blog blog = blogService.getBlog(uri.parameter("name"));
                     if (blog != null) {
                         String archive = uri.parameter("archive").replace('-', '/');
-                        BlogHome bh = new BlogHome(blog, archive);
-                        bh.templateFactory(templateFactory);
-                        return bh;
+                        return new BlogHome(blog, archive);
                     } else {
                         return null;
                     }
                 }
             });
-
-        return resources;
     }
 }

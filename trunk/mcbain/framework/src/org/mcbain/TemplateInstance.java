@@ -17,7 +17,7 @@ package org.mcbain;
 import java.util.HashMap;
 
 import org.mcbain.components.Value;
-import org.mcbain.rest.Resources;
+import org.mcbain.rest.Context;
 import org.mcbain.template.Template;
 import org.mcbain.util.PairIterator;
 
@@ -100,7 +100,7 @@ public class TemplateInstance extends HashMap<String, Renderer> implements Rende
     
     // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
-    public void render(Resources context, Writer writer) {
+    public void render(Context context, Writer writer) {
         template.render(context, writer, this);
     }
 }

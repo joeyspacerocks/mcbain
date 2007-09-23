@@ -16,25 +16,24 @@ package org.mcbain.examples.blog;
 
 import java.util.List;
 
+import org.mcbain.Renderer;
 import org.mcbain.TemplateInstance;
-import org.mcbain.Templated;
 import org.mcbain.Writer;
 import org.mcbain.components.Loop;
 import org.mcbain.components.Value;
 import org.mcbain.examples.blog.model.Post;
-import org.mcbain.rest.Resources;
-import org.mcbain.template.TemplateFactory;
+import org.mcbain.rest.Context;
 
 
 /************************************************************************
  * Component used to display a list of posts.
  */
 
-public class Posts implements Templated {
+public class Posts implements Renderer {
 
-    private TemplateInstance template;
     private Loop<Post> postLoop;
-    private Post currentPost;
+    private Value title;
+    private Value content;
     
     
     /************************************************************************
@@ -42,9 +41,13 @@ public class Posts implements Templated {
      */
 
     public Posts(final List<Post> posts) {
+        title = new Value();
+        content = new Value();
+        
         postLoop = new Loop<Post>(posts) {
             public void currentValue(Post value) {
-                currentPost = value;
+                title.value(value.getTitle());
+                content.value(value.getContent());
             }
         };
     }
@@ -52,20 +55,15 @@ public class Posts implements Templated {
     
     // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
-    public void render(Resources context, Writer writer) {
+    public void render(Context context, Writer writer) {
+        TemplateInstance template = context.template("posts");
+        
         template.bind(
             "posts", postLoop,
-            "title", new Value(currentPost.getTitle()),
-            "body", new Value(currentPost.getContent())
+            "title", title,
+            "body", content
         );
         
         template.render(context, writer);
-    }
-
-
-    // @see org.mcbain.Templated#templateFactory(org.mcbain.template.TemplateFactory)
-    
-    public void templateFactory(TemplateFactory factory) {
-        template = factory.instance("posts");
     }
 }

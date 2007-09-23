@@ -17,7 +17,7 @@ package org.mcbain.components;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
-import org.mcbain.rest.Resources;
+import org.mcbain.rest.Context;
 import org.mcbain.rest.Uri;
 import org.mcbain.template.Attributes;
 import org.mcbain.util.PairIterator;
@@ -50,8 +50,8 @@ public class Link implements Renderer, Elemental {
     
     // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
-    public void render(Resources context, Writer writer) {
-        Uri uri = context.link(resourceId);
+    public void render(Context context, Writer writer) {
+        Uri uri = context.resources().link(resourceId);
 
         while(parameters.hasNext()) {
             uri.addParameter(parameters.nextKey(), parameters.nextValue());
