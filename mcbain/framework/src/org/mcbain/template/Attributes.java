@@ -34,4 +34,15 @@ public class Attributes extends HashMap<String, String> {
     public Attributes(int size) {
         super(size);
     }
+    
+    
+    /************************************************************************
+     * Constructs a new set of attributes populated from another set.
+     * 
+     * @param   source      Source of attributes to copy
+     */
+    
+    public Attributes(Attributes source) {
+        super(source);
+    }
 }
