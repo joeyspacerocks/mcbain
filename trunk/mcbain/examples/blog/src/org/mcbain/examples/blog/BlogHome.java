@@ -14,68 +14,64 @@
 
 package org.mcbain.examples.blog;
 
-import java.util.List;
-
-import org.mcbain.Components;
+import org.mcbain.TemplateInstance;
 import org.mcbain.Templated;
 import org.mcbain.Writer;
+import org.mcbain.components.Value;
 import org.mcbain.examples.blog.model.Blog;
-import org.mcbain.examples.blog.model.BlogService;
-import org.mcbain.examples.blog.model.Post;
-import org.mcbain.template.Template;
+import org.mcbain.rest.Resources;
 import org.mcbain.template.TemplateFactory;
 
 
 /************************************************************************
  * Blog home page. Contains a list of archives, and a list of the last
  * few most recent posts.
- *
- * @version $Revision$
- * @author  Joe Trewin
  */
 
-public class HomePage implements Templated {
+public class BlogHome implements Templated {
 
-    private Template template;
-    private Components components;
+    private TemplateInstance template;
     
-    private Blog blog;
-    private BlogService blogService;
+    private Border border;
+    private Posts posts;
+    private String archive;
+    
     
     /************************************************************************
      * Constructs a new instance.
      */
 
-    public HomePage(BlogService service) {
-        this.blogService = service;
-
-        Border border = new Border() {
-            public Blog blog() { return blog; }
-        };
-        
-        Posts posts = new Posts() {
-            public List<Post> posts() {
-                return blog.latestPosts();
-            }
-        };
-
-        components = new Components()
-            .bind("border", border)
-            .bind("posts", posts);
+    public BlogHome(final Blog blog) {
+        this(blog, null);
     }
 
+    
+    /************************************************************************
+     * Constructs a new instance.
+     */
+
+    public BlogHome(final Blog blog, final String archive) {
+        border = new Border(blog);
+        this.archive = archive;
+        posts = new Posts(archive == null ? blog.latestPosts() : blog.archivedPosts(archive));
+    }
 
     // @see org.mcbain.Templated#templateFactory(org.mcbain.template.TemplateFactory)
     
     public void templateFactory(TemplateFactory factory) {
-        template = factory.findTemplate("home");
+        template = factory.instance("blog");
     }
 
     
-    // @see org.redneck.Renderer#render(org.redneck.Writer)
+    // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
-    public void render(Writer writer) {
-        blog = blogService.getBlog("");
-        template.render(writer, components);
+    public void render(Resources context, Writer writer) {
+        template.bind(
+            "border", border,
+            "posts", posts,
+            "postTitle", new Value(archive == null ? "Recent Posts" : "Archive: " + archive)
+        );
+        
+        template.render(context, writer);
     }
 }
