@@ -14,13 +14,12 @@
 
 package org.mcbain.examples.blog;
 
+import org.mcbain.Renderer;
 import org.mcbain.TemplateInstance;
-import org.mcbain.Templated;
 import org.mcbain.Writer;
 import org.mcbain.components.Value;
 import org.mcbain.examples.blog.model.Blog;
-import org.mcbain.rest.Resources;
-import org.mcbain.template.TemplateFactory;
+import org.mcbain.rest.Context;
 
 
 /************************************************************************
@@ -28,10 +27,8 @@ import org.mcbain.template.TemplateFactory;
  * few most recent posts.
  */
 
-public class BlogHome implements Templated {
+public class BlogHome implements Renderer {
 
-    private TemplateInstance template;
-    
     private Border border;
     private Posts posts;
     private String archive;
@@ -56,16 +53,11 @@ public class BlogHome implements Templated {
         posts = new Posts(archive == null ? blog.latestPosts() : blog.archivedPosts(archive));
     }
 
-    // @see org.mcbain.Templated#templateFactory(org.mcbain.template.TemplateFactory)
-    
-    public void templateFactory(TemplateFactory factory) {
-        template = factory.instance("blog");
-    }
-
-    
     // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
-    public void render(Resources context, Writer writer) {
+    public void render(Context context, Writer writer) {
+        TemplateInstance template = context.template("blog");
+        
         template.bind(
             "border", border,
             "posts", posts,

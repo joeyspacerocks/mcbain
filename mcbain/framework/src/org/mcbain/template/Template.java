@@ -21,7 +21,7 @@ import java.util.Map;
 
 import org.mcbain.TemplateInstance;
 import org.mcbain.Writer;
-import org.mcbain.rest.Resources;
+import org.mcbain.rest.Context;
 
 /************************************************************************
  * Representation of a component template, holding the hierarchy of 
@@ -71,7 +71,7 @@ public class Template implements TemplateElement {
     
     // @see org.mcbain.template.TemplateElement#render(org.mcbain.rest.Resources, org.mcbain.Writer, org.mcbain.TemplateInstance)
     
-    public void render(Resources context, Writer writer, TemplateInstance templateInstance) {
+    public void render(Context context, Writer writer, TemplateInstance templateInstance) {
         root.render(context, writer, templateInstance);
     }
 

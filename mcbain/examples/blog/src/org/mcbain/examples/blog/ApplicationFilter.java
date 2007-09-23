@@ -25,11 +25,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.mcbain.Application;
-import org.mcbain.RenderEngine;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
-import org.mcbain.rest.Resources;
-import org.mcbain.template.TemplateFactory;
+import org.mcbain.rest.Context;
 
 /************************************************************************
  * Application filter - gateway to framework.
@@ -40,19 +38,16 @@ import org.mcbain.template.TemplateFactory;
 
 public class ApplicationFilter implements Filter {
 
-    private RenderEngine renderEngine;
     private Application app;
-    private Resources resources;
+    private Context context;
     
     
     // @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
     
     public void init(FilterConfig config) throws ServletException {
-        TemplateFactory templateFactory = new TemplateFactory(config.getServletContext());
-        renderEngine = new RenderEngine(templateFactory);
-        app = new BlogApplication(templateFactory);
-        
-        resources = app.resources();
+        context = new Context(config.getServletContext());
+        app = new BlogApplication();
+        app.initialise(context);
     }
 
     
@@ -67,11 +62,13 @@ public class ApplicationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest hRequest = (HttpServletRequest) request;
         
-        Renderer renderer = resources.route(hRequest.getRequestURI());
+        Renderer renderer = context.resources().route(hRequest.getRequestURI());
         
         if (renderer != null) {
-            Writer writer = renderEngine.render(resources, renderer);
+            Writer writer = new Writer();
+            renderer.render(context, writer);
             response.getWriter().write(writer.toString());
+            
         } else {
             chain.doFilter(request, response);
         }

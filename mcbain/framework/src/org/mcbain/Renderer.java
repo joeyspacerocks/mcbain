@@ -14,7 +14,7 @@
 
 package org.mcbain;
 
-import org.mcbain.rest.Resources;
+import org.mcbain.rest.Context;
 
 /************************************************************************
  * Renderers provide a method for rendering themselves using the supplied
@@ -33,5 +33,5 @@ public interface Renderer {
      * @param   writer      Writer to render to
      */
     
-    public void render(Resources context, Writer writer);
+    public void render(Context context, Writer writer);
 }

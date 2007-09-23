@@ -16,7 +16,7 @@ package org.mcbain.template;
 
 import org.mcbain.TemplateInstance;
 import org.mcbain.Writer;
-import org.mcbain.rest.Resources;
+import org.mcbain.rest.Context;
 
 /************************************************************************
  * Renderer used to store and render portions of text from component
@@ -44,7 +44,7 @@ public class TemplateText implements TemplateElement {
 
     // @see org.mcbain.template.TemplateElement#render(org.mcbain.rest.Resources, org.mcbain.Writer, org.mcbain.TemplateInstance)
     
-    public void render(Resources context, Writer writer, TemplateInstance templateInstance) {
+    public void render(Context context, Writer writer, TemplateInstance templateInstance) {
         writer.print(text, true);
     }
     

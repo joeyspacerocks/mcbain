@@ -17,13 +17,11 @@ package org.mcbain.examples.blog;
 import org.mcbain.Container;
 import org.mcbain.Renderer;
 import org.mcbain.TemplateInstance;
-import org.mcbain.Templated;
 import org.mcbain.Writer;
 import org.mcbain.components.Link;
 import org.mcbain.components.Loop;
 import org.mcbain.examples.blog.model.Blog;
-import org.mcbain.rest.Resources;
-import org.mcbain.template.TemplateFactory;
+import org.mcbain.rest.Context;
 
 
 /************************************************************************
@@ -31,9 +29,7 @@ import org.mcbain.template.TemplateFactory;
  * the blog.
  */
 
-public class Border implements Templated, Container {
-
-    private TemplateInstance template;
+public class Border implements Renderer, Container {
 
     private Loop<String> archiveLoop;
     private Link archive;
@@ -60,13 +56,6 @@ public class Border implements Templated, Container {
     }
 
     
-    // @see org.mcbain.Templated#templateFactory(org.mcbain.template.TemplateFactory)
-    
-    public void templateFactory(TemplateFactory factory) {
-        template = factory.instance("border");
-    }
-    
-    
     // @see org.redneck.Container#contents(org.redneck.Renderer)
     
     public void contents(Renderer content) {
@@ -76,8 +65,10 @@ public class Border implements Templated, Container {
     
     // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
-    public void render(Resources context, Writer writer) {
+    public void render(Context context, Writer writer) {
         long timestamp = System.currentTimeMillis();
+
+        TemplateInstance template = context.template("border");
 
         template.bind(
             "archives", archiveLoop,
