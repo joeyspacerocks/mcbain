@@ -22,10 +22,13 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
+import org.mcbain.Application;
 import org.mcbain.RenderEngine;
+import org.mcbain.Renderer;
 import org.mcbain.Writer;
-import org.mcbain.examples.blog.model.BlogService;
+import org.mcbain.rest.Resources;
 import org.mcbain.template.TemplateFactory;
 
 /************************************************************************
@@ -38,14 +41,18 @@ import org.mcbain.template.TemplateFactory;
 public class ApplicationFilter implements Filter {
 
     private RenderEngine renderEngine;
-    private HomePage homepage;
+    private Application app;
+    private Resources resources;
     
     
     // @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
     
     public void init(FilterConfig config) throws ServletException {
-        renderEngine = new RenderEngine( new TemplateFactory(config.getServletContext()) );
-        homepage = new HomePage( new BlogService() );
+        TemplateFactory templateFactory = new TemplateFactory(config.getServletContext());
+        renderEngine = new RenderEngine(templateFactory);
+        app = new BlogApplication(templateFactory);
+        
+        resources = app.resources();
     }
 
     
@@ -58,10 +65,15 @@ public class ApplicationFilter implements Filter {
     // @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
     
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        //chain.doFilter(request, response);
+        HttpServletRequest hRequest = (HttpServletRequest) request;
         
-        Writer writer = renderEngine.render(homepage);
+        Renderer renderer = resources.route(hRequest.getRequestURI());
         
-        response.getWriter().write(writer.toString());
+        if (renderer != null) {
+            Writer writer = renderEngine.render(resources, renderer);
+            response.getWriter().write(writer.toString());
+        } else {
+            chain.doFilter(request, response);
+        }
     }
 }
