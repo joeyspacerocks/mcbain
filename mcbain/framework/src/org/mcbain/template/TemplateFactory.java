@@ -14,6 +14,7 @@
 
 package org.mcbain.template;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -24,6 +25,8 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.mcbain.ComponentFactory;
+import org.mcbain.TemplateInstance;
+import org.mcbain.util.Strings;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.ParserAdapter;
@@ -56,6 +59,19 @@ public class TemplateFactory {
         this.templates = new HashMap<String,Template>();
     }
     
+
+    /************************************************************************
+     * Creates a template instance for the named template.
+     * 
+     * @param   name        Template name
+     * @return              Template instance
+     */
+    
+    public TemplateInstance instance(String name) {
+        Template template = findTemplate(name);
+        return (template == null ? null : template.instance());
+    }
+    
     
     /************************************************************************
      * Gets a template by name.
@@ -66,18 +82,23 @@ public class TemplateFactory {
     
     public Template findTemplate(String name) {
         Template template = templates.get(name);
+        String path = Strings.string("/", name, ".html");
+        
+        if (template != null) {
+            String filename = context.getRealPath(path);
+            if (filename != null && template.olderThan( new File(filename).lastModified()) ) {
+                template = null;
+            }
+        }
         
         if (template == null) {
-            String path = "/" + name + ".html";
-
             System.out.println("[mcbain] Loading template " + path);
             
             InputStream in = context.getResourceAsStream(path);
-//            try {
-//                in = new FileInputStream(fileName);
-//            } catch (FileNotFoundException e) {
-//                throw new RuntimeException("Template file not found : " + file.getAbsolutePath());
-//            }
+            
+            if (in == null) {
+                throw new RuntimeException("Template file could not be found: " + path);
+            }
             
             template = parseTemplate(name, in);
             templates.put(name, template);

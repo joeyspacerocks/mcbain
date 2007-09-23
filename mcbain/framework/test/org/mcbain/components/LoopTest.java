@@ -18,7 +18,8 @@ import java.util.List;
 
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
-import org.mcbain.util.ArrayList;
+import org.mcbain.rest.Resources;
+import org.mcbain.util.Lists;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -37,7 +38,7 @@ public class LoopTest {
     
     @Test
     public void testNullSource() {
-        Loop<String> loop = new Loop<String>();
+        Loop<String> loop = new Loop<String>(null);
 
         Writer writer = loop(loop);
         Assert.assertEquals(writer.toString(), "");
@@ -50,13 +51,9 @@ public class LoopTest {
     
     @Test
     public void testSingleItemArray() {
-        final List<String> source = new ArrayList<String>("test");
+        final List<String> source = Lists.list("test");
         
-        Loop<String> loop = new Loop<String>() {
-            public Iterable<String> source() {
-                return source;
-            }
-        };
+        Loop<String> loop = new Loop<String>(source);
 
         Writer writer = loop(loop);
         Assert.assertEquals(writer.toString(), "content");
@@ -69,13 +66,9 @@ public class LoopTest {
     
     @Test
     public void testTwoItemArray() {
-        final List<String> source = new ArrayList<String>("test1", "test2");
+        final List<String> source = Lists.list("test1", "test2");
 
-        Loop<String> loop = new Loop<String>() {
-            public Iterable<String> source() {
-                return source;
-            }
-        };
+        Loop<String> loop = new Loop<String>(source);
         
         Writer writer = loop(loop);
         Assert.assertEquals(writer.toString(), "contentcontent");
@@ -86,9 +79,9 @@ public class LoopTest {
      * Set up and render the loop component.
      */
     
-    private Writer loop(Loop loop) {
+    private Writer loop(Loop<String> loop) {
         Renderer content = new Renderer() {
-            public void render(Writer writer) {
+            public void render(Resources context, Writer writer) {
                 writer.print("content", false);
             }
         };
@@ -96,7 +89,7 @@ public class LoopTest {
         loop.contents(content);
         
         Writer writer = new Writer();
-        loop.render(writer);
+        loop.render(null, writer);
         
         return writer;
     }

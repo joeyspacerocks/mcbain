@@ -14,6 +14,7 @@
 
 package org.mcbain;
 
+import org.mcbain.rest.Resources;
 import org.mcbain.template.TemplateFactory;
 
 
@@ -46,22 +47,23 @@ public class RenderEngine {
      * @return                  Markup writer containing result
      */
     
-    public Writer render(Templated renderer) {
+    public Writer render(Resources context, Templated renderer) {
         renderer.templateFactory(templateFactory);
-        return render((Renderer) renderer);
+        return render(context, (Renderer) renderer);
     }
     
     
     /************************************************************************
      * Renders the specified renderer.
      * 
+     * @param   context         Render context
      * @param   renderer        Renderer to render
      * @return                  Markup writer containing result
      */
     
-    public Writer render(Renderer renderer) {
+    public Writer render(Resources context, Renderer renderer) {
         Writer writer = new Writer();
-        renderer.render(writer);
+        renderer.render(context, writer);
         return writer;
     }
 }

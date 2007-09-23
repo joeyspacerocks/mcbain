@@ -14,6 +14,8 @@
 
 package org.mcbain;
 
+import org.mcbain.rest.Resources;
+
 /************************************************************************
  * Renderers provide a method for rendering themselves using the supplied
  * writer.
@@ -27,8 +29,9 @@ public interface Renderer {
     /************************************************************************
      * Renders using the supplied writer.
      * 
+     * @param   context     Render context
      * @param   writer      Writer to render to
      */
     
-    public void render(Writer writer);
+    public void render(Resources context, Writer writer);
 }
