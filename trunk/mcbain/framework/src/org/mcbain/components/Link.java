@@ -14,44 +14,54 @@
 
 package org.mcbain.components;
 
-import org.mcbain.Container;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
+import org.mcbain.rest.Resources;
+import org.mcbain.rest.Uri;
 import org.mcbain.template.Attributes;
+import org.mcbain.util.PairIterator;
 
 /************************************************************************
  * Link component.
- *
- * @version $Revision$
- * @author  Joe Trewin
  */
 
-public class Link implements Renderer, Container, Elemental {
+public class Link implements Renderer, Elemental {
 
     private Attributes attributes;
-    private Renderer content;
+    private String resourceId;
+    private PairIterator<String, String> parameters;
+    private String value;
     
-    
-    // @see org.redneck.Renderer#render(org.redneck.Writer)
-
-    public void render(Writer writer) {
-        writer.tag("a").attributes(attributes);
-        content.render(writer);
-        writer.close();
+    public void uri(String id, Object... parameters) {
+        this.resourceId = id;
+        this.parameters = new PairIterator<String, String>(parameters);
     }
 
-    
-    // @see org.redneck.Container#contents(org.redneck.Renderer)
-    
-    public void contents(Renderer content) {
-        this.content = content;
+    public void value(String value) {
+        this.value = value;
     }
-    
     
     // @see org.redneck.Attributes#attributes(java.lang.String, java.util.Map)
 
     public void element(String element, Attributes attributes) {
-        this.attributes = attributes;
+        this.attributes = new Attributes(attributes);
+    }
+    
+    // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
+    
+    public void render(Resources context, Writer writer) {
+        Uri uri = context.link(resourceId);
+
+        while(parameters.hasNext()) {
+            uri.addParameter(parameters.nextKey(), parameters.nextValue());
+        }
+        
+        attributes.put("href", uri.toString());
+        
+        writer
+            .tag("a")
+                .attributes(attributes)
+                .body(value);
     }
 }
