@@ -19,8 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.mcbain.Components;
+import org.mcbain.TemplateInstance;
 import org.mcbain.Writer;
+import org.mcbain.rest.Resources;
 
 /************************************************************************
  * Representation of a component template, holding the hierarchy of 
@@ -68,47 +69,10 @@ public class Template implements TemplateElement {
     }
     
     
-    /************************************************************************
-     * Binds a component to a component specification.
-     * 
-     * @param   id          Specification id
-     * @param   component   Component to bind
-     */
+    // @see org.mcbain.template.TemplateElement#render(org.mcbain.rest.Resources, org.mcbain.Writer, org.mcbain.TemplateInstance)
     
-//    public ComponentSpec bind(String id, Renderer component) {
-//        ComponentSpec spec = component(id);
-//        
-//        if (spec == null) {
-//            System.err.println("Could not bind component to unknown specification '" + id + "'");
-//            
-//        } else {
-//            spec.component(component);
-//        }
-//        
-//        return spec;
-//    }
-
-    
-    /************************************************************************
-     * Renders the template with no bound components.
-     * 
-     * @param   writer      Markup writer
-     */
-    
-    public void render(Writer writer) {
-        render(writer, Components.NONE);
-    }
-
-    
-    // @see org.redneck.template.TemplateElement#render(org.redneck.Writer, org.redneck.Components)
-    
-    public void render(Writer writer, Components components) {
-        
-        // TODO: check if template source has changed
-//        if (olderThan(file.lastModified())) {
-//        }
-
-        root.render(writer, components);
+    public void render(Resources context, Writer writer, TemplateInstance templateInstance) {
+        root.render(context, writer, templateInstance);
     }
 
     
@@ -144,5 +108,16 @@ public class Template implements TemplateElement {
     
     public TemplateFactory factory() {
         return loader;
+    }
+    
+    
+    /************************************************************************
+     * Creates a new template instance.
+     * 
+     * @return      Template instance
+     */
+    
+    public TemplateInstance instance() {
+        return new TemplateInstance(this);
     }
 }

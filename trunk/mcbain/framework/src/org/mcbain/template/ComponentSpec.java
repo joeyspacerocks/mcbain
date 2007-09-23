@@ -19,12 +19,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.mcbain.Components;
 import org.mcbain.Container;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
+import org.mcbain.TemplateInstance;
 import org.mcbain.Templated;
 import org.mcbain.Writer;
+import org.mcbain.rest.Resources;
 
 /************************************************************************
  * Specification of a component, usually defined through by template.
@@ -144,32 +145,36 @@ public class ComponentSpec implements TemplateElement{
     }
     
 
-    // @see org.redneck.template.TemplateElement#render(org.redneck.Writer, org.redneck.Components)
+    // @see org.mcbain.template.TemplateElement#render(org.mcbain.rest.Resources, org.mcbain.Writer, org.mcbain.TemplateInstance)
     
-    public void render(Writer writer, final Components components) {
+    public void render(Resources context, Writer writer, TemplateInstance templateInstance) {
         for (TemplateElement e : children) {
             if (e instanceof ComponentSpec) {
-                renderElement((ComponentSpec) e, writer, components);
+                renderElement(context, (ComponentSpec) e, writer, templateInstance);
             } else {
-                renderElement(e, writer, components);
+                ((TemplateElement) e).render(context, writer, templateInstance);
             }
         }
     }
     
     
-    private void renderElement(TemplateElement element, Writer writer, Components components) {
-        element.render(writer, components);
-    }
-    
-    
-    private void renderElement(final ComponentSpec spec, final Writer writer, final Components components) {
-        Renderer component = components.get(spec.id);
+    /************************************************************************
+     * Renders a child component specification.
+     * 
+     * @param   context             Render context
+     * @param   spec                Component specification
+     * @param   writer              Markup writer
+     * @param   templateInstance    Template instance
+     */
+
+    private void renderElement(final Resources context, final ComponentSpec spec, final Writer writer, final TemplateInstance templateInstance) {
+        Renderer component = templateInstance.get(spec.id);
         
         if (component != null) {
             if (component instanceof Container) {
                 ((Container) component).contents( new Renderer() {
-                    public void render(Writer writer) {
-                        spec.render(writer, components);
+                    public void render(Resources context, Writer writer) {
+                        spec.render(context, writer, templateInstance);
                     }
                 });
             }
@@ -182,7 +187,7 @@ public class ComponentSpec implements TemplateElement{
                 ((Templated) component).templateFactory(template.factory());
             }
 
-            component.render(writer);
+            component.render(context, writer);
         }
     }
 }

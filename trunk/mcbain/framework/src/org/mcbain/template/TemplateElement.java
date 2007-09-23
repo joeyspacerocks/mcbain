@@ -14,8 +14,9 @@
 
 package org.mcbain.template;
 
-import org.mcbain.Components;
+import org.mcbain.TemplateInstance;
 import org.mcbain.Writer;
+import org.mcbain.rest.Resources;
 
 /************************************************************************
  * Renderable element representing a portion of a template.
@@ -30,9 +31,10 @@ public interface TemplateElement {
      * Renders a template element, using the supplied collection of 
      * components to bind component references to instantiated components.
      * 
-     * @param writer
-     * @param components
+     * @param   context             Render context
+     * @param   writer              Markup writer
+     * @param   templateInstance    Template instance
      */
     
-    public void render(Writer writer, Components components);
+    public void render(Resources context, Writer writer, TemplateInstance templateInstance);
 }
