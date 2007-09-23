@@ -16,6 +16,7 @@ package org.mcbain;
 
 import static org.testng.Assert.assertEquals;
 
+import org.mcbain.rest.Resources;
 import org.testng.annotations.Test;
 
 
@@ -37,12 +38,12 @@ public class RenderEngineTest {
         RenderEngine engine = new RenderEngine(null);
         
         Renderer renderer = new Renderer() {
-            public void render(Writer writer) {
+            public void render(Resources context, Writer writer) {
                 writer.emptyTag("test");
             }
         };
         
-        Writer writer = engine.render(renderer);
+        Writer writer = engine.render(null, renderer);
         
         assertEquals(writer.toString(), "<test />");
     }
