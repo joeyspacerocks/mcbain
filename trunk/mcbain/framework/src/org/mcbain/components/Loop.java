@@ -19,6 +19,7 @@ import org.mcbain.Container;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
+import org.mcbain.rest.Resources;
 import org.mcbain.template.Attributes;
 
 /************************************************************************
@@ -30,20 +31,18 @@ import org.mcbain.template.Attributes;
 
 public class Loop<T> implements Renderer, Container, Elemental {
 
+    private Iterable<T> source;
     private Renderer content;
     private String element;
     private T currentValue;
-
     
+
     /************************************************************************
-     * Gets the loop source. Should be overriden when instance created to 
-     * supply custom source.
-     * 
-     * @return      Iterable source
+     * Constructs a new loop component.
      */
 
-    public Iterable<T> source() {
-        return null;
+    public Loop(Iterable<T> source) {
+        this.source = source;
     }
 
     
@@ -84,20 +83,17 @@ public class Loop<T> implements Renderer, Container, Elemental {
     }
 
     
-    // @see org.redneck.Renderer#render(org.redneck.Writer)
-
-    @SuppressWarnings("unchecked")
-    public void render(Writer writer) {
-        Iterable<T> items = source();
-        
-        if (items == null) return;
+    // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
+    
+    public void render(Resources context, Writer writer) {
+        if (source == null) return;
 
         if (element != null)
             writer.tag(element);
 
-        for (T value : items) {
+        for (T value : source) {
             currentValue(value);
-            content.render(writer);
+            content.render(context, writer);
         }
         
         if (element != null)
