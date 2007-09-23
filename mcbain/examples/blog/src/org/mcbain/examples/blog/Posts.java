@@ -16,76 +16,56 @@ package org.mcbain.examples.blog;
 
 import java.util.List;
 
-import org.mcbain.Components;
-import org.mcbain.Renderer;
+import org.mcbain.TemplateInstance;
 import org.mcbain.Templated;
 import org.mcbain.Writer;
 import org.mcbain.components.Loop;
 import org.mcbain.components.Value;
 import org.mcbain.examples.blog.model.Post;
-import org.mcbain.template.Template;
+import org.mcbain.rest.Resources;
 import org.mcbain.template.TemplateFactory;
 
 
 /************************************************************************
  * Component used to display a list of posts.
- *
- * @version $Revision$
- * @author  Joe Trewin
  */
 
-public class Posts implements Renderer, Templated {
+public class Posts implements Templated {
 
-    private Template template;
-    private Components components;
+    private TemplateInstance template;
+    private Loop<Post> postLoop;
+    private Post currentPost;
     
     
     /************************************************************************
      * Constructs a new instance.
      */
 
-    public Posts() {
-        
-        final Loop<Post> loop = new Loop<Post>() {
-            public Iterable<Post> source() {
-                return posts();
+    public Posts(final List<Post> posts) {
+        postLoop = new Loop<Post>(posts) {
+            public void currentValue(Post value) {
+                currentPost = value;
             }
         };
-        
-        Value title = new Value() {
-            public Object value() {
-                return loop.value().getTitle();
-            }
-        };
-
-        Value body = new Value() {
-            public Object value() {
-                return loop.value().getContent();
-            }
-        };
-        
-        components = new Components()
-            .bind("posts", loop)
-            .bind("title", title)
-            .bind("body", body);
-    }
-
-    
-    public List<Post> posts() {
-        return null;
     }
     
     
-    // @see org.redneck.Renderer#render(org.redneck.Writer)
+    // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
-    public void render(Writer writer) {
-        template.render(writer, components);
+    public void render(Resources context, Writer writer) {
+        template.bind(
+            "posts", postLoop,
+            "title", new Value(currentPost.getTitle()),
+            "body", new Value(currentPost.getContent())
+        );
+        
+        template.render(context, writer);
     }
 
 
     // @see org.mcbain.Templated#templateFactory(org.mcbain.template.TemplateFactory)
     
     public void templateFactory(TemplateFactory factory) {
-        template = factory.findTemplate("posts");
+        template = factory.instance("posts");
     }
 }

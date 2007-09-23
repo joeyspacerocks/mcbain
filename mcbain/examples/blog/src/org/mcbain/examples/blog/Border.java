@@ -14,72 +14,56 @@
 
 package org.mcbain.examples.blog;
 
-import org.mcbain.Components;
 import org.mcbain.Container;
 import org.mcbain.Renderer;
+import org.mcbain.TemplateInstance;
 import org.mcbain.Templated;
 import org.mcbain.Writer;
+import org.mcbain.components.Link;
 import org.mcbain.components.Loop;
-import org.mcbain.components.Value;
 import org.mcbain.examples.blog.model.Blog;
-import org.mcbain.template.Template;
+import org.mcbain.rest.Resources;
 import org.mcbain.template.TemplateFactory;
 
 
 /************************************************************************
  * Border component used to render the common border around each page in
  * the blog.
- *
- * @version $Revision$
- * @author  Joe Trewin
  */
 
 public class Border implements Templated, Container {
 
-    private Template template;
-    private Components components;
-    
+    private TemplateInstance template;
+
+    private Loop<String> archiveLoop;
+    private Link archive;
     private Renderer content;
     
+    private Blog blog;
     
     /************************************************************************
      * Constructs a new instance.
      */
 
-    public Border() {
-        final Loop<String> archives = new Loop<String>() {
-            public Iterable<String> source() {
-                return blog().getArchives();
+    public Border(final Blog blog) {
+        this.blog = blog;
+
+        archive = new Link();
+        archiveLoop = new Loop<String>(blog.getArchives()) {
+            public void currentValue(String value) {
+                archive.value(value);
+                archive.uri("archive", 
+                    "name", blog.getName(), 
+                    "archive", value.replace('/', '-'));
             }
         };
-        
-        Value archive = new Value() {
-            public Object value() {
-                return archives.value();
-            }
-        };
-
-        components = new Components()
-            .bind("archives", archives)
-            .bind("archive", archive);
-    }
-
-    
-    /************************************************************************
-     * Gets the blog.
-     * 
-     * @return      Blog
-     */
-    
-    public Blog blog() {
-        return null;
     }
 
     
     // @see org.mcbain.Templated#templateFactory(org.mcbain.template.TemplateFactory)
     
     public void templateFactory(TemplateFactory factory) {
-        template = factory.findTemplate("border");
+        template = factory.instance("border");
     }
     
     
@@ -90,18 +74,21 @@ public class Border implements Templated, Container {
     }
     
     
-    // @see org.redneck.Renderer#render(org.redneck.Writer)
-
-    public void render(Writer writer) {
+    // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
+    
+    public void render(Resources context, Writer writer) {
         long timestamp = System.currentTimeMillis();
 
-        components
-            .bind("title", "Blog: " + blog().getName())
-            .bind("time", System.currentTimeMillis() - timestamp)
-            .bind("content", content);
-        
+        template.bind(
+            "archives", archiveLoop,
+            "archive", archive,
+            "title", "Blog: " + blog.getName(),
+            "time", System.currentTimeMillis() - timestamp,
+            "content", content
+        );
+
         writer.reset();
-        template.render(writer, components);
+        template.render(context, writer);
         writer.seal();
     }
 }
