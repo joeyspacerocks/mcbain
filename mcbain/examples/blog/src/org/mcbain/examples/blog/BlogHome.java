@@ -35,7 +35,7 @@ public class BlogHome implements Renderer {
     
     
     /************************************************************************
-     * Constructs a new instance.
+     * Constructs an instance to render a blog.
      */
 
     public BlogHome(final Blog blog) {
@@ -44,7 +44,7 @@ public class BlogHome implements Renderer {
 
     
     /************************************************************************
-     * Constructs a new instance.
+     * Constructs an instance to render the posts in a blog's archive.
      */
 
     public BlogHome(final Blog blog, final String archive) {
@@ -53,6 +53,7 @@ public class BlogHome implements Renderer {
         posts = new Posts(archive == null ? blog.latestPosts() : blog.archivedPosts(archive));
     }
 
+    
     // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
     public void render(Context context, Writer writer) {
