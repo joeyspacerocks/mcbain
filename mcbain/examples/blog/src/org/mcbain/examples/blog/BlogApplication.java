@@ -20,7 +20,6 @@ import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.BlogService;
 import org.mcbain.rest.Context;
 import org.mcbain.rest.Controller;
-import org.mcbain.rest.Resources;
 import org.mcbain.rest.Uri;
 
 
@@ -45,24 +44,21 @@ public class BlogApplication implements Application{
     // @see org.mcbain.Application#initialise(org.mcbain.rest.Context)
     
     public void initialise(final Context context) {
-        Resources resources = context.resources();
+        context.resources()
         
-        resources
             .add("index", "/", new Controller() {
                 public Renderer get(Uri uri) {
                     return context.template("index");
                 }
-            });
-
-        resources
+            })
+            
             .add("blog", "/blog/$name", new Controller() {
                 public Renderer get(Uri uri) {
                     Blog blog = blogService.getBlog(uri.parameter("name"));
                     return (blog == null ? null : new BlogHome(blog));
                 }
-            });
-
-        resources
+            })
+            
             .add("archive", "/blog/$name/$archive", new Controller() {
                 public Renderer get(Uri uri) {
                     Blog blog = blogService.getBlog(uri.parameter("name"));
