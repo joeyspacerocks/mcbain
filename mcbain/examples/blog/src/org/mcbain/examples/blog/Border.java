@@ -70,10 +70,14 @@ public class Border implements Renderer, Container {
 
         TemplateInstance template = context.template("border");
 
+        Link title = new Link();
+        title.uri("blog", "name", blog.getName());
+        title.value("Blog: " + blog.getName());
+        
         template.bind(
             "archives", archiveLoop,
             "archive", archive,
-            "title", "Blog: " + blog.getName(),
+            "title", title,
             "time", System.currentTimeMillis() - timestamp,
             "content", content
         );
