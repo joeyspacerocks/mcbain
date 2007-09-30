@@ -50,7 +50,7 @@ public class BlogHome implements Renderer {
     public BlogHome(final Blog blog, final String archive) {
         border = new Border(blog);
         this.archive = archive;
-        posts = new Posts(archive == null ? blog.latestPosts() : blog.archivedPosts(archive));
+        posts = new Posts(blog, archive == null ? blog.latestPosts() : blog.archivedPosts(archive));
     }
 
     
