@@ -14,6 +14,7 @@
 
 package org.mcbain.components;
 
+import org.mcbain.Container;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
@@ -26,16 +27,17 @@ import org.mcbain.util.PairIterator;
  * Link component.
  */
 
-public class Link implements Renderer, Elemental {
+public class Link implements Renderer, Elemental, Container {
 
     private Attributes attributes;
     private String resourceId;
-    private PairIterator<String, String> parameters;
+    private Object[] parameters;
     private String value;
+    private Renderer content;
     
     public void uri(String id, Object... parameters) {
         this.resourceId = id;
-        this.parameters = new PairIterator<String, String>(parameters);
+        this.parameters = parameters;
     }
 
     public void value(String value) {
@@ -47,21 +49,36 @@ public class Link implements Renderer, Elemental {
     public void element(String element, Attributes attributes) {
         this.attributes = new Attributes(attributes);
     }
+
+    // @see org.mcbain.Container#contents(org.mcbain.Renderer)
+    
+    public void contents(Renderer content) {
+        this.content = content;
+    }
     
     // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
     public void render(Context context, Writer writer) {
         Uri uri = context.resources().link(resourceId);
 
-        while(parameters.hasNext()) {
-            uri.addParameter(parameters.nextKey(), parameters.nextValue());
+        if (parameters != null && parameters.length > 0) {
+            PairIterator<String, String> it = new PairIterator<String, String>(parameters);
+            while(it.hasNext()) {
+                uri.addParameter(it.nextKey(), it.nextValue());
+            }
         }
         
         attributes.put("href", uri.toString());
         
         writer
             .tag("a")
-                .attributes(attributes)
-                .body(value);
+                .attributes(attributes);
+        
+        if (value != null) {
+            writer.body(value);
+        } else {
+            content.render(context, writer);
+            writer.close();
+        }
     }
 }
