@@ -19,8 +19,11 @@ import java.util.List;
 import org.mcbain.Renderer;
 import org.mcbain.TemplateInstance;
 import org.mcbain.Writer;
+import org.mcbain.components.If;
+import org.mcbain.components.Link;
 import org.mcbain.components.Loop;
 import org.mcbain.components.Value;
+import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.Post;
 import org.mcbain.rest.Context;
 
@@ -32,24 +35,36 @@ import org.mcbain.rest.Context;
 public class Posts implements Renderer {
 
     private Loop<Post> postLoop;
+    private Link titleLink;
     private Value title;
     private Value content;
+    private If empty;
     
     
     /************************************************************************
      * Constructs a new instance.
      */
 
-    public Posts(final List<Post> posts) {
-        title = new Value();
-        content = new Value();
-        
-        postLoop = new Loop<Post>(posts) {
-            public void currentValue(Post value) {
-                title.value(value.getTitle());
-                content.value(value.getContent());
-            }
-        };
+    public Posts(final Blog blog, final List<Post> posts) {
+        if (posts.isEmpty()) {
+            empty = new If(posts.isEmpty());
+                
+        } else {
+            titleLink = new Link();
+            title = new Value();
+            title.tagless();
+            content = new Value();
+            
+            postLoop = new Loop<Post>(posts) {
+                public void currentValue(Post post) {
+                    String archive = post.getArchiveDate().replace('/', '-');
+                    
+                    title.value(post.getTitle());
+                    titleLink.uri("post", "name", blog.getName(), "archive", archive, "post", post.getTitle());
+                    content.value(post.getContent());
+                }
+            };
+        }
     }
     
     
@@ -61,7 +76,10 @@ public class Posts implements Renderer {
         template.bind(
             "posts", postLoop,
             "title", title,
-            "body", content
+            "titleLink", titleLink,
+            "body", content,
+            "moreLink", titleLink,
+            "empty", empty
         );
         
         template.render(context, writer);
