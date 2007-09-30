@@ -14,6 +14,9 @@
 
 package org.mcbain.rest;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,12 +164,21 @@ public class UriTemplate {
         }
         
         public boolean matches(Uri result, String value) {
+            try {
+                value = URLDecoder.decode(value, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
             result.addParameter(name, value);
             return true;
         }
         
         public String toString(Uri uri) {
-            return uri.parameter(name);
+            try {
+                return URLEncoder.encode(uri.parameter(name), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     
