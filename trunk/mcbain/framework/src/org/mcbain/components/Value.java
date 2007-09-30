@@ -33,6 +33,7 @@ public class Value implements Renderer, Elemental {
     private Object value;
     private String element;
     private Attributes attributes;
+    private boolean tagless;
 
     
     /************************************************************************
@@ -69,13 +70,23 @@ public class Value implements Renderer, Elemental {
     public void value(Object value) {
         this.value = value;
     }
+
+    
+    /************************************************************************
+     * Indicates that the template element used to refer to the component 
+     * should not be rendered.
+     */
+    
+    public void tagless() {
+        this.tagless = true;
+    }
     
     
     // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
     public void render(Context context, Writer writer) {
         if (value != null) {
-            if (element != null) {
+            if (!tagless && element != null) {
                 writer
                     .tag(element)
                     .attributes(attributes)
