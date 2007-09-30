@@ -18,6 +18,7 @@ import org.mcbain.Application;
 import org.mcbain.Renderer;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.BlogService;
+import org.mcbain.examples.blog.model.Post;
 import org.mcbain.rest.Context;
 import org.mcbain.rest.Controller;
 import org.mcbain.rest.Uri;
@@ -65,6 +66,18 @@ public class BlogApplication implements Application{
                     if (blog != null) {
                         String archive = uri.parameter("archive").replace('-', '/');
                         return new BlogHome(blog, archive);
+                    } else {
+                        return null;
+                    }
+                }
+            })
+            
+            .add("post", "/blog/$name/$archive/$post", new Controller() {
+                public Renderer get(Uri uri) {
+                    Blog blog = blogService.getBlog(uri.parameter("name"));
+                    if (blog != null) {
+                        Post post = blog.getPost(uri.parameter("post"));
+                        return new FullPost(blog, post);
                     } else {
                         return null;
                     }
