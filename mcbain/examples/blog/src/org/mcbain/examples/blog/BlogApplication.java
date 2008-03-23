@@ -14,6 +14,8 @@
 
 package org.mcbain.examples.blog;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.mcbain.Application;
 import org.mcbain.Renderer;
 import org.mcbain.examples.blog.model.Blog;
@@ -33,16 +35,10 @@ public class BlogApplication implements Application{
     private BlogService blogService;
     
     
-    /************************************************************************
-     * Constructs a new application.
-     */
-
     public BlogApplication() {
         this.blogService = new BlogService();
     }
     
-    
-    // @see org.mcbain.Application#initialise(org.mcbain.rest.Context)
     
     public void initialise(final Context context) {
         context.resources()
@@ -82,6 +78,24 @@ public class BlogApplication implements Application{
                         return null;
                     }
                 }
+            })
+            
+            .add("newpost", "/blog/$name/newpost", new Controller() {
+            	public Renderer get(Uri uri) {
+                    Blog blog = blogService.getBlog(uri.parameter("name"));
+            		return new NewPost(blog);
+            	}
+            	
+            	public Renderer post(Uri uri, HttpServletRequest request) {
+                    Blog blog = blogService.getBlog(uri.parameter("name"));
+                    
+                    String title = request.getParameter("title");
+                    String content = request.getParameter("content");
+                    
+                    blog.addPost(title, content);
+                    
+                    return new BlogHome(blog);
+            	}
             });
     }
 }

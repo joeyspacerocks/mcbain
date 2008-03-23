@@ -37,9 +37,6 @@ public class Border implements Renderer, Container {
     
     private Blog blog;
     
-    /************************************************************************
-     * Constructs a new instance.
-     */
 
     public Border(final Blog blog) {
         this.blog = blog;
@@ -56,14 +53,10 @@ public class Border implements Renderer, Container {
     }
 
     
-    // @see org.redneck.Container#contents(org.redneck.Renderer)
-    
     public void contents(Renderer content) {
         this.content = content;
     }
     
-    
-    // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
     public void render(Context context, Writer writer) {
         long timestamp = System.currentTimeMillis();
