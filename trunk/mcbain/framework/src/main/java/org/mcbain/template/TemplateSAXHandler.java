@@ -131,13 +131,21 @@ public class TemplateSAXHandler extends DefaultHandler2 {
         if (id != null) {           // if has id attribute, create a component to be later bound
             endTween();
             tagStack.push(name + depth);
-            current = current.add(id, name, attributes(attributes));
+            current = current.add(id, createElement(name, attributes));
             
         } else {                    // if no id, look for default anonymous component
 //            Renderer r = factory.createComponent(name);
     
 //            if (r == null) {
-                tween("<").tween(name).tween(">");
+                tween("<").tween(name);
+                
+                int count = attributes.getLength();
+                while (count-- > 0) {
+                    tween(" ").tween(attributes.getLocalName(count)).tween("=\"");
+                    tween(attributes.getValue(count)).tween("\"");
+                }
+
+                tween(">");
     
 //            } else {                    // else is content
 //    
@@ -217,25 +225,26 @@ public class TemplateSAXHandler extends DefaultHandler2 {
     
     
     /************************************************************************
-     * Creates a map of attributes from an XML attributes collection, 
+     * Creates an element wrapper from an XML attributes collection, 
      * filtering out the 'id' attribute.
      * 
+     * @param	tag				Element tag name
      * @param   attributes      Attributes collection
-     * @return                  Map of attributes
+     * @return                  Element wrapper
      */
     
-    private org.mcbain.template.Attributes attributes(Attributes attributes) {
+    private Element createElement(String tag, Attributes attributes) {
+    	Element element = new Element(tag);
         int count = attributes.getLength();
-        
-        org.mcbain.template.Attributes a = new org.mcbain.template.Attributes(count);
         
         while (count-- > 0) {
             String name = attributes.getLocalName(count);
-            if (!name.equals("id"))
-                a.put(name, attributes.getValue(count));
+            if (!name.equals("id")) {
+                element.attribute(name, attributes.getValue(count));
+            }
         }
         
-        return a;
+        return element;
     }
     
     

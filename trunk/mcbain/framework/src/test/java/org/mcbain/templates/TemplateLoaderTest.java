@@ -27,7 +27,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 
 import org.mcbain.template.Template;
-import org.mcbain.template.TemplateElement;
+import org.mcbain.template.TemplatePart;
 import org.mcbain.template.TemplateFactory;
 import org.mcbain.template.TemplateText;
 import org.testng.Assert;
@@ -85,7 +85,7 @@ public class TemplateLoaderTest {
         TemplateFactory templateFactory = new TemplateFactory(context);
         Template t = templateFactory.parseTemplate("test", in);
 
-        List<TemplateElement> children = t.root().children();
+        List<TemplatePart> children = t.root().children();
         
         assertEquals(children.size(), 1);
         assertContent(children.get(0), html);
@@ -109,7 +109,7 @@ public class TemplateLoaderTest {
         TemplateFactory templateFactory = new TemplateFactory(context);
         Template t = templateFactory.parseTemplate("test", in);
         
-        List<TemplateElement> children = t.root().children();
+        List<TemplatePart> children = t.root().children();
         
         assertEquals(children.size(), 3);
         assertContent(children.get(0), "<html><head><title>Test</title></head><body>");
@@ -134,7 +134,7 @@ public class TemplateLoaderTest {
         TemplateFactory templateFactory = new TemplateFactory(context);
         Template t = templateFactory.parseTemplate("test", in);
         
-        List<TemplateElement> children = t.root().children();
+        List<TemplatePart> children = t.root().children();
         
         assertEquals(children.size(), 1);
         assertContent(children.get(0), "<div>Part one</div><div>Part two</div>");
@@ -165,7 +165,7 @@ public class TemplateLoaderTest {
      * with the expected content.
      */
     
-    private void assertContent(TemplateElement spec, String expected) {
+    private void assertContent(TemplatePart spec, String expected) {
         Assert.assertTrue(spec instanceof TemplateText);
         assertEquals( ((TemplateText) spec).text(), expected);
     }

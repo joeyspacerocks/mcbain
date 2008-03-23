@@ -18,21 +18,17 @@ import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
 import org.mcbain.rest.Context;
-import org.mcbain.template.Attributes;
+import org.mcbain.template.Element;
 
 /************************************************************************
  * Simple component that renders a value, wrapped by a tag if one is 
  * specified.
- *
- * @version $Revision$
- * @author  Joe Trewin
  */
 
 public class Value implements Renderer, Elemental {
 
     private Object value;
-    private String element;
-    private Attributes attributes;
+    private Element element;
     private boolean tagless;
 
     
@@ -53,11 +49,8 @@ public class Value implements Renderer, Elemental {
     }
     
     
-    // @see org.redneck.Attributes#attributes(java.util.Map)
-    
-    public void element(String element, Attributes attributes) {
+    public void element(Element element) {
         this.element = element;
-        this.attributes = attributes;
     }
 
     
@@ -82,14 +75,12 @@ public class Value implements Renderer, Elemental {
     }
     
     
-    // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
-    
     public void render(Context context, Writer writer) {
         if (value != null) {
             if (!tagless && element != null) {
                 writer
-                    .tag(element)
-                    .attributes(attributes)
+                    .tag(element.tag())
+                    .attributes(element)
                     .body( value.toString() );
                 
             } else {

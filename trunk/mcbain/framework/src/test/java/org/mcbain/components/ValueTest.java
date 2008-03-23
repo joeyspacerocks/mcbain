@@ -15,6 +15,7 @@
 package org.mcbain.components;
 
 import org.mcbain.Writer;
+import org.mcbain.template.Element;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -51,7 +52,7 @@ public class ValueTest {
     public void testNoValueWithTag() {
         Value c = new Value();
         
-        c.element("tag", null);
+        c.element( new Element("tag") );
         
         Writer w = new Writer();
         
@@ -85,7 +86,7 @@ public class ValueTest {
     public void testValueWithTag() {
         Value c = new Value("content");
         
-        c.element("tag", null);
+        c.element( new Element("tag") );
         
         Writer w = new Writer();
         

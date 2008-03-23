@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.mcbain.Renderer;
 
 /************************************************************************
@@ -65,14 +67,27 @@ public class Resources {
         return template.emptyUri();
     }
     
+    
+    public Uri link(String id, Object[] parameters) {
+        UriTemplate template = uris.get(id);
+        if (template == null)
+            throw new IllegalArgumentException("Unknown resource id: " + id);
+        
+        Uri uri = template.emptyUri();
+        uri.parameters(parameters);
+        return uri;
+    }
+    
+    
     /************************************************************************
      * Routes a URI to a controller, and executes it.
      * 
-     * @param   uri     URI
-     * @return          Result of running controller
+     * @param   uri     	URI
+     * @param	method  	HTTP method
+     * @return          	Result of running controller
      */
     
-    public Renderer route(String uri) {
+    public Renderer route(String uri, String method, HttpServletRequest request) {
         Controller c = null;
         Uri result = null;
         
@@ -86,6 +101,15 @@ public class Resources {
             }
         }
         
-        return (c == null ? null : c.get(result));
+        Renderer r = null;
+        if (c != null) {
+        	if ("GET".equalsIgnoreCase(method)) {
+        		r = c.get(result);
+        	} else if ("POST".equalsIgnoreCase(method)) {
+        		r = c.post(result, request);
+        	}
+        }
+        
+        return r;
     }
 }

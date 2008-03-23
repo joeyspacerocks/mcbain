@@ -14,6 +14,8 @@
 
 package org.mcbain.rest;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.mcbain.Renderer;
 
 /************************************************************************
@@ -21,7 +23,13 @@ import org.mcbain.Renderer;
  * do with it.
  */
 
-public interface Controller {
+public class Controller {
 
-    public Renderer get(Uri uri);
+    public Renderer get(Uri uri) {
+    	throw new UnsupportedOperationException();
+    }
+    
+    public Renderer post(Uri uri, HttpServletRequest request) {
+    	throw new UnsupportedOperationException();
+    }
 }
