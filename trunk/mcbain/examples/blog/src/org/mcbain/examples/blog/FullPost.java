@@ -34,17 +34,11 @@ public class FullPost implements Renderer {
     private Post post;
     
     
-    /************************************************************************
-     * Constructs an instance to render a blog.
-     */
-
     public FullPost(final Blog blog, final Post post) {
         this.blog = blog;
         this.post = post;
     }
 
-    
-    // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
     public void render(Context context, Writer writer) {
         TemplateInstance template = context.template("post");

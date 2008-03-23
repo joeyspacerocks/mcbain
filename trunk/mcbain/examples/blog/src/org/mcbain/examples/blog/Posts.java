@@ -41,10 +41,6 @@ public class Posts implements Renderer {
     private If empty;
     
     
-    /************************************************************************
-     * Constructs a new instance.
-     */
-
     public Posts(final Blog blog, final List<Post> posts) {
         if (posts.isEmpty()) {
             empty = new If(posts.isEmpty());
@@ -67,8 +63,6 @@ public class Posts implements Renderer {
         }
     }
     
-    
-    // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
     public void render(Context context, Writer writer) {
         TemplateInstance template = context.template("posts");

@@ -34,27 +34,17 @@ public class BlogHome implements Renderer {
     private String archive;
     
     
-    /************************************************************************
-     * Constructs an instance to render a blog.
-     */
-
     public BlogHome(final Blog blog) {
         this(blog, null);
     }
 
     
-    /************************************************************************
-     * Constructs an instance to render the posts in a blog's archive.
-     */
-
     public BlogHome(final Blog blog, final String archive) {
         border = new Border(blog);
         this.archive = archive;
         posts = new Posts(blog, archive == null ? blog.latestPosts() : blog.archivedPosts(archive));
     }
 
-    
-    // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
     
     public void render(Context context, Writer writer) {
         TemplateInstance template = context.template("blog");
