@@ -17,6 +17,8 @@ package org.mcbain.rest;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.mcbain.util.PairIterator;
+
 /************************************************************************
  * A uri is an instance of a UriTemplate - i.e. it is a template plus a
  * map of parameters.
@@ -76,6 +78,23 @@ public class Uri {
 
     
     /************************************************************************
+     * Adds a set of parameters to the uri result from an array containing
+     * alternate name/value pairs.
+     * 
+     * @param   parameters  Parameter array
+     * @return              Uri instance
+     */
+    
+    public Uri parameters(Object[] parameters) {
+        PairIterator<String, String> it = new PairIterator<String, String>(parameters);
+        while(it.hasNext()) {
+            parameters().put(it.nextKey(), it.nextValue());
+        }
+        return this;
+    }
+    
+    
+    /************************************************************************
      * Gets the named parameter, returning null if none present.
      * 
      * @param   name        Parameter name
@@ -100,8 +119,7 @@ public class Uri {
         }
         return parameters;
     }
-    
-    // @see java.lang.Object#toString()
+
     
     @Override
     public String toString() {

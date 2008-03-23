@@ -26,7 +26,7 @@ import org.mcbain.rest.Context;
  * @author  Joe Trewin
  */
 
-public class TemplateText implements TemplateElement {
+public class TemplateText implements TemplatePart {
 
     private String text;
     

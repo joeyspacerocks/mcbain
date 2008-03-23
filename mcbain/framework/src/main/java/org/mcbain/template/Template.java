@@ -31,7 +31,7 @@ import org.mcbain.rest.Context;
  * @author  Joe Trewin
  */
 
-public class Template implements TemplateElement {
+public class Template implements TemplatePart {
 
     private TemplateFactory loader;
     private ComponentSpec root;

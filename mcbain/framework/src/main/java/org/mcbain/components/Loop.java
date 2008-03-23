@@ -20,20 +20,17 @@ import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
 import org.mcbain.rest.Context;
-import org.mcbain.template.Attributes;
+import org.mcbain.template.Element;
 
 /************************************************************************
  * Component that renders its content multiple times.
- *
- * @version $Revision$
- * @author  Joe Trewin
  */
 
 public class Loop<T> implements Renderer, Container, Elemental {
 
     private Iterable<T> source;
     private Renderer content;
-    private String element;
+    private Element element;
     private T currentValue;
     
 
@@ -68,28 +65,19 @@ public class Loop<T> implements Renderer, Container, Elemental {
         return currentValue;
     }
     
-    
-    // @see org.redneck.Container#contents(org.redneck.Renderer)
-    
     public void contents(Renderer content) {
         this.content = content;
     }
 
-    
-    // @see org.redneck.Attributes#attributes(java.util.Map)
-    
-    public void element(String element, Attributes attributes) {
+    public void element(Element element) {
         this.element = element;
     }
 
-    
-    // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
-    
     public void render(Context context, Writer writer) {
         if (source == null) return;
 
         if (element != null)
-            writer.tag(element);
+            writer.tag(element.tag());
 
         for (T value : source) {
             currentValue(value);

@@ -20,7 +20,7 @@ import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
 import org.mcbain.rest.Context;
-import org.mcbain.template.Attributes;
+import org.mcbain.template.Element;
 
 /************************************************************************
  * Component that conditionally renders its content.
@@ -32,7 +32,7 @@ import org.mcbain.template.Attributes;
 public class If implements Renderer, Container, Elemental {
 
     private Renderer content;
-    private String element;
+    private Element element;
     private boolean condition;
     
 
@@ -66,26 +66,20 @@ public class If implements Renderer, Container, Elemental {
     }
     
     
-    // @see org.mcbain.Container#contents(org.mcbain.Renderer)
-    
     public void contents(Renderer content) {
         this.content = content;
     }
 
     
-    // @see org.redneck.Attributes#attributes(java.util.Map)
-    
-    public void element(String element, Attributes attributes) {
+    public void element(Element element) {
         this.element = element;
     }
 
     
-    // @see org.mcbain.Renderer#render(org.mcbain.rest.Resources, org.mcbain.Writer)
-    
     public void render(Context context, Writer writer) {
         if (condition) {
             if (element != null)
-                writer.tag(element);
+                writer.tag(element.tag());
 
             content.render(context, writer);
         

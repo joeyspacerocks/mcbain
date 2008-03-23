@@ -17,7 +17,7 @@ package org.mcbain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mcbain.template.Attributes;
+import org.mcbain.template.Element;
 
 
 /************************************************************************
@@ -94,14 +94,14 @@ public class Writer {
     /************************************************************************
      * Adds a collection of attributes to the open tag.
      * 
-     * @param   attributes      Map of attributes
-     * @return                  Writer
+     * @param   element		Element containing attributes (may be null)
+     * @return              Writer
      */
     
-    public Writer attributes(Attributes attributes) {
-        if (attributes != null) {
-            for (String name : attributes.keySet()) {
-                attribute(name, attributes.get(name));
+    public Writer attributes(Element element) {
+        if (element != null) {
+            for (String name : element) {
+                attribute(name, element.attribute(name));
             }
         }
         

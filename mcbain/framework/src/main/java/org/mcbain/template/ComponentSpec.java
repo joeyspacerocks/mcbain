@@ -33,16 +33,15 @@ import org.mcbain.rest.Context;
  * @author  Joe Trewin
  */
 
-public class ComponentSpec implements TemplateElement{
+public class ComponentSpec implements TemplatePart{
 
     private Template template;
     private String id;
-    private String element;
-    private Attributes attributes;
+    private Element element;
     
     private ComponentSpec parent;
-    private List<TemplateElement> children;
-    private Map<String, TemplateElement> childLookup;
+    private List<TemplatePart> children;
+    private Map<String, TemplatePart> childLookup;
     
     
     /************************************************************************
@@ -54,8 +53,8 @@ public class ComponentSpec implements TemplateElement{
     
     public ComponentSpec(Template template) {
         this.template = template;
-        children = new ArrayList<TemplateElement>(0);
-        childLookup = new HashMap<String,TemplateElement>(0);
+        children = new ArrayList<TemplatePart>(0);
+        childLookup = new HashMap<String,TemplatePart>(0);
     }
     
     
@@ -64,17 +63,15 @@ public class ComponentSpec implements TemplateElement{
      * 
      * @param   id          Component specification id
      * @param   parent      Parent fragment
-     * @param   element     Markup element name
-     * @param   attributes  Map of attributes from the contributing tag
+     * @param   element     Markup element
      * @param   component   Component the specification defines
      */
     
-    public ComponentSpec(String id, ComponentSpec parent, String element, Attributes attributes) {
+    public ComponentSpec(String id, ComponentSpec parent, Element element) {
         this(parent.template);
         this.id = id;
         this.parent = parent;
-        this.element = element.toLowerCase();
-        this.attributes = attributes;
+        this.element = element;
     }
 
     
@@ -82,13 +79,12 @@ public class ComponentSpec implements TemplateElement{
      * Adds a new component specification as a child of this one.
      * 
      * @param   id          Component specification id
-     * @param   element     Markup element name
-     * @param   attributes  Map of attributes from the contributing tag
+     * @param   element     Markup element
      * @return              New child specification
      */
     
-    public ComponentSpec add(String id, String element, Attributes attributes) {
-        ComponentSpec child = new ComponentSpec(id, this, element, attributes);
+    public ComponentSpec add(String id, Element element) {
+        ComponentSpec child = new ComponentSpec(id, this, element);
         
         template.add(id, child);
         children.add(child);
@@ -105,7 +101,7 @@ public class ComponentSpec implements TemplateElement{
      */
     
     public void addTemplateText(String text) {
-        TemplateElement child = new TemplateText(text);
+        TemplatePart child = new TemplateText(text);
         children.add(child);
     }
     
@@ -116,7 +112,7 @@ public class ComponentSpec implements TemplateElement{
      * @return      List of children
      */
     
-    public List<TemplateElement> children() {
+    public List<TemplatePart> children() {
         return children;
     }
 
@@ -133,13 +129,13 @@ public class ComponentSpec implements TemplateElement{
     
     
     /************************************************************************
-     * Gets the XML tag that was used to define the component in the 
+     * Gets the element that was used to define the component in the 
      * template.
      * 
-     * @return      XML tag name
+     * @return      Tempalte element
      */
     
-    public String tag() {
+    public Element element() {
         return element;
     }
     
@@ -147,11 +143,11 @@ public class ComponentSpec implements TemplateElement{
     // @see org.mcbain.template.TemplateElement#render(org.mcbain.rest.Resources, org.mcbain.Writer, org.mcbain.TemplateInstance)
     
     public void render(Context context, Writer writer, TemplateInstance templateInstance) {
-        for (TemplateElement e : children) {
+        for (TemplatePart e : children) {
             if (e instanceof ComponentSpec) {
                 renderElement(context, (ComponentSpec) e, writer, templateInstance);
             } else {
-                ((TemplateElement) e).render(context, writer, templateInstance);
+                ((TemplatePart) e).render(context, writer, templateInstance);
             }
         }
     }
@@ -179,7 +175,7 @@ public class ComponentSpec implements TemplateElement{
             }
             
             if (component instanceof Elemental) {
-                ((Elemental) component).element(spec.element, spec.attributes);
+                ((Elemental) component).element( new Element(spec.element) );
             }
             
             component.render(context, writer);
