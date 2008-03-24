@@ -16,6 +16,7 @@ package org.mcbain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.mcbain.template.Element;
 
@@ -100,7 +101,8 @@ public class Writer {
     
     public Writer attributes(Element element) {
         if (element != null) {
-            for (String name : element) {
+        	Set<String> attributes = element.attributeNames();
+            for (String name : attributes) {
                 attribute(name, element.attribute(name));
             }
         }
