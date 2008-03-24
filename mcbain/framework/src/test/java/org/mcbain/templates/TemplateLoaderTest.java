@@ -14,9 +14,8 @@
 
 package org.mcbain.templates;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stub;
 import static org.testng.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
@@ -27,8 +26,8 @@ import java.util.List;
 import javax.servlet.ServletContext;
 
 import org.mcbain.template.Template;
-import org.mcbain.template.TemplatePart;
 import org.mcbain.template.TemplateFactory;
+import org.mcbain.template.TemplatePart;
 import org.mcbain.template.TemplateText;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -78,9 +77,8 @@ public class TemplateLoaderTest {
     public void testPlainHtml(String html) {
         InputStream in = new ByteArrayInputStream(html.getBytes());
         
-        ServletContext context = createMock(ServletContext.class);
-        expect( context.getResourceAsStream("/test.html") ).andReturn(in);
-        replay(context);
+        ServletContext context = mock(ServletContext.class);
+        stub( context.getResourceAsStream("/test.html") ).toReturn(in);
         
         TemplateFactory templateFactory = new TemplateFactory(context);
         Template t = templateFactory.parseTemplate("test", in);
@@ -102,9 +100,8 @@ public class TemplateLoaderTest {
         String html = "<html><head><title>Test</title></head><body><div id=\"test\">Some text</div></body></html>";
         InputStream in = new ByteArrayInputStream(html.getBytes());
         
-        ServletContext context = createMock(ServletContext.class);
-        expect( context.getResourceAsStream("/test.html") ).andReturn(in);
-        replay(context);
+        ServletContext context = mock(ServletContext.class);
+        stub( context.getResourceAsStream("/test.html") ).toReturn(in);
         
         TemplateFactory templateFactory = new TemplateFactory(context);
         Template t = templateFactory.parseTemplate("test", in);
@@ -127,9 +124,8 @@ public class TemplateLoaderTest {
         String html = "<div>Part one</div><div>Part two</div>";
         InputStream in = new ByteArrayInputStream(html.getBytes());
         
-        ServletContext context = createMock(ServletContext.class);
-        expect( context.getResourceAsStream("/test.html") ).andReturn(in);
-        replay(context);
+        ServletContext context = mock(ServletContext.class);
+        stub( context.getResourceAsStream("/test.html") ).toReturn(in);
         
         TemplateFactory templateFactory = new TemplateFactory(context);
         Template t = templateFactory.parseTemplate("test", in);

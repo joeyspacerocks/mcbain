@@ -12,29 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain.template;
+package org.mcbain.components;
 
-import org.mcbain.TemplateInstance;
+import org.mcbain.Elemental;
+import org.mcbain.Renderer;
 import org.mcbain.Writer;
 import org.mcbain.rest.Context;
+import org.mcbain.template.Element;
+
 
 /************************************************************************
- * Renderable element representing a portion of a template.
- *
- * @version $Revision$
- * @author  Joe Trewin
+ * Input field component.
  */
 
-public interface TemplateElement {
+public class Input implements Renderer, Elemental {
 
-    /************************************************************************
-     * Renders a template element, using the supplied collection of 
-     * components to bind component references to instantiated components.
-     * 
-     * @param   context             Render context
-     * @param   writer              Markup writer
-     * @param   templateInstance    Template instance
-     */
+    private Object value;
+    private Element element;
+
     
-    public void render(Context context, Writer writer, TemplateInstance templateInstance);
+    public void element(Element element) {
+        this.element = element;
+    }
+
+    
+    public Input value(Object value) {
+        this.value = value;
+        return this;
+    }
+
+    
+    public void render(Context context, Writer writer) {
+    	element.attribute("value", value);
+    	
+        writer
+            .emptyTag("input")
+            .attributes(element);
+    }
 }

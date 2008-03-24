@@ -14,35 +14,27 @@
 
 package org.mcbain.template;
 
-import java.util.HashMap;
+import org.mcbain.TemplateInstance;
+import org.mcbain.Writer;
+import org.mcbain.rest.Context;
 
 /************************************************************************
- * Collection of attributes from a markup element.
+ * Renderable element representing a portion of a template.
  *
  * @version $Revision$
  * @author  Joe Trewin
  */
 
-public class Attributes extends HashMap<String, String> {
-    
-    /************************************************************************
-     * Constructs a new instance with an initial capacity.
-     * 
-     * @param   size        Initial capacity
-     */
+public interface TemplatePart {
 
-    public Attributes(int size) {
-        super(size);
-    }
-    
-    
     /************************************************************************
-     * Constructs a new set of attributes populated from another set.
+     * Renders a template element, using the supplied collection of 
+     * components to bind component references to instantiated components.
      * 
-     * @param   source      Source of attributes to copy
+     * @param   context             Render context
+     * @param   writer              Markup writer
+     * @param   templateInstance    Template instance
      */
     
-    public Attributes(Attributes source) {
-        super(source);
-    }
+    public void render(Context context, Writer writer, TemplateInstance templateInstance);
 }
