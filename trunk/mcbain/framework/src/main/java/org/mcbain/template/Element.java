@@ -27,10 +27,12 @@ public class Element {
     
 	private Element passThrough;
 	private String tag;
+	private String id;
 	private Map<String, String> attributes;
 	
-    public Element(String tag) {
+    public Element(String tag, String id) {
     	this.tag = tag;
+    	this.id = id;
     }
 
     public Element(Element element) {
@@ -46,9 +48,18 @@ public class Element {
     	return (passThrough == null ? tag : passThrough.tag());
     }
 
+    public String id() {
+    	return (passThrough == null ? id : passThrough.id());
+    }
+    
     public Set<String> attributeNames() {
     	if (attributes == null) {
-    		return Collections.emptySet();
+    		if (passThrough == null) {
+    			return Collections.emptySet();
+    		} else {
+    			return passThrough.attributeNames();
+    		}
+    		
     	} else {
     		return attributes.keySet();
     	}
