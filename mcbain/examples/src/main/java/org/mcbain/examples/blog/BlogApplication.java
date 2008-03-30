@@ -73,7 +73,7 @@ public class BlogApplication implements Application{
                     Blog blog = blogService.getBlog(uri.parameter("name"));
                     if (blog != null) {
                         Post post = blog.getPost(uri.parameter("post"));
-                        return new FullPost(blog, post);
+                        return (post == null ? null : new FullPost(blog, post));
                     } else {
                         return null;
                     }
