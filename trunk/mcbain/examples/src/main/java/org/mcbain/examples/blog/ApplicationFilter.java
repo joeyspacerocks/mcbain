@@ -31,9 +31,6 @@ import org.mcbain.rest.Context;
 
 /************************************************************************
  * Application filter - gateway to framework.
- *
- * @version $Revision$
- * @author  Joe Trewin
  */
 
 public class ApplicationFilter implements Filter {
@@ -42,8 +39,6 @@ public class ApplicationFilter implements Filter {
     private Context context;
     
     
-    // @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
-    
     public void init(FilterConfig config) throws ServletException {
         context = new Context(config.getServletContext());
         app = new BlogApplication();
@@ -51,19 +46,11 @@ public class ApplicationFilter implements Filter {
     }
 
     
-    // @see javax.servlet.Filter#destroy()
-    
-    public void destroy() {
-    }
-
-    
-    // @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
-    
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest hRequest = (HttpServletRequest) request;
         String method = hRequest.getMethod();
         
-        Renderer renderer = context.resources().route(hRequest.getRequestURI(), method, hRequest);
+        Renderer renderer = context.resources().route(hRequest.getServletPath(), method, hRequest);
         
         if (renderer != null) {
             Writer writer = new Writer();
@@ -73,5 +60,9 @@ public class ApplicationFilter implements Filter {
         } else {
             chain.doFilter(request, response);
         }
+    }
+
+    
+    public void destroy() {
     }
 }

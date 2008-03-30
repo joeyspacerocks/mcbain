@@ -66,11 +66,15 @@ public class Border implements Renderer, Container {
         Link title = new Link();
         title.uri("blog", "name", blog.getName());
         title.value("Blog: " + blog.getName());
+
+        Link newPost = new Link();
+        newPost.uri("newpost", "name", blog.getName());
         
         template.bind(
             "archives", archiveLoop,
             "archive", archive,
             "title", title,
+            "newpost", newPost,
             "time", System.currentTimeMillis() - timestamp,
             "content", content
         );

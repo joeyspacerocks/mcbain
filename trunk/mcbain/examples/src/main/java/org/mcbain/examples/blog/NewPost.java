@@ -43,8 +43,9 @@ public class NewPost implements Renderer {
         template.bind(
             "border", new Border(blog),
             "form", new Form("newpost", "name", blog.getName()),
-            "title", new Input().value("post title"),
-            "content", new Input().value("")
+            "title", new Input("post title"),
+            "content", new Input(),
+            "type", new DropDown("one", "two", "three")
         );
         
         template.render(context, writer);

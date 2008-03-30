@@ -59,12 +59,10 @@
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>maven-jetty-plugin</artifactId>
-				<!--
 				<configuration>
 					<contextPath>/</contextPath>
-					<jettyConfig>src/main/config/jetty/jetty-local.xml</jettyConfig>
+					<!-- <jettyConfig>src/main/config/jetty/jetty-local.xml</jettyConfig> -->
 				</configuration>
-				-->
 			</plugin>
 		</plugins>
 	</build>
