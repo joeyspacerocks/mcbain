@@ -26,20 +26,18 @@ import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.DefaultHandler2;
+import org.xml.sax.ext.Locator2;
 
 /*******************************************************************************
  * SAX handler that is used to decompose an XML template into a hierarchical 
  * structure of component specifications.
- * 
- * @version $Revision$
- * @author Joe Trewin
  */
 
 public class TemplateSAXHandler extends DefaultHandler2 {
     
     public static final String DEFAULT_ID_ATTRIBUTE = "id";
     
-    // private Locator locator;
+    private Locator locator;
     
     private ComponentFactory factory;
     private String idAttribute = DEFAULT_ID_ATTRIBUTE;
@@ -51,6 +49,9 @@ public class TemplateSAXHandler extends DefaultHandler2 {
     private int depth;
     private ArrayStack<String> tagStack;
     private Map<String, Integer> componentCount;
+
+    private int startColumn;
+    private int startLine;
 
     
     /************************************************************************
@@ -71,7 +72,7 @@ public class TemplateSAXHandler extends DefaultHandler2 {
     // @see org.xml.sax.helpers.DefaultHandler#setDocumentLocator(org.xml.sax.Locator)
     
     public void setDocumentLocator(Locator locator) {
-        // this.locator = locator;
+        this.locator = locator;
     }
 
     
@@ -127,6 +128,8 @@ public class TemplateSAXHandler extends DefaultHandler2 {
         if (name.equals(TemplateFactory.FAKE_ROOT)) return;
         
         String id = attributes.getValue(idAttribute);
+        startColumn = locator.getColumnNumber();
+        startLine = locator.getLineNumber();
         
         if (id != null) {           // if has id attribute, create a component to be later bound
             endTween();
@@ -175,7 +178,11 @@ public class TemplateSAXHandler extends DefaultHandler2 {
             tagStack.pop();
 
         } else {
-            tween("</").tween(name).tween(">");
+        	if (locator.getColumnNumber() == startColumn && locator.getLineNumber() == startLine) {
+        		tween.insert(tween.length() - 1, '/');
+        	} else {
+        		tween("</").tween(name).tween(">");
+        	}
         }
     }
 
@@ -184,6 +191,7 @@ public class TemplateSAXHandler extends DefaultHandler2 {
     
     public InputSource resolveEntity(String name, String publicId,
             String baseURI, String systemId) throws SAXException, IOException {
+    	// FIXME: still used?
         String leaf = "org/redneck/dtd"
                 + systemId.substring(systemId.lastIndexOf('/'));
 
@@ -234,7 +242,7 @@ public class TemplateSAXHandler extends DefaultHandler2 {
      */
     
     private Element createElement(String tag, Attributes attributes) {
-    	Element element = new Element(tag);
+    	Element element = new Element(tag, attributes.getValue("id"));
         int count = attributes.getLength();
         
         while (count-- > 0) {

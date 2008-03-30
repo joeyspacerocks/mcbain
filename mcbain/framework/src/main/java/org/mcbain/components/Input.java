@@ -30,6 +30,12 @@ public class Input implements Renderer, Elemental {
     private Object value;
     private Element element;
 
+    public Input() {
+    }
+    
+    public Input(Object value) {
+    	value(value);
+	}
     
     public void element(Element element) {
         this.element = element;
@@ -42,11 +48,26 @@ public class Input implements Renderer, Elemental {
     }
 
     
+	// FIXME: unique id/name when in loop ...
+    
     public void render(Context context, Writer writer) {
-    	element.attribute("value", value);
-    	
-        writer
-            .emptyTag("input")
-            .attributes(element);
+    	if (element.tag().equals("textarea")) {
+            writer
+            .tag("textarea")
+	            .attribute("name", element.id())
+	            .attribute("id", element.id())
+	            .attributes(element)
+        	.print( value == null ? "" : value.toString(), false)
+        	.close();
+            
+    	} else {
+    		element.attribute("value", value);
+	    	
+	        writer
+	            .emptyTag("input")
+	            .attribute("name", element.id())
+	            .attribute("id", element.id())
+	            .attributes(element);
+    	}
     }
 }

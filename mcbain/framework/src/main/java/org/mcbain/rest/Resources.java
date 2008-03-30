@@ -17,6 +17,7 @@ package org.mcbain.rest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -108,6 +109,9 @@ public class Resources {
         	} else if ("POST".equalsIgnoreCase(method)) {
         		r = c.post(result, request);
         	}
+        	
+        } else {
+        	Logger.global.info("No controller for " + uri);
         }
         
         return r;

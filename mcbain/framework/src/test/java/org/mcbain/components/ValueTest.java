@@ -52,7 +52,7 @@ public class ValueTest {
     public void testNoValueWithTag() {
         Value c = new Value();
         
-        c.element( new Element("tag") );
+        c.element( new Element("tag", "id") );
         
         Writer w = new Writer();
         
@@ -86,7 +86,7 @@ public class ValueTest {
     public void testValueWithTag() {
         Value c = new Value("content");
         
-        c.element( new Element("tag") );
+        c.element( new Element("tag", "id") );
         
         Writer w = new Writer();
         
