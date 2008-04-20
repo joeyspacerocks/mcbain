@@ -15,10 +15,13 @@
 package org.mcbain.examples.blog;
 
 import org.mcbain.Renderer;
+import org.mcbain.Request;
 import org.mcbain.TemplateInstance;
 import org.mcbain.Writer;
 import org.mcbain.components.Form;
 import org.mcbain.components.Input;
+import org.mcbain.components.Loop;
+import org.mcbain.components.Value;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.rest.Context;
 
@@ -30,22 +33,34 @@ import org.mcbain.rest.Context;
 public class NewPost implements Renderer {
 
     private Blog blog;
+    private String title;
+    private String content;
+    private Request request;
     
-    
-    public NewPost(final Blog blog) {
+    public NewPost(final Request request, final Blog blog) {
         this.blog = blog;
+        this.request = request;
+        title = request.get("title");
+        content = request.get("content");
     }
 
     
     public void render(Context context, Writer writer) {
         TemplateInstance template = context.template("newpost");
         
+        final Value error = new Value();
+        
         template.bind(
             "border", new Border(blog),
             "form", new Form("newpost", "name", blog.getName()),
-            "title", new Input("post title"),
-            "content", new Input(),
-            "type", new DropDown("one", "two", "three")
+            "title", new Input(title),
+            "content", new Input(content),
+            "error", error,
+            "errors", new Loop<String>(request.errors().keySet()) {
+            	public void currentValue(String value) {
+            		error.value(request.errors().get(value));
+            	}
+            }
         );
         
         template.render(context, writer);

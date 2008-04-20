@@ -47,10 +47,7 @@ public class ApplicationFilter implements Filter {
 
     
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest hRequest = (HttpServletRequest) request;
-        String method = hRequest.getMethod();
-        
-        Renderer renderer = context.resources().route(hRequest.getServletPath(), method, hRequest);
+        Renderer renderer = context.resources().route((HttpServletRequest) request);
         
         if (renderer != null) {
             Writer writer = new Writer();

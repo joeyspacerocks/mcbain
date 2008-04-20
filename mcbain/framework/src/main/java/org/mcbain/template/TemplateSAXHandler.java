@@ -189,11 +189,8 @@ public class TemplateSAXHandler extends DefaultHandler2 {
     
     // @see org.xml.sax.ext.DefaultHandler2#resolveEntity(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
     
-    public InputSource resolveEntity(String name, String publicId,
-            String baseURI, String systemId) throws SAXException, IOException {
-    	// FIXME: still used?
-        String leaf = "org/redneck/dtd"
-                + systemId.substring(systemId.lastIndexOf('/'));
+    public InputSource resolveEntity(String name, String publicId, String baseURI, String systemId) throws SAXException, IOException {
+        String leaf = "org/mcbain/dtd" + systemId.substring(systemId.lastIndexOf('/'));
 
         InputStream in = getClass().getClassLoader().getResourceAsStream(leaf);
 

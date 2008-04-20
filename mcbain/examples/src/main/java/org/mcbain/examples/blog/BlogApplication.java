@@ -14,10 +14,9 @@
 
 package org.mcbain.examples.blog;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.mcbain.Application;
 import org.mcbain.Renderer;
+import org.mcbain.Request;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.BlogService;
 import org.mcbain.examples.blog.model.Post;
@@ -44,20 +43,21 @@ public class BlogApplication implements Application{
         context.resources()
         
             .add("index", "/", new Controller() {
-                public Renderer get(Uri uri) {
+            	public Renderer get(Request request) {
                     return context.template("index");
                 }
             })
             
             .add("blog", "/blog/$name", new Controller() {
-                public Renderer get(Uri uri) {
-                    Blog blog = blogService.getBlog(uri.parameter("name"));
+            	public Renderer get(Request request) {
+                    Blog blog = blogService.getBlog(request.uri().parameter("name"));
                     return (blog == null ? null : new BlogHome(blog));
                 }
             })
             
             .add("archive", "/blog/$name/$archive", new Controller() {
-                public Renderer get(Uri uri) {
+            	public Renderer get(Request request) {
+            		Uri uri = request.uri();
                     Blog blog = blogService.getBlog(uri.parameter("name"));
                     if (blog != null) {
                         String archive = uri.parameter("archive").replace('-', '/');
@@ -69,7 +69,8 @@ public class BlogApplication implements Application{
             })
             
             .add("post", "/blog/$name/$archive/$post", new Controller() {
-                public Renderer get(Uri uri) {
+            	public Renderer get(Request request) {
+            		Uri uri = request.uri();
                     Blog blog = blogService.getBlog(uri.parameter("name"));
                     if (blog != null) {
                         Post post = blog.getPost(uri.parameter("post"));
@@ -81,20 +82,26 @@ public class BlogApplication implements Application{
             })
             
             .add("newpost", "/blog/$name/newpost", new Controller() {
-            	public Renderer get(Uri uri) {
-                    Blog blog = blogService.getBlog(uri.parameter("name"));
-            		return new NewPost(blog);
+            	public Renderer get(Request request) {
+                    Blog blog = blogService.getBlog(request.uri().parameter("name"));
+            		return new NewPost(request, blog);
             	}
             	
-            	public Renderer post(Uri uri, HttpServletRequest request) {
-                    Blog blog = blogService.getBlog(uri.parameter("name"));
+            	public Renderer post(Request request) {
+                    Blog blog = blogService.getBlog(request.uri().parameter("name"));
                     
-                    String title = request.getParameter("title");
-                    String content = request.getParameter("content");
-                    
-                    blog.addPost(title, content);
-                    
-                    return new BlogHome(blog);
+                    if (request
+                    		.has("title")
+                    		.has("content")
+                    		.ok()) {
+                    	
+	                    blog.addPost( request.get("title"), request.get("content") );
+	                    
+	                    return new BlogHome(blog);
+	                    
+                    } else {
+                    	return new NewPost(request, blog);
+                    }
             	}
             });
     }

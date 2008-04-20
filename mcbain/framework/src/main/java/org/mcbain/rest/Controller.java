@@ -14,9 +14,8 @@
 
 package org.mcbain.rest;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.mcbain.Renderer;
+import org.mcbain.Request;
 
 /************************************************************************
  * A controller takes an incoming request to a URI and decides what to 
@@ -25,11 +24,11 @@ import org.mcbain.Renderer;
 
 public class Controller {
 
-    public Renderer get(Uri uri) {
+    public Renderer get(Request request) {
     	throw new UnsupportedOperationException();
     }
     
-    public Renderer post(Uri uri, HttpServletRequest request) {
+    public Renderer post(Request request) {
     	throw new UnsupportedOperationException();
     }
 }
