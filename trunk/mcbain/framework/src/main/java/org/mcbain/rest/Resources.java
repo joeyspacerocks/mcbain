@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 import org.mcbain.Renderer;
+import org.mcbain.Request;
 
 /************************************************************************
  * Collection of resources and controllers.
@@ -88,7 +89,10 @@ public class Resources {
      * @return          	Result of running controller
      */
     
-    public Renderer route(String uri, String method, HttpServletRequest request) {
+    public Renderer route(HttpServletRequest servletRequest) {
+    	String uri = servletRequest.getServletPath();
+    	String method = servletRequest.getMethod().toUpperCase();
+    	
         Controller c = null;
         Uri result = null;
         
@@ -104,10 +108,13 @@ public class Resources {
         
         Renderer r = null;
         if (c != null) {
-        	if ("GET".equalsIgnoreCase(method)) {
-        		r = c.get(result);
-        	} else if ("POST".equalsIgnoreCase(method)) {
-        		r = c.post(result, request);
+        	Request request = new Request(servletRequest, result);
+        	
+        	if ("GET".equals(method)) {
+        		r = c.get(request);
+        		
+        	} else if ("POST".equals(method)) {
+        		r = c.post(request);
         	}
         	
         } else {
