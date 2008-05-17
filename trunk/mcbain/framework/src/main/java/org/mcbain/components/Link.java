@@ -18,8 +18,7 @@ import org.mcbain.Container;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
-import org.mcbain.rest.Context;
-import org.mcbain.rest.Uri;
+import org.mcbain.request.Request;
 import org.mcbain.template.Element;
 
 /************************************************************************
@@ -29,14 +28,19 @@ import org.mcbain.template.Element;
 public class Link implements Renderer, Elemental, Container {
 
     private Element element;
-    private String resourceId;
-    private Object[] parameters;
+    private String path ;
     private String value;
     private Renderer content;
+
+    public Link() {
+	}
     
-    public void uri(String id, Object... parameters) {
-        this.resourceId = id;
-        this.parameters = parameters;
+    public Link(String path) {
+    	uri(path);
+	}
+
+    public void uri(String path) {
+        this.path = path;
     }
 
     public void value(String value) {
@@ -51,10 +55,8 @@ public class Link implements Renderer, Elemental, Container {
         this.content = content;
     }
     
-    public void render(Context context, Writer writer) {
-        Uri uri = context.resources().link(resourceId, parameters);
-        
-        element.attribute("href", uri);
+    public void render(Request context, Writer writer) {
+        element.attribute("href", context.context().link(path));
         
         writer.tag("a").attributes(element);
         

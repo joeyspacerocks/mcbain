@@ -14,110 +14,106 @@
 
 package org.mcbain.template;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.mcbain.TemplateInstance;
+import org.mcbain.Renderer;
 import org.mcbain.Writer;
-import org.mcbain.rest.Context;
+import org.mcbain.request.Request;
+import org.mcbain.util.PairIterator;
 
 /************************************************************************
- * Representation of a component template, holding the hierarchy of 
- * contained component specifications.
- *
- * @version $Revision$
- * @author  Joe Trewin
+ * Instance of a template class for rendering a template with a specific
+ * set of bound components/variables.
  */
 
-public class Template implements TemplatePart {
+public class Template implements Renderer {
 
-    private TemplateFactory loader;
-    private ComponentSpec root;
-    private List<ComponentSpec> components;
-    private Map<String,ComponentSpec> lookup;
-    private long timestamp;
+    private TemplateClass templateClass;
+    private Map<String, Renderer> components;
     
     
-    /************************************************************************
-     * Constructs a new template.
+    /***************************************************************************
+     * Constructs a template instance for binding components to the specified 
+     * template class.
      * 
-     * @param   loader      Template loader that loaded the template
-     * @param   id          Template id
+     * @param   templateClass		Template class
      */
-    
-    public Template(String id, TemplateFactory loader) {
-        this.loader = loader;
-        root = new ComponentSpec(this);
-        components = new ArrayList<ComponentSpec>();
-        lookup = new HashMap<String,ComponentSpec>();
-        timestamp = System.currentTimeMillis();
-    }
-    
-    
-    /************************************************************************
-     * Adds a new component spec.
-     * 
-     * @param   id          Component id
-     * @param   component   Component spec
-     */
-    
-    public void add(String id, ComponentSpec component) {
-        components.add(component);
-        lookup.put(id, component);
-    }
-    
-    
-    // @see org.mcbain.template.TemplateElement#render(org.mcbain.rest.Resources, org.mcbain.Writer, org.mcbain.TemplateInstance)
-    
-    public void render(Context context, Writer writer, TemplateInstance templateInstance) {
-        root.render(context, writer, templateInstance);
+
+    public Template(TemplateClass templateClass) {
+        this.templateClass = templateClass;
+        this.components = new HashMap<String, Renderer>();
     }
 
-    
-    /************************************************************************
-     * Tests to see if the template was created before the specified time.
+
+
+    /***************************************************************************
+     * Binds a component collection from the supplied key/value pairs.
      * 
-     * @param   time        Time to test against
-     * @return              True if older than time, else false
+     * @param   content     Array of objects, in String/Object pairs
      */
-    
-    public boolean olderThan(long time) {
-        return (timestamp < time);
-    }
-    
-    
-    /************************************************************************
-     * Gets the root component specification that contains all the nested
-     * specifications.
-     * 
-     * @return      Root component specification
-     */
-    
-    public ComponentSpec root() {
-        return root;
+
+    public Template bind(Object... content) {
+        PairIterator<String, Object> it = new PairIterator<String, Object>(content);
+        
+        while (it.hasNext()) {
+            String id = it.nextKey();
+            Object component = it.nextValue();
+            
+            if (component instanceof Renderer) {
+                bind(id, (Renderer) component);
+            } else {
+                bind(id, component);
+            }
+        }
+        
+        return this;
     }
 
-    
+
     /************************************************************************
-     * Gets the template factory that this template was loaded with.
+     * Adds a component to the collection.
      * 
-     * @return      Template factory
+     * @param   id              Component id in the context of it's container
+     * @param   component       Renderable component
+     * @return                  This object
      */
     
-    public TemplateFactory factory() {
-        return loader;
+    public Template bind(final String id, final Renderer component) {
+        components.put(id, component);
+        return this;
     }
     
     
     /************************************************************************
-     * Creates a new template instance.
+     * Adds an object to the collection. The object will be rendered using
+     * its toString method.
      * 
-     * @return      Template instance
+     * @param   id              Component id in the context of it's container
+     * @param   value           Object to be rendererd
+     * @return                  This object
      */
     
-    public TemplateInstance instance() {
-        return new TemplateInstance(this);
+    public Template bind(final String id, final Object value) {
+        components.put(id, new Renderer() {
+            public void render(Request context, Writer writer) {
+                if (value != null)
+                    writer.print(value.toString(), false);
+            }
+        });
+        return this;
+    }
+    
+
+    public boolean contains(final String id) {
+    	return components.containsKey(id);
+    }
+
+    public Renderer get(final String id) {
+    	return components.get(id);
+    }
+    
+    public void render(Request context, Writer writer) {
+        templateClass.render(context, writer, this);
     }
 }

@@ -16,12 +16,12 @@ package org.mcbain.examples.blog;
 
 import org.mcbain.Container;
 import org.mcbain.Renderer;
-import org.mcbain.TemplateInstance;
 import org.mcbain.Writer;
 import org.mcbain.components.Link;
 import org.mcbain.components.Loop;
 import org.mcbain.examples.blog.model.Blog;
-import org.mcbain.rest.Context;
+import org.mcbain.request.Request;
+import org.mcbain.template.Template;
 
 
 /************************************************************************
@@ -45,9 +45,7 @@ public class Border implements Renderer, Container {
         archiveLoop = new Loop<String>(blog.getArchives()) {
             public void currentValue(String value) {
                 archive.value(value);
-                archive.uri("archive", 
-                    "name", blog.getName(), 
-                    "archive", value.replace('/', '-'));
+                archive.uri("/blog/" + blog.getName() + "/" + value.replace('/', '-'));
             }
         };
     }
@@ -58,29 +56,25 @@ public class Border implements Renderer, Container {
     }
     
     
-    public void render(Context context, Writer writer) {
+    public void render(Request request, Writer writer) {
         long timestamp = System.currentTimeMillis();
 
-        TemplateInstance template = context.template("border");
+        Template template = request.context().template("border");
 
-        Link title = new Link();
-        title.uri("blog", "name", blog.getName());
-        title.value("Blog: " + blog.getName());
+        Link title = new Link("/blog/" + blog.getName());
+        title.value(blog.getName());
 
-        Link newPost = new Link();
-        newPost.uri("newpost", "name", blog.getName());
-        
         template.bind(
             "archives", archiveLoop,
             "archive", archive,
             "title", title,
-            "newpost", newPost,
+            "newpost", new Link("/blog/" + blog.getName() + "/newpost"),
             "time", System.currentTimeMillis() - timestamp,
             "content", content
         );
 
         writer.reset();
-        template.render(context, writer);
+        template.render(request, writer);
         writer.seal();
     }
 }

@@ -19,9 +19,6 @@ import org.testng.annotations.Test;
 
 /************************************************************************
  * Unit tests the array stack implementation.
- *
- * @version $Revision$
- * @author  Joe Trewin
  */
 
 public class ArrayStackTest {

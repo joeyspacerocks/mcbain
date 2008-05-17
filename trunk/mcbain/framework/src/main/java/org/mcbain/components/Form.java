@@ -19,7 +19,7 @@ import org.mcbain.Container;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
-import org.mcbain.rest.Context;
+import org.mcbain.request.Request;
 import org.mcbain.template.Element;
 
 /************************************************************************
@@ -28,16 +28,14 @@ import org.mcbain.template.Element;
 
 public class Form implements Renderer, Container, Elemental {
 
-	private String resourceId;
-	private Object[] parameters;
+	private String path;
 	
     private Renderer content;
     private Element element;
     
 
-    public Form(String resourceId, Object... parameters) {
-    	this.resourceId = resourceId;
-    	this.parameters = parameters;
+    public Form(String path) {
+    	this.path = path;
     }
     
     
@@ -51,14 +49,14 @@ public class Form implements Renderer, Container, Elemental {
     }
 
     
-    public void render(Context context, Writer writer) {
+    public void render(Request request, Writer writer) {
         writer.tag(element.tag());
 
-        element.attribute("action", context.resources().link(resourceId, parameters));
+        element.attribute("action", request.context().link(path));
         element.attribute("method", "POST");
 
         writer.attributes(element);
-        content.render(context, writer);
+        content.render(request, writer);
     
         writer.close();
     }

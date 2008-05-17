@@ -15,17 +15,15 @@
 package org.mcbain.examples.blog;
 
 import org.mcbain.Renderer;
-import org.mcbain.TemplateInstance;
 import org.mcbain.Writer;
-import org.mcbain.components.Value;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.Post;
-import org.mcbain.rest.Context;
+import org.mcbain.request.Request;
+import org.mcbain.template.Template;
 
 
 /************************************************************************
- * Blog home page. Contains a list of archives, and a list of the last
- * few most recent posts.
+ * Renders a post in full.
  */
 
 public class FullPost implements Renderer {
@@ -40,15 +38,15 @@ public class FullPost implements Renderer {
     }
 
     
-    public void render(Context context, Writer writer) {
-        TemplateInstance template = context.template("post");
+    public void render(Request request, Writer writer) {
+        Template template = request.context().template("post");
         
         template.bind(
             "border", new Border(blog),
-            "title", new Value(post.getTitle()),
-            "content", new Value(post.getContent())
+            "title", post.getTitle(),
+            "content", post.getContent()
         );
         
-        template.render(context, writer);
+        template.render(request, writer);
     }
 }

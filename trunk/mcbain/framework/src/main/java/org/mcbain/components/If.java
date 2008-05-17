@@ -19,7 +19,7 @@ import org.mcbain.Container;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
-import org.mcbain.rest.Context;
+import org.mcbain.request.Request;
 import org.mcbain.template.Element;
 
 /************************************************************************
@@ -76,7 +76,7 @@ public class If implements Renderer, Container, Elemental {
     }
 
     
-    public void render(Context context, Writer writer) {
+    public void render(Request context, Writer writer) {
         if (condition) {
             if (element != null)
                 writer.tag(element.tag());

@@ -15,33 +15,26 @@
 package org.mcbain.template;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.mcbain.Container;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
-import org.mcbain.TemplateInstance;
 import org.mcbain.Writer;
-import org.mcbain.rest.Context;
+import org.mcbain.request.Request;
 
 /************************************************************************
  * Specification of a component, usually defined through by template.
- *
- * @version $Revision$
- * @author  Joe Trewin
  */
 
-public class ComponentSpec implements TemplatePart{
+public class ComponentSpec implements TemplatePart {
 
-    private Template template;
+    private TemplateClass template;
     private String id;
     private Element element;
     
     private ComponentSpec parent;
     private List<TemplatePart> children;
-    private Map<String, TemplatePart> childLookup;
     
     
     /************************************************************************
@@ -51,10 +44,9 @@ public class ComponentSpec implements TemplatePart{
      * @param   id          Component specification id
      */
     
-    public ComponentSpec(Template template) {
+    public ComponentSpec(TemplateClass template) {
         this.template = template;
         children = new ArrayList<TemplatePart>(0);
-        childLookup = new HashMap<String,TemplatePart>(0);
     }
     
     
@@ -88,7 +80,6 @@ public class ComponentSpec implements TemplatePart{
         
         template.add(id, child);
         children.add(child);
-        childLookup.put(id, child);
         
         return child;
     }
@@ -140,14 +131,12 @@ public class ComponentSpec implements TemplatePart{
     }
     
 
-    // @see org.mcbain.template.TemplateElement#render(org.mcbain.rest.Resources, org.mcbain.Writer, org.mcbain.TemplateInstance)
-    
-    public void render(Context context, Writer writer, TemplateInstance templateInstance) {
+    public void render(Request request, Writer writer, Template templateInstance) {
         for (TemplatePart e : children) {
             if (e instanceof ComponentSpec) {
-                renderElement(context, (ComponentSpec) e, writer, templateInstance);
+                renderElement(request, (ComponentSpec) e, writer, templateInstance);
             } else {
-                ((TemplatePart) e).render(context, writer, templateInstance);
+                e.render(request, writer, templateInstance);
             }
         }
     }
@@ -156,29 +145,43 @@ public class ComponentSpec implements TemplatePart{
     /************************************************************************
      * Renders a child component specification.
      * 
-     * @param   context             Render context
+     * @param   request             Render context
      * @param   spec                Component specification
      * @param   writer              Markup writer
      * @param   templateInstance    Template instance
      */
 
-    private void renderElement(final Context context, final ComponentSpec spec, final Writer writer, final TemplateInstance templateInstance) {
-        Renderer component = templateInstance.get(spec.id);
-        
-        if (component != null) {
-            if (component instanceof Container) {
-                ((Container) component).contents( new Renderer() {
-                    public void render(Context context, Writer writer) {
-                        spec.render(context, writer, templateInstance);
-                    }
-                });
+    private void renderElement(final Request request, final ComponentSpec spec, final Writer writer, final Template templateInstance) {
+        if (templateInstance.contains(spec.id)) {
+            Renderer component = templateInstance.get(spec.id);
+            
+            if (component != null) {
+	            if (component instanceof Container) {
+	                ((Container) component).contents( new Renderer() {
+	                    public void render(Request request, Writer writer) {
+	                        spec.render(request, writer, templateInstance);
+	                    }
+	                });
+	            }
+	            
+	            if (component instanceof Elemental) {
+	                ((Elemental) component).element( new Element(spec.element) );
+	            }
+	            
+	            component.render(request, writer);
             }
             
-            if (component instanceof Elemental) {
-                ((Elemental) component).element( new Element(spec.element) );
-            }
+        } else {
+        	Element element = spec.element();
+        	if (element != null) {
+        		writer.tag(element.tag()).attribute("id", spec.id).attributes(element);
+        	}
+        	
+            spec.render(request, writer, templateInstance);
             
-            component.render(context, writer);
+        	if (element != null) {
+        		writer.close();
+        	}
         }
     }
 }

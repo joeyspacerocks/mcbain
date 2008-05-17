@@ -17,7 +17,7 @@ package org.mcbain.components;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
-import org.mcbain.rest.Context;
+import org.mcbain.request.Request;
 import org.mcbain.template.Element;
 
 
@@ -29,6 +29,7 @@ public class Input implements Renderer, Elemental {
 
     private Object value;
     private Element element;
+    private boolean valueSet;
 
     public Input() {
     }
@@ -44,24 +45,27 @@ public class Input implements Renderer, Elemental {
     
     public Input value(Object value) {
         this.value = value;
+        valueSet = true;
         return this;
     }
 
     
 	// FIXME: unique id/name when in loop ...
     
-    public void render(Context context, Writer writer) {
+    public void render(Request request, Writer writer) {
+    	Object renderValue = valueSet ? value : request.parameter(element.id());
+    	
     	if (element.tag().equals("textarea")) {
             writer
-            .tag("textarea")
-	            .attribute("name", element.id())
-	            .attribute("id", element.id())
-	            .attributes(element)
-        	.print( value == null ? "" : value.toString(), false)
-        	.close();
+	            .tag("textarea")
+		            .attribute("name", element.id())
+		            .attribute("id", element.id())
+		            .attributes(element)
+	        	.print( renderValue == null ? "" : renderValue.toString(), false)
+	        	.close();
             
     	} else {
-    		element.attribute("value", value);
+    		element.attribute("value", renderValue);
 	    	
 	        writer
 	            .emptyTag("input")

@@ -25,7 +25,6 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.mcbain.ComponentFactory;
-import org.mcbain.TemplateInstance;
 import org.mcbain.util.Strings;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
@@ -45,7 +44,7 @@ public class TemplateFactory {
     
     private ComponentFactory factory;
     private ServletContext context;
-    private Map<String,Template> templates;
+    private Map<String,TemplateClass> templates;
     
     
     /************************************************************************
@@ -56,7 +55,7 @@ public class TemplateFactory {
     
     public TemplateFactory(ServletContext context) {
         this.context = context;
-        this.templates = new HashMap<String,Template>();
+        this.templates = new HashMap<String,TemplateClass>();
     }
     
 
@@ -67,8 +66,8 @@ public class TemplateFactory {
      * @return              Template instance
      */
     
-    public TemplateInstance instance(String name) {
-        Template template = findTemplate(name);
+    public Template instance(String name) {
+        TemplateClass template = findTemplate(name);
         return (template == null ? null : template.instance());
     }
     
@@ -80,8 +79,8 @@ public class TemplateFactory {
      * @return              Template
      */
     
-    public Template findTemplate(String name) {
-        Template template = templates.get(name);
+    public TemplateClass findTemplate(String name) {
+        TemplateClass template = templates.get(name);
         String path = Strings.string("/", name, ".html");
         
         if (template != null) {
@@ -116,8 +115,8 @@ public class TemplateFactory {
      * @return              Template specification
      */
     
-    public Template parseTemplate(String id, InputStream in) {
-        Template root = new Template(id, this);
+    public TemplateClass parseTemplate(String id, InputStream in) {
+        TemplateClass root = new TemplateClass(id, this);
         
         DefaultHandler handler = new TemplateSAXHandler(factory, root);
         SAXParserFactory factory = SAXParserFactory.newInstance();

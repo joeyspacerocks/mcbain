@@ -14,18 +14,19 @@
 
 package org.mcbain.examples.blog;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import org.mcbain.Renderer;
-import org.mcbain.TemplateInstance;
 import org.mcbain.Writer;
 import org.mcbain.components.If;
 import org.mcbain.components.Link;
 import org.mcbain.components.Loop;
-import org.mcbain.components.Value;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.Post;
-import org.mcbain.rest.Context;
+import org.mcbain.request.Request;
+import org.mcbain.template.Template;
 
 
 /************************************************************************
@@ -34,48 +35,41 @@ import org.mcbain.rest.Context;
 
 public class Posts implements Renderer {
 
-    private Loop<Post> postLoop;
-    private Link titleLink;
-    private Value title;
-    private Value content;
-    private If empty;
-    
-    
+	private Blog blog;
+	private List<Post> posts;
+	
     public Posts(final Blog blog, final List<Post> posts) {
-        if (posts.isEmpty()) {
-            empty = new If(posts.isEmpty());
-                
-        } else {
-            titleLink = new Link();
-            title = new Value();
-            title.tagless();
-            content = new Value();
-            
-            postLoop = new Loop<Post>(posts) {
-                public void currentValue(Post post) {
-                    String archive = post.getArchiveDate().replace('/', '-');
-                    
-                    title.value(post.getTitle());
-                    titleLink.uri("post", "name", blog.getName(), "archive", archive, "post", post.getTitle());
-                    content.value(post.getContent());
-                }
-            };
-        }
+    	this.blog = blog;
+    	this.posts = posts;
     }
     
-    
-    public void render(Context context, Writer writer) {
-        TemplateInstance template = context.template("posts");
-        
+    public void render(Request request, Writer writer) {
+        final Template template = request.context().template("posts");
+
         template.bind(
-            "posts", postLoop,
-            "title", title,
-            "titleLink", titleLink,
-            "body", content,
-            "moreLink", titleLink,
-            "empty", empty
+        	"empty", new If(posts.isEmpty()),
+            "posts", new Loop<Post>(posts) {
+            	public void currentValue(Post post) {
+            		template.bind(
+            			"title", post.getTitle(),
+            			"body", post.getContent(),
+            			"titleLink", new Link(postLink(post)),
+            			"moreLink", new Link(postLink(post))
+            		);
+            	}
+            }
         );
         
-        template.render(context, writer);
+        template.render(request, writer);
+    }
+    
+    private String postLink(Post post) {
+    	try {
+    		String archive = post.getArchiveDate().replace('/', '-');
+			return "/blog/" + blog.getName() + "/" + archive + "/" + URLEncoder.encode(post.getTitle(), "UTF-8");
+			
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
     }
 }

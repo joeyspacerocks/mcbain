@@ -19,7 +19,7 @@ import org.mcbain.Container;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
-import org.mcbain.rest.Context;
+import org.mcbain.request.Request;
 import org.mcbain.template.Element;
 
 /************************************************************************
@@ -73,7 +73,7 @@ public class Loop<T> implements Renderer, Container, Elemental {
         this.element = element;
     }
 
-    public void render(Context context, Writer writer) {
+    public void render(Request context, Writer writer) {
         if (source == null) return;
 
         if (element != null)

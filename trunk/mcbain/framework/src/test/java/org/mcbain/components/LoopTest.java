@@ -14,12 +14,12 @@
 
 package org.mcbain.components;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
-import org.mcbain.rest.Context;
-import org.mcbain.util.Lists;
+import org.mcbain.request.Request;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -51,7 +51,7 @@ public class LoopTest {
     
     @Test
     public void testSingleItemArray() {
-        final List<String> source = Lists.list("test");
+        final List<String> source = Arrays.asList("test");
         
         Loop<String> loop = new Loop<String>(source);
 
@@ -66,7 +66,7 @@ public class LoopTest {
     
     @Test
     public void testTwoItemArray() {
-        final List<String> source = Lists.list("test1", "test2");
+        final List<String> source = Arrays.asList("test1", "test2");
 
         Loop<String> loop = new Loop<String>(source);
         
@@ -81,7 +81,7 @@ public class LoopTest {
     
     private Writer loop(Loop<String> loop) {
         Renderer content = new Renderer() {
-            public void render(Context context, Writer writer) {
+            public void render(Request context, Writer writer) {
                 writer.print("content", false);
             }
         };

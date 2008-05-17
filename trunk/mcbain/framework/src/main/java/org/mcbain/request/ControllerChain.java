@@ -12,23 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain.rest;
+package org.mcbain.request;
 
-import org.mcbain.Renderer;
-import org.mcbain.Request;
+import java.util.ArrayList;
+import java.util.List;
 
-/************************************************************************
- * A controller takes an incoming request to a URI and decides what to 
- * do with it.
- */
 
-public class Controller {
+public class ControllerChain {
 
-    public Renderer get(Request request) {
-    	throw new UnsupportedOperationException();
-    }
-    
-    public Renderer post(Request request) {
-    	throw new UnsupportedOperationException();
-    }
+	private List<Interceptor> interceptors;
+	private Controller controller;
+
+	public ControllerChain() {
+		interceptors = new ArrayList<Interceptor>();
+	}
+	
+	public void controller(Controller controller) {
+		this.controller = controller;
+	}
+	
+	public Controller controller() {
+		return controller;
+	}
+	
+	public void addInterceptor(Interceptor interceptor) {
+		interceptors().add(interceptor);
+	}
+	
+	public List<Interceptor> interceptors() {
+		return interceptors;
+	}
 }
