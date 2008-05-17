@@ -15,11 +15,10 @@
 package org.mcbain.examples.blog;
 
 import org.mcbain.Renderer;
-import org.mcbain.TemplateInstance;
 import org.mcbain.Writer;
-import org.mcbain.components.Value;
 import org.mcbain.examples.blog.model.Blog;
-import org.mcbain.rest.Context;
+import org.mcbain.request.Request;
+import org.mcbain.template.Template;
 
 
 /************************************************************************
@@ -29,32 +28,25 @@ import org.mcbain.rest.Context;
 
 public class BlogHome implements Renderer {
 
-    private Border border;
-    private Posts posts;
+    private Blog blog;
     private String archive;
     
     
-    public BlogHome(final Blog blog) {
-        this(blog, null);
-    }
-
-    
     public BlogHome(final Blog blog, final String archive) {
-        border = new Border(blog);
+        this.blog = blog;
         this.archive = archive;
-        posts = new Posts(blog, archive == null ? blog.latestPosts() : blog.archivedPosts(archive));
     }
 
     
-    public void render(Context context, Writer writer) {
-        TemplateInstance template = context.template("blog");
+    public void render(Request request, Writer writer) {
+        Template template = request.context().template("blog");
         
         template.bind(
-            "border", border,
-            "posts", posts,
-            "postTitle", new Value(archive == null ? "Recent Posts" : "Archive: " + archive)
+            "border", new Border(blog),
+            "posts", new Posts(blog, archive == null ? blog.latestPosts() : blog.archivedPosts(archive)),
+            "postTitle", archive == null ? "Recent Posts" : "Archive: " + archive
         );
         
-        template.render(context, writer);
+        template.render(request, writer);
     }
 }

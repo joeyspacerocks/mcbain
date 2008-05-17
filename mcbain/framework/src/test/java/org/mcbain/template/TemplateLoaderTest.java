@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain.templates;
+package org.mcbain.template;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
@@ -25,7 +25,8 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
-import org.mcbain.template.Template;
+import org.mcbain.template.ComponentSpec;
+import org.mcbain.template.TemplateClass;
 import org.mcbain.template.TemplateFactory;
 import org.mcbain.template.TemplatePart;
 import org.mcbain.template.TemplateText;
@@ -35,9 +36,6 @@ import org.testng.annotations.Test;
 
 /************************************************************************
  * Tests parsing of templates.
- *
- * @version $Revision$
- * @author  Joe Trewin
  */
 
 public class TemplateLoaderTest {
@@ -81,7 +79,7 @@ public class TemplateLoaderTest {
         stub( context.getResourceAsStream("/test.html") ).toReturn(in);
         
         TemplateFactory templateFactory = new TemplateFactory(context);
-        Template t = templateFactory.parseTemplate("test", in);
+        TemplateClass t = templateFactory.parseTemplate("test", in);
 
         List<TemplatePart> children = t.root().children();
         
@@ -104,7 +102,7 @@ public class TemplateLoaderTest {
         stub( context.getResourceAsStream("/test.html") ).toReturn(in);
         
         TemplateFactory templateFactory = new TemplateFactory(context);
-        Template t = templateFactory.parseTemplate("test", in);
+        TemplateClass t = templateFactory.parseTemplate("test", in);
         
         List<TemplatePart> children = t.root().children();
         
@@ -128,7 +126,7 @@ public class TemplateLoaderTest {
         stub( context.getResourceAsStream("/test.html") ).toReturn(in);
         
         TemplateFactory templateFactory = new TemplateFactory(context);
-        Template t = templateFactory.parseTemplate("test", in);
+        TemplateClass t = templateFactory.parseTemplate("test", in);
         
         List<TemplatePart> children = t.root().children();
         
@@ -153,6 +151,26 @@ public class TemplateLoaderTest {
         }
         
         assertEquals(actual.toString(), expected);
+    }
+    
+    
+    @Test
+    public void shouldInterpolateValues() {
+        String html = "<html>The ${value} value</html>";
+        InputStream in = new ByteArrayInputStream(html.getBytes());
+        
+        ServletContext context = mock(ServletContext.class);
+        stub( context.getResourceAsStream("/test.html") ).toReturn(in);
+        
+        TemplateFactory templateFactory = new TemplateFactory(context);
+        TemplateClass t = templateFactory.parseTemplate("test", in);
+        
+        List<TemplatePart> children = t.root().children();
+        
+        assertEquals(children.size(), 3);
+        assertContent(children.get(0), "<html>The ");
+        assertEquals(((ComponentSpec) children.get(1)).element().id(), "value");
+        assertContent(children.get(2), " value</html>");
     }
     
     

@@ -26,7 +26,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.DefaultHandler2;
-import org.xml.sax.ext.Locator2;
 
 /*******************************************************************************
  * SAX handler that is used to decompose an XML template into a hierarchical 
@@ -61,7 +60,7 @@ public class TemplateSAXHandler extends DefaultHandler2 {
      * @param   root        Root template
      */
     
-    public TemplateSAXHandler(ComponentFactory factory, Template template) {
+    public TemplateSAXHandler(ComponentFactory factory, TemplateClass template) {
         this.current = template.root();
         this.factory = factory;
         this.tagStack = new ArrayStack<String>();
@@ -118,7 +117,25 @@ public class TemplateSAXHandler extends DefaultHandler2 {
     // @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
     
     public void characters(char[] ch, int start, int length) throws SAXException {
-        tween.append(new String(ch, start, length));
+    	String value = new String(ch, start, length);
+    	
+    	int valuePos;
+    	int endPos = -1;
+    	
+    	while ((valuePos = value.indexOf("${", endPos)) > -1) {
+    		tween.append(value.substring(0, valuePos));
+    		
+    		endPos = value.indexOf("}", valuePos);
+    		if (endPos < 0) {
+    			break;
+    		}
+
+            endTween();
+            String id = value.substring(valuePos + 2, endPos);
+            current.add(id, new Element(null, id));
+    	}
+    	
+        tween.append(value.substring(endPos + 1));
     }
 
     

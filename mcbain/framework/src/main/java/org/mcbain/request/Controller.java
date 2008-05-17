@@ -12,26 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain;
+package org.mcbain.request;
 
-import org.mcbain.request.Request;
+import org.mcbain.Renderer;
 
 /************************************************************************
- * Renderers provide a method for rendering themselves using the supplied
- * writer.
- *
- * @version $Revision$
- * @author  Joe Trewin
+ * A controller takes an incoming request to a URI and decides what to 
+ * do with it.
  */
 
-public interface Renderer {
+public class Controller {
 
-    /************************************************************************
-     * Renders using the supplied writer.
-     * 
-     * @param   context     Render context
-     * @param   writer      Writer to render to
-     */
+    public Renderer get(Request request) {
+    	throw new UnsupportedOperationException();
+    }
     
-    public void render(Request context, Writer writer);
+    public Renderer post(Request request) {
+    	throw new UnsupportedOperationException();
+    }
 }

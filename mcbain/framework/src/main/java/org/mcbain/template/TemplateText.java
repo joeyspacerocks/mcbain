@@ -14,16 +14,12 @@
 
 package org.mcbain.template;
 
-import org.mcbain.TemplateInstance;
 import org.mcbain.Writer;
-import org.mcbain.rest.Context;
+import org.mcbain.request.Request;
 
 /************************************************************************
- * Renderer used to store and render portions of text from component
- * templates.
- *
- * @version $Revision$
- * @author  Joe Trewin
+ * Template part used to store and render the portions of text that lie 
+ * between component specifications in a template.
  */
 
 public class TemplateText implements TemplatePart {
@@ -31,36 +27,20 @@ public class TemplateText implements TemplatePart {
     private String text;
     
     
-    /************************************************************************
-     * Constructs a new instance to render the supplied text.
-     * 
-     * @param   text        Template text
-     */
-    
     public TemplateText(String text) {
         this.text = text;
     }
     
 
-    // @see org.mcbain.template.TemplateElement#render(org.mcbain.rest.Resources, org.mcbain.Writer, org.mcbain.TemplateInstance)
-    
-    public void render(Context context, Writer writer, TemplateInstance templateInstance) {
+    public void render(Request context, Writer writer, Template templateInstance) {
         writer.print(text, true);
     }
     
-    
-    /************************************************************************
-     * Gets the text to be rendered.
-     * 
-     * @return      Text
-     */
     
     public String text() {
         return text;
     }
 
-    
-    // @see java.lang.Object#toString()
     
     @Override
     public String toString() {

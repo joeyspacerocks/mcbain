@@ -12,19 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain;
+package org.mcbain.request;
 
-import org.mcbain.rest.Context;
 
-/************************************************************************
- * Declares configuration of an application.
- */
-
-public interface Application {
-
-    /************************************************************************
-     * Provides the application with a chance to initialise.
-     */
-    
-    public void initialise(Context context);
+public interface Interceptor {
+	public boolean intercept(Request request);
 }

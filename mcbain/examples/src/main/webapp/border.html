@@ -1,15 +1,37 @@
 <html>
     <head>
         <title>Blog</title>
+        <style type="text/css">
+        	body { font-family: tahoma; font-size: 10pt; }
+        	h2 { color: #888; font-weight: normal; }
+        	a { text-decoration: none; }
+        	h1 { border-bottom: solid #ddd 2px; padding-bottom: 2px }
+        	h1 a { color: #777; font-weight: normal; }
+        	#content { float: left; }
+        	#content p { margin-left: 10px; }
+        	#footer { clear: both; border-top: solid #ddd 2px; padding-top: 2px }
+        	#side { float: right; }
+        	#side li { list-style-type: none;  }
+        	#side ul { padding-left: 0px; }
+        </style>
     </head>
     <body>
         <h1><a href="#" id="title" class="style">Blog title</a></h1>
-        <p><a href="newpost.html" id="newpost">Post new entry</a></p>
-        <h2>Archived posts</h2>
-        <ul id="archives">
-            <li><a id="archive" href="#">Archive name</a></li>
-        </ul>
-        <div id="content"></div>
-        <p><i>mcbain sample page / rendered in ~<span id="time">??</span> ms</i></p>
+        <div id="side">
+	        <h2>By date</h2>
+    	    <ul id="archives">
+         	   <li><a id="archive" href="#">Archive name</a></li>
+	        </ul>
+        </div>
+        <div id="content">
+        	<h2>Sample</h2>
+        	<p>
+        		Some sample content.
+        	</p>
+        </div>
+        <div id="footer">
+	        <p><a href="newpost.html" id="newpost">Post new entry</a></p>
+	        <p><i>mcbain sample page / rendered in ~${time} ms</i></p>
+        </div>
     </body>
 </html>

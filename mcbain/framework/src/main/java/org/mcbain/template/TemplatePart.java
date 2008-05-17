@@ -14,9 +14,8 @@
 
 package org.mcbain.template;
 
-import org.mcbain.TemplateInstance;
 import org.mcbain.Writer;
-import org.mcbain.rest.Context;
+import org.mcbain.request.Request;
 
 /************************************************************************
  * Renderable element representing a portion of a template.
@@ -36,5 +35,5 @@ public interface TemplatePart {
      * @param   templateInstance    Template instance
      */
     
-    public void render(Context context, Writer writer, TemplateInstance templateInstance);
+    public void render(Request context, Writer writer, Template templateInstance);
 }

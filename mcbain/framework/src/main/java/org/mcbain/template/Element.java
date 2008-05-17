@@ -25,65 +25,62 @@ import java.util.Set;
 
 public class Element {
     
-	private Element passThrough;
 	private String tag;
 	private String id;
 	private Map<String, String> attributes;
-	
+
+	private Element passThrough;
+	private boolean proxy;
+
     public Element(String tag, String id) {
     	this.tag = tag;
     	this.id = id;
     }
 
     public Element(Element element) {
-    	this.passThrough = element;
+    	passThrough = element;
+    	proxy = true;
     }
     
     public Element attribute(String key, Object value) {
-    	attributes().put(key, value == null ? null : value.toString());
-    	return this;
-    }
-
-    public String tag() {
-    	return (passThrough == null ? tag : passThrough.tag());
-    }
-
-    public String id() {
-    	return (passThrough == null ? id : passThrough.id());
-    }
-    
-    public Set<String> attributeNames() {
-    	if (attributes == null) {
-    		if (passThrough == null) {
-    			return Collections.emptySet();
-    		} else {
-    			return passThrough.attributeNames();
-    		}
-    		
-    	} else {
-    		return attributes.keySet();
-    	}
-    }
-
-    public String attribute(String key) {
-    	String value = null;
-    	
-    	if (attributes != null) {
-    		value = attributes.get(key);
-    	}
-    	
-    	if (value == null && passThrough != null) {
-    		value = passThrough.attribute(key);
-    	}
-    	
-    	return value;
-    }
-    
-    private Map<String, String> attributes() {
     	if (attributes == null) {
     		attributes = new LinkedHashMap<String, String>();
     	}
     	
-    	return attributes;
+    	if (proxy) {
+    		attributes.putAll(passThrough.attributes());
+    	}
+    	
+    	attributes.put(key, value == null ? null : value.toString());
+    	return this;
+    }
+
+    public String tag() {
+    	return proxy ? passThrough.tag() : tag;
+    }
+
+    public String id() {
+    	return proxy ? passThrough.id() : id;
+    }
+    
+    public Set<String> attributeNames() {
+    	return attributes().keySet();
+    }
+
+    public String attribute(String key) {
+    	return attributes().get(key);
+    }
+    
+    protected Map<String, String> attributes() {
+    	if (attributes == null) {
+    		if (proxy) {
+    			return passThrough.attributes();
+    		} else {
+    			return Collections.emptyMap();
+    		}
+
+    	} else {
+        	return attributes;
+    	}
     }
 }

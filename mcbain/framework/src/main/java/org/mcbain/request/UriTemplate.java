@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain.rest;
+package org.mcbain.request;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -51,7 +51,7 @@ public class UriTemplate {
      */
     
     public Uri emptyUri() {
-        return new Uri(this);
+        return new Uri();
     }
 
     
@@ -80,7 +80,7 @@ public class UriTemplate {
      */
     
     public Uri match(String actual) {
-        Uri result = new Uri(this);
+        Uri result = new Uri();
         
         String[] parts = split(actual);
         

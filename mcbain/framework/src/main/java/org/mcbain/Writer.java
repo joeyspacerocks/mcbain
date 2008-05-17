@@ -30,7 +30,7 @@ import org.mcbain.template.Element;
 
 public class Writer {
 
-    private enum State { CONTENT, TAG, EMPTY_TAG, BODY }
+    private enum State { CONTENT, TAG, EMPTY_TAG }
     
     private StringBuilder buffer;
     private State state;

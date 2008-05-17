@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain.rest;
+package org.mcbain.request;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,30 +26,11 @@ import org.mcbain.util.PairIterator;
 
 public class Uri {
 
-    public static final Uri NOMATCH = new Uri(false);
+    public static final Uri NOMATCH = new Uri() {
+    	public boolean matches() { return false; }
+    };
     
-    private UriTemplate template;
-    private boolean match;
     private Map<String,Object> parameters;
-    
-    
-    /************************************************************************
-     * Constructs a new instance.
-     */
-
-    public Uri(UriTemplate template) {
-        this.template = template;
-        this.match = true;
-    }
-    
-    
-    /************************************************************************
-     * Constructs a new instance.
-     */
-
-    public Uri(boolean match) {
-        this.match = match;
-    }
     
     
     /************************************************************************
@@ -59,7 +40,7 @@ public class Uri {
      */
     
     public boolean matches() {
-        return match;
+        return true;
     }
     
     
@@ -118,11 +99,5 @@ public class Uri {
             parameters = new HashMap<String, Object>();
         }
         return parameters;
-    }
-
-    
-    @Override
-    public String toString() {
-        return template.build(this);
     }
 }
