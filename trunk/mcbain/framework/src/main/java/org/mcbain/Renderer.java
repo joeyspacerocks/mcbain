@@ -19,9 +19,6 @@ import org.mcbain.request.Request;
 /************************************************************************
  * Renderers provide a method for rendering themselves using the supplied
  * writer.
- *
- * @version $Revision$
- * @author  Joe Trewin
  */
 
 public interface Renderer {
@@ -29,9 +26,9 @@ public interface Renderer {
     /************************************************************************
      * Renders using the supplied writer.
      * 
-     * @param   context     Render context
+     * @param   request     Render context
      * @param   writer      Writer to render to
      */
     
-    public void render(Request context, Writer writer);
+    public void render(Request request, Writer writer);
 }

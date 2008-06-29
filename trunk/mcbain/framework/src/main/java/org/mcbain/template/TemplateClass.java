@@ -25,29 +25,17 @@ import org.mcbain.request.Request;
 /************************************************************************
  * Representation of a component template, holding the hierarchy of 
  * contained component specifications.
- *
- * @version $Revision$
- * @author  Joe Trewin
  */
 
 public class TemplateClass implements TemplatePart {
 
-    private TemplateFactory loader;
     private ComponentSpec root;
     private List<ComponentSpec> components;
     private Map<String,ComponentSpec> lookup;
     private long timestamp;
     
     
-    /************************************************************************
-     * Constructs a new template.
-     * 
-     * @param   loader      Template loader that loaded the template
-     * @param   id          Template id
-     */
-    
-    public TemplateClass(String id, TemplateFactory loader) {
-        this.loader = loader;
+    public TemplateClass() {
         root = new ComponentSpec(this);
         components = new ArrayList<ComponentSpec>();
         lookup = new HashMap<String,ComponentSpec>();
@@ -67,8 +55,6 @@ public class TemplateClass implements TemplatePart {
         lookup.put(id, component);
     }
     
-    
-    // @see org.mcbain.template.TemplateElement#render(org.mcbain.rest.Resources, org.mcbain.Writer, org.mcbain.TemplateInstance)
     
     public void render(Request context, Writer writer, Template templateInstance) {
         root.render(context, writer, templateInstance);
@@ -98,17 +84,6 @@ public class TemplateClass implements TemplatePart {
         return root;
     }
 
-    
-    /************************************************************************
-     * Gets the template factory that this template was loaded with.
-     * 
-     * @return      Template factory
-     */
-    
-    public TemplateFactory factory() {
-        return loader;
-    }
-    
     
     /************************************************************************
      * Creates a new template instance.
