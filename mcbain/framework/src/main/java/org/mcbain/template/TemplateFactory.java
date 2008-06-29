@@ -116,7 +116,7 @@ public class TemplateFactory {
      */
     
     public TemplateClass parseTemplate(String id, InputStream in) {
-        TemplateClass root = new TemplateClass(id, this);
+        TemplateClass root = new TemplateClass();
         
         DefaultHandler handler = new TemplateSAXHandler(factory, root);
         SAXParserFactory factory = SAXParserFactory.newInstance();

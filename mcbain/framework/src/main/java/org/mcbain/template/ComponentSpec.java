@@ -27,9 +27,9 @@ import org.mcbain.request.Request;
  * Specification of a component, usually defined through by template.
  */
 
-public class ComponentSpec implements TemplatePart {
+class ComponentSpec implements TemplatePart {
 
-    private TemplateClass template;
+    private TemplateClass templateClass;
     private String id;
     private Element element;
     
@@ -41,11 +41,10 @@ public class ComponentSpec implements TemplatePart {
      * Constructs a new component specification.
      * 
      * @param   template    Template the specification belongs to
-     * @param   id          Component specification id
      */
     
-    public ComponentSpec(TemplateClass template) {
-        this.template = template;
+    protected ComponentSpec(TemplateClass template) {
+        this.templateClass = template;
         children = new ArrayList<TemplatePart>(0);
     }
     
@@ -59,8 +58,8 @@ public class ComponentSpec implements TemplatePart {
      * @param   component   Component the specification defines
      */
     
-    public ComponentSpec(String id, ComponentSpec parent, Element element) {
-        this(parent.template);
+    private ComponentSpec(String id, ComponentSpec parent, Element element) {
+        this(parent.templateClass);
         this.id = id;
         this.parent = parent;
         this.element = element;
@@ -75,10 +74,10 @@ public class ComponentSpec implements TemplatePart {
      * @return              New child specification
      */
     
-    public ComponentSpec add(String id, Element element) {
+    protected ComponentSpec add(String id, Element element) {
         ComponentSpec child = new ComponentSpec(id, this, element);
         
-        template.add(id, child);
+        templateClass.add(id, child);
         children.add(child);
         
         return child;
@@ -91,7 +90,7 @@ public class ComponentSpec implements TemplatePart {
      * @param   text        Template text
      */
     
-    public void addTemplateText(String text) {
+    protected void addTemplateText(String text) {
         TemplatePart child = new TemplateText(text);
         children.add(child);
     }
@@ -103,7 +102,7 @@ public class ComponentSpec implements TemplatePart {
      * @return      List of children
      */
     
-    public List<TemplatePart> children() {
+    protected List<TemplatePart> children() {
         return children;
     }
 
@@ -114,7 +113,7 @@ public class ComponentSpec implements TemplatePart {
      * @return      Parent template, or null
      */
     
-    public ComponentSpec parent() {
+    protected ComponentSpec parent() {
         return parent;
     }
     
@@ -123,7 +122,7 @@ public class ComponentSpec implements TemplatePart {
      * Gets the element that was used to define the component in the 
      * template.
      * 
-     * @return      Tempalte element
+     * @return      Template element
      */
     
     public Element element() {
@@ -131,57 +130,44 @@ public class ComponentSpec implements TemplatePart {
     }
     
 
-    public void render(Request request, Writer writer, Template templateInstance) {
-        for (TemplatePart e : children) {
-            if (e instanceof ComponentSpec) {
-                renderElement(request, (ComponentSpec) e, writer, templateInstance);
-            } else {
-                e.render(request, writer, templateInstance);
-            }
-        }
-    }
-    
-    
-    /************************************************************************
-     * Renders a child component specification.
-     * 
-     * @param   request             Render context
-     * @param   spec                Component specification
-     * @param   writer              Markup writer
-     * @param   templateInstance    Template instance
-     */
-
-    private void renderElement(final Request request, final ComponentSpec spec, final Writer writer, final Template templateInstance) {
-        if (templateInstance.contains(spec.id)) {
-            Renderer component = templateInstance.get(spec.id);
+    public void render(Request request, Writer writer, final Template template) {
+    	if (isRoot()) {
+    		renderChildren(request, writer, template);
+    		
+    	} else if (template.contains(id)) {
+            Renderer component = template.get(id);
             
             if (component != null) {
 	            if (component instanceof Container) {
 	                ((Container) component).contents( new Renderer() {
 	                    public void render(Request request, Writer writer) {
-	                        spec.render(request, writer, templateInstance);
+	                		renderChildren(request, writer, template);
 	                    }
 	                });
 	            }
 	            
 	            if (component instanceof Elemental) {
-	                ((Elemental) component).element( new Element(spec.element) );
+	                ((Elemental) component).element( new Element(element) );
 	            }
 	            
 	            component.render(request, writer);
             }
             
-        } else {
-        	Element element = spec.element();
-        	if (element != null) {
-        		writer.tag(element.tag()).attribute("id", spec.id).attributes(element);
-        	}
-        	
-            spec.render(request, writer, templateInstance);
-            
-        	if (element != null) {
-        		writer.close();
-        	}
+        } else if (element != null) {
+    		writer.tag(element.tag()).attribute("id", id).attributes(element);
+    		renderChildren(request, writer, template);
+    		writer.close();
         }
+    }
+    
+    
+    private void renderChildren(Request request, Writer writer, final Template templateInstance) {
+        for (TemplatePart part : children) {
+        	part.render(request, writer, templateInstance);
+        }
+    }
+    
+    private boolean isRoot() {
+    	return (parent == null);
     }
 }
