@@ -14,10 +14,6 @@
 
 package org.mcbain.examples.blog;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.List;
-
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
 import org.mcbain.components.If;
@@ -28,8 +24,12 @@ import org.mcbain.examples.blog.model.Post;
 import org.mcbain.request.Request;
 import org.mcbain.template.Template;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
 
-/************************************************************************
+
+/**
  * Component used to display a list of posts.
  */
 
@@ -37,39 +37,39 @@ public class Posts implements Renderer {
 
 	private Blog blog;
 	private List<Post> posts;
-	
-    public Posts(final Blog blog, final List<Post> posts) {
-    	this.blog = blog;
-    	this.posts = posts;
-    }
-    
-    public void render(Request request, Writer writer) {
-        final Template template = request.template("posts");
 
-        template.bind(
-        	"empty", new If(posts.isEmpty()),
-            "posts", new Loop<Post>(posts) {
-            	public void currentValue(Post post) {
-            		template.bind(
-            			"title", post.getTitle(),
-            			"body", post.getContent(),
-            			"titleLink", new Link(postLink(post)),
-            			"moreLink", new Link(postLink(post))
-            		);
-            	}
-            }
-        );
-        
-        template.render(request, writer);
-    }
-    
-    private String postLink(Post post) {
-    	try {
-    		String archive = post.getArchiveDate().replace('/', '-');
+	public Posts(final Blog blog, final List<Post> posts) {
+		this.blog = blog;
+		this.posts = posts;
+	}
+
+	public void render(Request request, Writer writer) {
+		final Template template = request.template("posts");
+
+		template.bind(
+			"empty", new If(posts.isEmpty()),
+			"posts", new Loop<Post>(posts) {
+				public void currentValue(Post post) {
+					template.bind(
+						"title", post.getTitle(),
+						"body", post.getContent(),
+						"titleLink", new Link(postLink(post)),
+						"moreLink", new Link(postLink(post))
+					);
+				}
+			}
+		);
+
+		template.render(request, writer);
+	}
+
+	private String postLink(Post post) {
+		try {
+			String archive = post.getArchiveDate().replace('/', '-');
 			return "/blog/" + blog.getName() + "/" + archive + "/" + URLEncoder.encode(post.getTitle(), "UTF-8");
-			
+
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
-    }
+	}
 }

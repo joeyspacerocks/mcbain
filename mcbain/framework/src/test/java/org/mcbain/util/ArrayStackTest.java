@@ -17,70 +17,70 @@ package org.mcbain.util;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/************************************************************************
+/**
  * Unit tests the array stack implementation.
  */
 
 public class ArrayStackTest {
 
-    /************************************************************************
-     * Tests that a pop from an empty stack returns null.
-     */
-    
-    @Test
-    public void testPopFromEmptyStack() {
-        ArrayStack<String> stack = new ArrayStack<String>();
-        
-        Assert.assertNull( stack.pop() );
-    }
-    
-    
-    /************************************************************************
-     * Tests that a single push followed by a pop returns correct element.
-     */
-    
-    @Test
-    public void testPushThenPop() {
-        ArrayStack<String> stack = new ArrayStack<String>();
-        
-        stack.push("test");
-        
-        Assert.assertEquals( stack.pop(), "test" );
-        Assert.assertNull( stack.pop() );
-    }
-    
-    
-    /************************************************************************
-     * Tests that a single push followed by a peek returns correct element.
-     */
-    
-    @Test
-    public void testPushThenPeek() {
-        ArrayStack<String> stack = new ArrayStack<String>();
-        
-        stack.push("test");
-        
-        Assert.assertEquals( stack.peek(), "test" );
-        Assert.assertEquals( stack.pop(), "test" );
-        Assert.assertNull( stack.pop() );
-    }
-    
-    
-    /************************************************************************
-     * Tests that a stack with several items maintains itself.
-     */
-    
-    @Test
-    public void testMultipleElements() {
-        ArrayStack<String> stack = new ArrayStack<String>();
-        
-        stack.push("test1");
-        stack.push("test2");
-        stack.push("test3");
-        
-        Assert.assertEquals( stack.pop(), "test3" );
-        Assert.assertEquals( stack.pop(), "test2" );
-        Assert.assertEquals( stack.pop(), "test1" );
-        Assert.assertNull( stack.pop() );
-    }
+	/**
+	 * Tests that a pop from an empty stack returns null.
+	 */
+
+	@Test
+	public void testPopFromEmptyStack() {
+		ArrayStack<String> stack = new ArrayStack<String>();
+
+		Assert.assertNull(stack.pop());
+	}
+
+
+	/**
+	 * Tests that a single push followed by a pop returns correct element.
+	 */
+
+	@Test
+	public void testPushThenPop() {
+		ArrayStack<String> stack = new ArrayStack<String>();
+
+		stack.push("test");
+
+		Assert.assertEquals(stack.pop(), "test");
+		Assert.assertNull(stack.pop());
+	}
+
+
+	/**
+	 * Tests that a single push followed by a peek returns correct element.
+	 */
+
+	@Test
+	public void testPushThenPeek() {
+		ArrayStack<String> stack = new ArrayStack<String>();
+
+		stack.push("test");
+
+		Assert.assertEquals(stack.peek(), "test");
+		Assert.assertEquals(stack.pop(), "test");
+		Assert.assertNull(stack.pop());
+	}
+
+
+	/**
+	 * Tests that a stack with several items maintains itself.
+	 */
+
+	@Test
+	public void testMultipleElements() {
+		ArrayStack<String> stack = new ArrayStack<String>();
+
+		stack.push("test1");
+		stack.push("test2");
+		stack.push("test3");
+
+		Assert.assertEquals(stack.pop(), "test3");
+		Assert.assertEquals(stack.pop(), "test2");
+		Assert.assertEquals(stack.pop(), "test1");
+		Assert.assertNull(stack.pop());
+	}
 }

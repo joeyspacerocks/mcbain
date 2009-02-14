@@ -16,18 +16,18 @@ package org.mcbain.request;
 
 import org.mcbain.Renderer;
 
-/************************************************************************
- * A controller takes an incoming request to a URI and decides what to 
+/**
+ * A controller takes an incoming request to a URI and decides what to
  * do with it.
  */
 
 public class Controller {
 
-    public Renderer get(Request request) {
-    	throw new UnsupportedOperationException();
-    }
-    
-    public Renderer post(Request request) {
-    	throw new UnsupportedOperationException();
-    }
+	public Renderer get(Request request) {
+		throw new UnsupportedOperationException();
+	}
+
+	public Renderer post(Request request) {
+		throw new UnsupportedOperationException();
+	}
 }

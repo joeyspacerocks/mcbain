@@ -24,34 +24,34 @@ import org.mcbain.request.Request;
 import org.mcbain.template.Template;
 
 
-/************************************************************************
+/**
  * Form for creating a new blog post.
  */
 
 public class NewPost implements Renderer {
 
-    private Blog blog;
-    
-    public NewPost(final Blog blog) {
-        this.blog = blog;
-    }
+	private Blog blog;
 
-    
-    public void render(final Request request, Writer writer) {
-        final Template template = request.template("newpost");
-        
-        template.bind(
-            "border", new Border(blog),
-            "form", new Form("/blog/" + blog.getName() + "/newpost"),
-            "title", new Input(),
-            "content", new Input(),
-            "errors", new Loop<String>(request.errors().values()) {
-            	public void currentValue(String value) {
-            		template.bind("error", value);
-            	}
-            }
-        );
-        
-        template.render(request, writer);
-    }
+	public NewPost(final Blog blog) {
+		this.blog = blog;
+	}
+
+
+	public void render(final Request request, Writer writer) {
+		final Template template = request.template("newpost");
+
+		template.bind(
+			"border", new Border(blog),
+			"form", new Form("/blog/" + blog.getName() + "/newpost"),
+			"title", new Input(),
+			"content", new Input(),
+			"errors", new Loop<String>(request.errors().values()) {
+				public void currentValue(String value) {
+					template.bind("error", value);
+				}
+			}
+		);
+
+		template.render(request, writer);
+	}
 }

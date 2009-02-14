@@ -18,45 +18,45 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Post {
-    private String title;
-    private String content;
-    private Date creation;
-    private String archiveDate;
-    
-    public Post(Blog blog, String title, String content) {
-        this(blog, title, content, new Date());
-    }
-    
-    public Post(Blog blog, String title, String content, Date postDate) {
-        //this.blog = blog;
-        this.title = title;
-        this.content = content;
-        this.creation = postDate;
-        this.archiveDate = new SimpleDateFormat("yyyy/MM").format(creation);
-    }
-    
-    public String getTitle() {
-        return title;
-    }
-    
-    public String getContent() {
-        return content;
-    }
-    
-    public Date getCreation() {
-        return creation;
-    }
-    
-    public void modify(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-    
-    public String getArchiveDate() {
-        return this.archiveDate;
-    }
-    
-    public boolean inArchive(String date) {
-        return (archiveDate.equals(date));
-    }
+	private String title;
+	private String content;
+	private Date creation;
+	private String archiveDate;
+
+	public Post(Blog blog, String title, String content) {
+		this(blog, title, content, new Date());
+	}
+
+	public Post(Blog blog, String title, String content, Date postDate) {
+		//this.blog = blog;
+		this.title = title;
+		this.content = content;
+		this.creation = postDate;
+		this.archiveDate = new SimpleDateFormat("yyyy/MM").format(creation);
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public Date getCreation() {
+		return creation;
+	}
+
+	public void modify(String title, String content) {
+		this.title = title;
+		this.content = content;
+	}
+
+	public String getArchiveDate() {
+		return this.archiveDate;
+	}
+
+	public boolean inArchive(String date) {
+		return (archiveDate.equals(date));
+	}
 }

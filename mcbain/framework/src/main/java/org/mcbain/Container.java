@@ -14,21 +14,21 @@
 
 package org.mcbain;
 
-/************************************************************************
+/**
  * Component type that indicates that the component contains other
  * components.
  *
+ * @author Joe Trewin
  * @version $Revision$
- * @author  Joe Trewin
  */
 
 public interface Container {
 
-    /************************************************************************
-     * Sets the content of the container.
-     * 
-     * @param   content     Content renderer
-     */
-    
-    public void contents(Renderer content);
+	/**
+	 * Sets the content of the container.
+	 *
+	 * @param content Content renderer
+	 */
+
+	public void contents(Renderer content);
 }

@@ -16,20 +16,20 @@ package org.mcbain;
 
 import org.mcbain.template.Element;
 
-/************************************************************************
+/**
  * Type indicating that the implementor accepts informal attributes.
  *
+ * @author Joe Trewin
  * @version $Revision$
- * @author  Joe Trewin
  */
 
 public interface Elemental {
-    
-    /************************************************************************
-     * Passes the markup element that was used when the object was defined.
-     * 
-     * @param   element         Element
-     */
-    
-    public void element(Element element);
+
+	/**
+	 * Passes the markup element that was used when the object was defined.
+	 *
+	 * @param element Element
+	 */
+
+	public void element(Element element);
 }

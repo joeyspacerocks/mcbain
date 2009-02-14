@@ -14,66 +14,66 @@
 
 package org.mcbain.util;
 
-/************************************************************************
+/**
  * Utility to iterate around an array of data, treating alternate values
  * as key/value pairs.
  */
 
 public class PairIterator<K, V> {
 
-    private Object[] source;
-    private int keyIndex;
-    private int valueIndex;
-    
-    
-    /************************************************************************
-     * Constructs an iterator to iterate round the specified source array.
-     * 
-     * @param   source      Array of source data
-     */
-    
-    public PairIterator(Object[] source) {
-        this.source = source;
-        keyIndex = 0;
-        valueIndex = 1;
-    }
-    
-    
-    /************************************************************************
-     * Tests to see if their is another pair to fetch.
-     * 
-     * @return      True if more data present, else false
-     */
-    
-    public boolean hasNext() {
-        return (source != null && keyIndex < source.length);
-    }
-    
-    
-    /************************************************************************
-     * Gets the next key value.
-     * 
-     * @return      Next key value
-     */
-    
-    @SuppressWarnings("unchecked")
-    public K nextKey() {
-        K key = (K) source[keyIndex];
-        keyIndex += 2;
-        return key;
-    }
-    
-    
-    /************************************************************************
-     * Gets the next value.
-     * 
-     * @return      Next value
-     */
-    
-    @SuppressWarnings("unchecked")
-    public V nextValue() {
-        V value = (V) source[valueIndex];
-        valueIndex += 2;
-        return value;
-    }
+	private Object[] source;
+	private int keyIndex;
+	private int valueIndex;
+
+
+	/**
+	 * Constructs an iterator to iterate round the specified source array.
+	 *
+	 * @param source Array of source data
+	 */
+
+	public PairIterator(Object[] source) {
+		this.source = source;
+		keyIndex = 0;
+		valueIndex = 1;
+	}
+
+
+	/**
+	 * Tests to see if their is another pair to fetch.
+	 *
+	 * @return True if more data present, else false
+	 */
+
+	public boolean hasNext() {
+		return (source != null && keyIndex < source.length);
+	}
+
+
+	/**
+	 * Gets the next key value.
+	 *
+	 * @return Next key value
+	 */
+
+	@SuppressWarnings("unchecked")
+	public K nextKey() {
+		K key = (K) source[keyIndex];
+		keyIndex += 2;
+		return key;
+	}
+
+
+	/**
+	 * Gets the next value.
+	 *
+	 * @return Next value
+	 */
+
+	@SuppressWarnings("unchecked")
+	public V nextValue() {
+		V value = (V) source[valueIndex];
+		valueIndex += 2;
+		return value;
+	}
 }

@@ -14,84 +14,84 @@
 
 package org.mcbain.template;
 
+import org.mcbain.Writer;
+import org.mcbain.request.Request;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.mcbain.Writer;
-import org.mcbain.request.Request;
-
-/************************************************************************
- * Representation of a component template, holding the hierarchy of 
+/**
+ * Representation of a component template, holding the hierarchy of
  * contained component specifications.
  */
 
 public class TemplateClass implements TemplatePart {
 
-    private ComponentSpec root;
-    private List<ComponentSpec> components;
-    private Map<String,ComponentSpec> lookup;
-    private long timestamp;
-    
-    
-    public TemplateClass() {
-        root = new ComponentSpec(this);
-        components = new ArrayList<ComponentSpec>();
-        lookup = new HashMap<String,ComponentSpec>();
-        timestamp = System.currentTimeMillis();
-    }
-    
-    
-    /************************************************************************
-     * Adds a new component spec.
-     * 
-     * @param   id          Component id
-     * @param   component   Component spec
-     */
-    
-    public void add(String id, ComponentSpec component) {
-        components.add(component);
-        lookup.put(id, component);
-    }
-    
-    
-    public void render(Request context, Writer writer, Template templateInstance) {
-        root.render(context, writer, templateInstance);
-    }
+	private ComponentSpec root;
+	private List<ComponentSpec> components;
+	private Map<String, ComponentSpec> lookup;
+	private long timestamp;
 
-    
-    /************************************************************************
-     * Tests to see if the template was created before the specified time.
-     * 
-     * @param   time        Time to test against
-     * @return              True if older than time, else false
-     */
-    
-    public boolean olderThan(long time) {
-        return (timestamp < time);
-    }
-    
-    
-    /************************************************************************
-     * Gets the root component specification that contains all the nested
-     * specifications.
-     * 
-     * @return      Root component specification
-     */
-    
-    public ComponentSpec root() {
-        return root;
-    }
 
-    
-    /************************************************************************
-     * Creates a new template instance.
-     * 
-     * @return      Template instance
-     */
-    
-    public Template instance() {
-        return new Template(this);
-    }
+	public TemplateClass() {
+		root = new ComponentSpec(this);
+		components = new ArrayList<ComponentSpec>();
+		lookup = new HashMap<String, ComponentSpec>();
+		timestamp = System.currentTimeMillis();
+	}
+
+
+	/**
+	 * Adds a new component spec.
+	 *
+	 * @param id		Component id
+	 * @param component Component spec
+	 */
+
+	public void add(String id, ComponentSpec component) {
+		components.add(component);
+		lookup.put(id, component);
+	}
+
+
+	public void render(Request context, Writer writer, Template templateInstance) {
+		root.render(context, writer, templateInstance);
+	}
+
+
+	/**
+	 * Tests to see if the template was created before the specified time.
+	 *
+	 * @param time Time to test against
+	 * @return True if older than time, else false
+	 */
+
+	public boolean olderThan(long time) {
+		return (timestamp < time);
+	}
+
+
+	/**
+	 * Gets the root component specification that contains all the nested
+	 * specifications.
+	 *
+	 * @return Root component specification
+	 */
+
+	public ComponentSpec root() {
+		return root;
+	}
+
+
+	/**
+	 * Creates a new template instance.
+	 *
+	 * @return Template instance
+	 */
+
+	public Template instance() {
+		return new Template(this);
+	}
 }

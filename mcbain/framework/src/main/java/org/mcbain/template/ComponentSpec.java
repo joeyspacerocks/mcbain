@@ -14,160 +14,160 @@
 
 package org.mcbain.template;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.mcbain.Container;
 import org.mcbain.Elemental;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
 import org.mcbain.request.Request;
 
-/************************************************************************
+import java.util.ArrayList;
+import java.util.List;
+
+/**
  * Specification of a component, usually defined through by template.
  */
 
 class ComponentSpec implements TemplatePart {
 
-    private TemplateClass templateClass;
-    private String id;
-    private Element element;
-    
-    private ComponentSpec parent;
-    private List<TemplatePart> children;
-    
-    
-    /************************************************************************
-     * Constructs a new component specification.
-     * 
-     * @param   template    Template the specification belongs to
-     */
-    
-    protected ComponentSpec(TemplateClass template) {
-        this.templateClass = template;
-        children = new ArrayList<TemplatePart>(0);
-    }
-    
-    
-    /************************************************************************
-     * Constructs a new component specification.
-     * 
-     * @param   id          Component specification id
-     * @param   parent      Parent fragment
-     * @param   element     Markup element
-     * @param   component   Component the specification defines
-     */
-    
-    private ComponentSpec(String id, ComponentSpec parent, Element element) {
-        this(parent.templateClass);
-        this.id = id;
-        this.parent = parent;
-        this.element = element;
-    }
+	private TemplateClass templateClass;
+	private String id;
+	private Element element;
 
-    
-    /************************************************************************
-     * Adds a new component specification as a child of this one.
-     * 
-     * @param   id          Component specification id
-     * @param   element     Markup element
-     * @return              New child specification
-     */
-    
-    protected ComponentSpec add(String id, Element element) {
-        ComponentSpec child = new ComponentSpec(id, this, element);
-        
-        templateClass.add(id, child);
-        children.add(child);
-        
-        return child;
-    }
-    
+	private ComponentSpec parent;
+	private List<TemplatePart> children;
 
-    /************************************************************************
-     * Adds a new child component specification to hold template text.
-     * 
-     * @param   text        Template text
-     */
-    
-    protected void addTemplateText(String text) {
-        TemplatePart child = new TemplateText(text);
-        children.add(child);
-    }
-    
-    
-    /************************************************************************
-     * Gets a list of child templates - returns empty list if none.
-     * 
-     * @return      List of children
-     */
-    
-    protected List<TemplatePart> children() {
-        return children;
-    }
 
-    
-    /************************************************************************
-     * Gets the parent of this template, or null if it's the root template.
-     * 
-     * @return      Parent template, or null
-     */
-    
-    protected ComponentSpec parent() {
-        return parent;
-    }
-    
-    
-    /************************************************************************
-     * Gets the element that was used to define the component in the 
-     * template.
-     * 
-     * @return      Template element
-     */
-    
-    public Element element() {
-        return element;
-    }
-    
+	/**
+	 * Constructs a new component specification.
+	 *
+	 * @param template Template the specification belongs to
+	 */
 
-    public void render(Request request, Writer writer, final Template template) {
-    	if (isRoot()) {
-    		renderChildren(request, writer, template);
-    		
-    	} else if (template.contains(id)) {
-            Renderer component = template.get(id);
-            
-            if (component != null) {
-	            if (component instanceof Container) {
-	                ((Container) component).contents( new Renderer() {
-	                    public void render(Request request, Writer writer) {
-	                		renderChildren(request, writer, template);
-	                    }
-	                });
-	            }
-	            
-	            if (component instanceof Elemental) {
-	                ((Elemental) component).element( new Element(element) );
-	            }
-	            
-	            component.render(request, writer);
-            }
-            
-        } else if (element != null) {
-    		writer.tag(element.tag()).attribute("id", id).attributes(element);
-    		renderChildren(request, writer, template);
-    		writer.close();
-        }
-    }
-    
-    
-    private void renderChildren(Request request, Writer writer, final Template templateInstance) {
-        for (TemplatePart part : children) {
-        	part.render(request, writer, templateInstance);
-        }
-    }
-    
-    private boolean isRoot() {
-    	return (parent == null);
-    }
+	protected ComponentSpec(TemplateClass template) {
+		this.templateClass = template;
+		children = new ArrayList<TemplatePart>(0);
+	}
+
+
+	/**
+	 * Constructs a new component specification.
+	 *
+	 * @param id		Component specification id
+	 * @param parent	Parent fragment
+	 * @param element   Markup element
+	 * @param component Component the specification defines
+	 */
+
+	private ComponentSpec(String id, ComponentSpec parent, Element element) {
+		this(parent.templateClass);
+		this.id = id;
+		this.parent = parent;
+		this.element = element;
+	}
+
+
+	/**
+	 * Adds a new component specification as a child of this one.
+	 *
+	 * @param id	  Component specification id
+	 * @param element Markup element
+	 * @return New child specification
+	 */
+
+	protected ComponentSpec add(String id, Element element) {
+		ComponentSpec child = new ComponentSpec(id, this, element);
+
+		templateClass.add(id, child);
+		children.add(child);
+
+		return child;
+	}
+
+
+	/**
+	 * Adds a new child component specification to hold template text.
+	 *
+	 * @param text Template text
+	 */
+
+	protected void addTemplateText(String text) {
+		TemplatePart child = new TemplateText(text);
+		children.add(child);
+	}
+
+
+	/**
+	 * Gets a list of child templates - returns empty list if none.
+	 *
+	 * @return List of children
+	 */
+
+	protected List<TemplatePart> children() {
+		return children;
+	}
+
+
+	/**
+	 * Gets the parent of this template, or null if it's the root template.
+	 *
+	 * @return Parent template, or null
+	 */
+
+	protected ComponentSpec parent() {
+		return parent;
+	}
+
+
+	/**
+	 * Gets the element that was used to define the component in the
+	 * template.
+	 *
+	 * @return Template element
+	 */
+
+	public Element element() {
+		return element;
+	}
+
+
+	public void render(Request request, Writer writer, final Template template) {
+		if (isRoot()) {
+			renderChildren(request, writer, template);
+
+		} else if (template.contains(id)) {
+			Renderer component = template.get(id);
+
+			if (component != null) {
+				if (component instanceof Container) {
+					((Container) component).contents(new Renderer() {
+						public void render(Request request, Writer writer) {
+							renderChildren(request, writer, template);
+						}
+					});
+				}
+
+				if (component instanceof Elemental) {
+					((Elemental) component).element(new Element(element));
+				}
+
+				component.render(request, writer);
+			}
+
+		} else if (element != null) {
+			writer.tag(element.tag()).attribute("id", id).attributes(element);
+			renderChildren(request, writer, template);
+			writer.close();
+		}
+	}
+
+
+	private void renderChildren(Request request, Writer writer, final Template templateInstance) {
+		for (TemplatePart part : children) {
+			part.render(request, writer, templateInstance);
+		}
+	}
+
+	private boolean isRoot() {
+		return (parent == null);
+	}
 }

@@ -24,78 +24,78 @@ import org.mcbain.request.Interceptor;
 import org.mcbain.request.Request;
 
 
-/************************************************************************
+/**
  * Entry point for the blog application.
  */
 
 public class BlogApplication {
 
-    public BlogApplication(final Context context) {
-    	final BlogService blogService = new BlogService();
+	public BlogApplication(final Context context) {
+		final BlogService blogService = new BlogService();
 
-    	Interceptor blogLocator = new Interceptor() {
+		Interceptor blogLocator = new Interceptor() {
 			public boolean intercept(Request request) {
-	            Blog blog = blogService.getBlog(request.parameter("blog"));
-	            if (blog == null) {
-	            	return false;
-	            } else {
-	            	request.resource("blog", blog);
-	            	return true;
-	            }
+				Blog blog = blogService.getBlog(request.parameter("blog"));
+				if (blog == null) {
+					return false;
+				} else {
+					request.resource("blog", blog);
+					return true;
+				}
 			}
 		};
 
-    	context.configure()
-    		.route("/").to(new Controller() {
-            	public Renderer get(Request request) {
-                    return context.template("index");
-                }
-            })
+		context.configure()
+			.route("/").to(new Controller() {
+			public Renderer get(Request request) {
+				return context.template("index");
+			}
+		})
 
-    		.route("/blog/$blog").via(blogLocator).to(new Controller() {
-            	public Renderer get(Request request) {
-                    return new BlogHome( (Blog) request.resource("blog"), null );
-                }
-            })
+			.route("/blog/$blog").via(blogLocator).to(new Controller() {
+			public Renderer get(Request request) {
+				return new BlogHome((Blog) request.resource("blog"), null);
+			}
+		})
 
-	        .route("/blog/$blog/$archive/$post").via(blogLocator).to(new Controller() {
-	        	public Renderer get(Request request) {
-	        		Blog blog = (Blog) request.resource("blog");
-                    Post post = blog.getPost(request.parameter("post"));
-                    return (post == null ? null : new FullPost(blog, post));
-	            }
-	        })
-	        
-            .route("/blog/$blog/newpost").via(blogLocator).to(new Controller() {
+			.route("/blog/$blog/$archive/$post").via(blogLocator).to(new Controller() {
+			public Renderer get(Request request) {
+				Blog blog = (Blog) request.resource("blog");
+				Post post = blog.getPost(request.parameter("post"));
+				return (post == null ? null : new FullPost(blog, post));
+			}
+		})
+
+			.route("/blog/$blog/newpost").via(blogLocator).to(new Controller() {
 
 
-                public Renderer get(Request request) {
-            		return new NewPost((Blog) request.resource("blog"));
-            	}
-            	
-            	public Renderer post(Request request) {
-                    Blog blog = (Blog) request.resource("blog");
+			public Renderer get(Request request) {
+				return new NewPost((Blog) request.resource("blog"));
+			}
 
-                    if (request
-                    		.has("title")
-                    		.has("content")
-                    		.ok()) {
-                    	
-	                    blog.addPost( request.parameter("title"), request.parameter("content") );
-	                    
-	                    return new BlogHome(blog, null);
-	                    
-                    } else {
-                    	return new NewPost(blog);
-                    }
-            	}
-            })
-	        
-	        .route("/blog/$blog/$archive").via(blogLocator).to(new Controller() {
-	        	public Renderer get(Request request) {
-	                String archive = request.parameter("archive").replace('-', '/');
-	                return new BlogHome( (Blog) request.resource("blog"), archive);
-	            }
-	        });
-    }
+			public Renderer post(Request request) {
+				Blog blog = (Blog) request.resource("blog");
+
+				if (request
+					.has("title")
+					.has("content")
+					.ok()) {
+
+					blog.addPost(request.parameter("title"), request.parameter("content"));
+
+					return new BlogHome(blog, null);
+
+				} else {
+					return new NewPost(blog);
+				}
+			}
+		})
+
+			.route("/blog/$blog/$archive").via(blogLocator).to(new Controller() {
+			public Renderer get(Request request) {
+				String archive = request.parameter("archive").replace('-', '/');
+				return new BlogHome((Blog) request.resource("blog"), archive);
+			}
+		});
+	}
 }

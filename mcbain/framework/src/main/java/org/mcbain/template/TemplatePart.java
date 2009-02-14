@@ -17,23 +17,23 @@ package org.mcbain.template;
 import org.mcbain.Writer;
 import org.mcbain.request.Request;
 
-/************************************************************************
+/**
  * Renderable element representing a portion of a template.
  *
+ * @author Joe Trewin
  * @version $Revision$
- * @author  Joe Trewin
  */
 
 public interface TemplatePart {
 
-    /************************************************************************
-     * Renders a template element, using the supplied collection of 
-     * components to bind component references to instantiated components.
-     * 
-     * @param   context             Render context
-     * @param   writer              Markup writer
-     * @param   templateInstance    Template instance
-     */
-    
-    public void render(Request context, Writer writer, Template templateInstance);
+	/**
+	 * Renders a template element, using the supplied collection of
+	 * components to bind component references to instantiated components.
+	 *
+	 * @param context		  Render context
+	 * @param writer		   Markup writer
+	 * @param templateInstance Template instance
+	 */
+
+	public void render(Request context, Writer writer, Template templateInstance);
 }

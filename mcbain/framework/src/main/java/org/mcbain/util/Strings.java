@@ -14,62 +14,62 @@
 
 package org.mcbain.util;
 
-/************************************************************************
+/**
  * String utility methods.
  */
 
 public class Strings {
 
-    /************************************************************************
-     * Convenience method to construct a string by appending a number of 
-     * objects together.
-     * 
-     * @param   one         First item
-     * @param   two         Second item
-     * @return              String
-     */
-    
-    public static String string(Object one, Object two) {
-        return new StringBuilder()
-            .append(one)
-            .append(two)
-            .toString();
-    }
-    
-    
-    /************************************************************************
-     * Convenience method to construct a string by appending a number of 
-     * objects together.
-     * 
-     * @param   one         First item
-     * @param   two         Second item
-     * @param   three       Third item
-     * @return              String
-     */
-    
-    public static String string(Object one, Object two, Object three) {
-        return new StringBuilder()
-            .append(one)
-            .append(two)
-            .append(three)
-            .toString();
-    }
-    
-    
-    /************************************************************************
-     * Convenience method to construct a string by appending a number of 
-     * objects together.
-     * 
-     * @param   parts       Items to append
-     * @return              String
-     */
-    
-    public static String string(Object... parts) {
-        StringBuilder b = new StringBuilder();
-        for (int i = 0; i < parts.length; i++) {
-            if (parts[i] != null)
-                b.append(parts[i]);
-        }
-        return b.toString();
-    }
+	/**
+	 * Convenience method to construct a string by appending a number of
+	 * objects together.
+	 *
+	 * @param one First item
+	 * @param two Second item
+	 * @return String
+	 */
+
+	public static String string(Object one, Object two) {
+		return new StringBuilder()
+			.append(one)
+			.append(two)
+			.toString();
+	}
+
+
+	/**
+	 * Convenience method to construct a string by appending a number of
+	 * objects together.
+	 *
+	 * @param one   First item
+	 * @param two   Second item
+	 * @param three Third item
+	 * @return String
+	 */
+
+	public static String string(Object one, Object two, Object three) {
+		return new StringBuilder()
+			.append(one)
+			.append(two)
+			.append(three)
+			.toString();
+	}
+
+
+	/**
+	 * Convenience method to construct a string by appending a number of
+	 * objects together.
+	 *
+	 * @param parts Items to append
+	 * @return String
+	 */
+
+	public static String string(Object... parts) {
+		StringBuilder b = new StringBuilder();
+		for (int i = 0; i < parts.length; i++) {
+			if (parts[i] != null)
+				b.append(parts[i]);
+		}
+		return b.toString();
+	}
 }

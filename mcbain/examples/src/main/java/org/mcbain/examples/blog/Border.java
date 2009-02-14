@@ -26,51 +26,51 @@ import org.mcbain.template.Template;
 import static java.lang.System.currentTimeMillis;
 
 
-/************************************************************************
+/**
  * Border component used to render the common border around each page in
  * the blog.
  */
 
 public class Border implements Renderer, Container {
 
-    private Renderer content;
-    private Blog blog;
+	private Renderer content;
+	private Blog blog;
 
-    public Border(final Blog blog) {
-        this.blog = blog;
-    }
+	public Border(final Blog blog) {
+		this.blog = blog;
+	}
 
-    public void contents(Renderer content) {
-        this.content = content;
-    }
-    
-    public void render(Request request, Writer writer) {
-        long timestamp = currentTimeMillis();
+	public void contents(Renderer content) {
+		this.content = content;
+	}
 
-        final Template template = request.template("border");
+	public void render(Request request, Writer writer) {
+		long timestamp = currentTimeMillis();
 
-        Link title = new Link("/blog/" + blog.getName());
-        title.value(blog.getName());
+		final Template template = request.template("border");
 
-        Loop<String> archiveLoop = new Loop<String>(blog.getArchives()) {
-            public void currentValue(String value) {
-                Link archive = new Link();
-                archive.value(value);
-                archive.uri("/blog/" + blog.getName() + "/" + value.replace('/', '-'));
-                template.bind("archive", archive);
-            }
-        };
+		Link title = new Link("/blog/" + blog.getName());
+		title.value(blog.getName());
 
-        template.bind(
-            "archives", archiveLoop,
-            "title", title,
-            "newpost", new Link("/blog/" + blog.getName() + "/newpost"),
-            "time", currentTimeMillis() - timestamp,
-            "content", content
-        );
+		Loop<String> archiveLoop = new Loop<String>(blog.getArchives()) {
+			public void currentValue(String value) {
+				Link archive = new Link();
+				archive.value(value);
+				archive.uri("/blog/" + blog.getName() + "/" + value.replace('/', '-'));
+				template.bind("archive", archive);
+			}
+		};
 
-        writer.reset();
-        template.render(request, writer);
-        writer.seal();
-    }
+		template.bind(
+			"archives", archiveLoop,
+			"title", title,
+			"newpost", new Link("/blog/" + blog.getName() + "/newpost"),
+			"time", currentTimeMillis() - timestamp,
+			"content", content
+		);
+
+		writer.reset();
+		template.render(request, writer);
+		writer.seal();
+	}
 }

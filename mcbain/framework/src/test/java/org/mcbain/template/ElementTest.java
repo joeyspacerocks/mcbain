@@ -16,12 +16,11 @@ package org.mcbain.template;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
+import org.testng.annotations.Test;
 
 import java.util.Set;
 
-import org.testng.annotations.Test;
-
-/************************************************************************
+/**
  * Tests the Element container.
  */
 
@@ -33,19 +32,19 @@ public class ElementTest {
 		assertEquals(element.tag(), "tag");
 		assertEquals(element.id(), "id");
 	}
-	
+
 	public void shouldExposeAddedAttributes() {
 		Element element = new Element("tag", "id");
 		element.attribute("name", "value");
 		assertEquals(element.attribute("name"), "value");
 	}
-	
+
 	public void shouldPreserveNullAttributeValue() {
 		Element element = new Element("tag", "id");
 		element.attribute("name", null);
 		assertEquals(element.attribute("name"), null);
 	}
-	
+
 	public void shouldSetNonStringAttributeValueToString() {
 		Element element = new Element("tag", "id");
 		element.attribute("name", new Object() {
@@ -55,14 +54,14 @@ public class ElementTest {
 		});
 		assertEquals(element.attribute("name"), "value");
 	}
-	
+
 	public void shouldExposeAttributeNames() {
 		Element element = new Element("tag", "id");
 		element.attribute("name1", "value");
 		element.attribute("name2", "value");
 		assertNames(element, "name1", "name2");
 	}
-	
+
 	public void shouldExposeTagAndIdFromWrappedElement() {
 		Element element = new Element("tag", "id");
 		Element proxy = new Element(element);
@@ -76,7 +75,7 @@ public class ElementTest {
 		element.attribute("name", "value");
 		assertEquals(proxy.attribute("name"), "value");
 	}
-	
+
 	public void shouldMaskAttributeFromWrappedElementIfSetInWrapper() {
 		Element element = new Element("tag", "id");
 		Element proxy = new Element(element);
@@ -84,14 +83,14 @@ public class ElementTest {
 		proxy.attribute("name", "value2");
 		assertEquals(proxy.attribute("name"), "value2");
 	}
-	
+
 	public void shouldExposeAttributesSetOnlyInElementWrapper() {
 		Element element = new Element("tag", "id");
 		Element proxy = new Element(element);
 		proxy.attribute("name", "value");
 		assertEquals(proxy.attribute("name"), "value");
 	}
-	
+
 	public void shouldExposeAttributeNamesFromWrappedElementWhenNoneSetInProxy() {
 		Element element = new Element("tag", "id");
 		element.attribute("name1", "value");
@@ -99,7 +98,7 @@ public class ElementTest {
 		Element proxy = new Element(element);
 		assertNames(proxy, "name1", "name2");
 	}
-	
+
 	public void shouldExposeAttributeNamesFromWrappedElementWhenSomeSetInProxy() {
 		Element element = new Element("tag", "id");
 		element.attribute("name1", "value");
@@ -108,7 +107,7 @@ public class ElementTest {
 		proxy.attribute("name1", "value");
 		assertNames(proxy, "name1", "name2");
 	}
-	
+
 	public void shouldExposeAttributeNamesFromProxyWhenOthersSetInDelegate() {
 		Element element = new Element("tag", "id");
 		element.attribute("name1", "value");
@@ -116,7 +115,7 @@ public class ElementTest {
 		proxy.attribute("name2", "value");
 		assertNames(proxy, "name1", "name2");
 	}
-	
+
 	private void assertNames(Element element, String... expected) {
 		Set<String> names = element.attributeNames();
 		assertEquals(names.size(), expected.length);

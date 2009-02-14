@@ -22,69 +22,69 @@ import org.mcbain.Writer;
 import org.mcbain.request.Request;
 import org.mcbain.template.Element;
 
-/************************************************************************
+/**
  * Component that conditionally renders its content.
  *
+ * @author Joe Trewin
  * @version $Revision$
- * @author  Joe Trewin
  */
 
 public class If implements Renderer, Container, Elemental {
 
-    private Renderer content;
-    private Element element;
-    private boolean condition;
-    
+	private Renderer content;
+	private Element element;
+	private boolean condition;
 
-    /************************************************************************
-     * Constructs a new instance.
-     */
 
-    public If() {
-    }
-    
-    
-    /************************************************************************
-     * Constructs a new component with a specified condition.
-     * 
-     * @param   condition       True to render the content, false not to
-     */
+	/**
+	 * Constructs a new instance.
+	 */
 
-    public If(boolean condition) {
-        this.condition = condition;
-    }
-    
-    
-    /************************************************************************
-     * Tests to see if the content should be rendererd.
-     * 
-     * @return      True to render the content, false not to
-     */
-    
-    public boolean condition() {
-        return condition;
-    }
-    
-    
-    public void contents(Renderer content) {
-        this.content = content;
-    }
+	public If() {
+	}
 
-    
-    public void element(Element element) {
-        this.element = element;
-    }
 
-    
-    public void render(Request context, Writer writer) {
-        if (condition) {
-            if (element != null)
-                writer.tag(element.tag());
+	/**
+	 * Constructs a new component with a specified condition.
+	 *
+	 * @param condition True to render the content, false not to
+	 */
 
-            content.render(context, writer);
-        
-            if (element != null)
-                writer.close();
-        }
-    }
+	public If(boolean condition) {
+		this.condition = condition;
+	}
+
+
+	/**
+	 * Tests to see if the content should be rendererd.
+	 *
+	 * @return True to render the content, false not to
+	 */
+
+	public boolean condition() {
+		return condition;
+	}
+
+
+	public void contents(Renderer content) {
+		this.content = content;
+	}
+
+
+	public void element(Element element) {
+		this.element = element;
+	}
+
+
+	public void render(Request request, Writer writer) {
+		if (condition) {
+			if (element != null)
+				writer.tag(element.tag());
+
+			content.render(request, writer);
+
+			if (element != null)
+				writer.close();
+		}
+	}
 }

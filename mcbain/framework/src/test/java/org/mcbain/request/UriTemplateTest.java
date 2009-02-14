@@ -14,65 +14,60 @@
 
 package org.mcbain.request;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
-
-import org.mcbain.request.Uri;
-import org.mcbain.request.UriTemplate;
+import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
-/************************************************************************
+/**
  * Unit tests for UriTemplate.
  */
 
 public class UriTemplateTest {
 
-    /************************************************************************
-     * Tests uri matching with a single string.
-     */
-    
-    @Test
-    public void testStringMatch() {
-        UriTemplate uri1 = new UriTemplate("/");
-        
-        assertTrue( uri1.match("/").matches() );
-        assertFalse( uri1.match("/bad").matches() );
-        
-        UriTemplate uri2 = new UriTemplate("/part1/part2");
-        
-        assertTrue( uri2.match("/part1/part2").matches() );
-        assertFalse( uri2.match("/bad").matches() );
-        assertFalse( uri2.match("/part1").matches() );
-        assertFalse( uri2.match("/part1/").matches() );
-    }
-    
-    
-    /************************************************************************
-     * Tests uri matching with a single parameter.
-     */
-    
-    @Test
-    public void testSingleParameterMatch() {
-        UriTemplate uri = new UriTemplate("/$p");
-        
-        Uri result = uri.match("/test");
-        assertTrue(result.matches());
-        assertEquals(result.parameter("p"), "test");
-    }
-    
-    
-    /************************************************************************
-     * Tests uri matching with a multiple parameter.
-     */
-    
-    @Test
-    public void testMultipleParameterMatch() {
-        UriTemplate uri = new UriTemplate("/$p1/$p2");
-        
-        Uri result = uri.match("/test1/test2");
-        assertTrue(result.matches());
-        assertEquals(result.parameter("p1"), "test1");
-        assertEquals(result.parameter("p2"), "test2");
-    }
+	/**
+	 * Tests uri matching with a single string.
+	 */
+
+	@Test
+	public void testStringMatch() {
+		UriTemplate uri1 = new UriTemplate("/");
+
+		assertTrue(uri1.match("/").matches());
+		assertFalse(uri1.match("/bad").matches());
+
+		UriTemplate uri2 = new UriTemplate("/part1/part2");
+
+		assertTrue(uri2.match("/part1/part2").matches());
+		assertFalse(uri2.match("/bad").matches());
+		assertFalse(uri2.match("/part1").matches());
+		assertFalse(uri2.match("/part1/").matches());
+	}
+
+
+	/**
+	 * Tests uri matching with a single parameter.
+	 */
+
+	@Test
+	public void testSingleParameterMatch() {
+		UriTemplate uri = new UriTemplate("/$p");
+
+		Uri result = uri.match("/test");
+		assertTrue(result.matches());
+		assertEquals(result.parameter("p"), "test");
+	}
+
+
+	/**
+	 * Tests uri matching with a multiple parameter.
+	 */
+
+	@Test
+	public void testMultipleParameterMatch() {
+		UriTemplate uri = new UriTemplate("/$p1/$p2");
+
+		Uri result = uri.match("/test1/test2");
+		assertTrue(result.matches());
+		assertEquals(result.parameter("p1"), "test1");
+		assertEquals(result.parameter("p2"), "test2");
+	}
 }

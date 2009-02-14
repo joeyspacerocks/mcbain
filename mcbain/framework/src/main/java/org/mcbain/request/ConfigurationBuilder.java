@@ -19,22 +19,22 @@ public class ConfigurationBuilder {
 
 	private Context context;
 	private ControllerChain currentControllerChain;
-	
+
 	public ConfigurationBuilder(Context context) {
 		this.context = context;
 	}
-	
+
 	public ConfigurationBuilder route(String path) {
 		currentControllerChain = new ControllerChain();
 		context.router().add(path, currentControllerChain);
 		return this;
 	}
-	
+
 	public ConfigurationBuilder to(Controller controller) {
 		currentControllerChain.controller(controller);
 		return this;
 	}
-	
+
 	public ConfigurationBuilder via(Interceptor interceptor) {
 		currentControllerChain.addInterceptor(interceptor);
 		return this;

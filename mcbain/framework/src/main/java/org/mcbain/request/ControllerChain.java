@@ -26,19 +26,19 @@ public class ControllerChain {
 	public ControllerChain() {
 		interceptors = new ArrayList<Interceptor>();
 	}
-	
+
 	public void controller(Controller controller) {
 		this.controller = controller;
 	}
-	
+
 	public Controller controller() {
 		return controller;
 	}
-	
+
 	public void addInterceptor(Interceptor interceptor) {
 		interceptors().add(interceptor);
 	}
-	
+
 	public List<Interceptor> interceptors() {
 		return interceptors;
 	}

@@ -16,19 +16,19 @@ package org.mcbain;
 
 import org.mcbain.request.Request;
 
-/************************************************************************
+/**
  * Renderers provide a method for rendering themselves using the supplied
  * writer.
  */
 
 public interface Renderer {
 
-    /************************************************************************
-     * Renders using the supplied writer.
-     * 
-     * @param   request     Render context
-     * @param   writer      Writer to render to
-     */
-    
-    public void render(Request request, Writer writer);
+	/**
+	 * Renders using the supplied writer.
+	 *
+	 * @param request Render context
+	 * @param writer  Writer to render to
+	 */
+
+	public void render(Request request, Writer writer);
 }
