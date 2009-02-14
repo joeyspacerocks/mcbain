@@ -14,6 +14,8 @@
 
 package org.mcbain.request;
 
+import org.mcbain.template.Template;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -83,4 +85,8 @@ public class Request {
 	public Object resource(String name) {
 		return resources.get(name);
 	}
+
+    public Template template(String name) {
+        return context.template(name);
+    }
 }

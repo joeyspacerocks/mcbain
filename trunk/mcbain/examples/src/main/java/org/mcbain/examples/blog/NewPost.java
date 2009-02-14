@@ -38,7 +38,7 @@ public class NewPost implements Renderer {
 
     
     public void render(final Request request, Writer writer) {
-        final Template template = request.context().template("newpost");
+        final Template template = request.template("newpost");
         
         template.bind(
             "border", new Border(blog),

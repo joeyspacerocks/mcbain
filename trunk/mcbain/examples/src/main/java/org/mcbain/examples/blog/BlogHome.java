@@ -39,7 +39,7 @@ public class BlogHome implements Renderer {
 
     
     public void render(Request request, Writer writer) {
-        Template template = request.context().template("blog");
+        Template template = request.template("blog");
         
         template.bind(
             "border", new Border(blog),

@@ -67,7 +67,9 @@ public class BlogApplication {
 	        })
 	        
             .route("/blog/$blog/newpost").via(blogLocator).to(new Controller() {
-            	public Renderer get(Request request) {
+
+
+                public Renderer get(Request request) {
             		return new NewPost((Blog) request.resource("blog"));
             	}
             	

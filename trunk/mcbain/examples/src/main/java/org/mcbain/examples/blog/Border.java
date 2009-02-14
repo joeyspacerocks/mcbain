@@ -23,6 +23,8 @@ import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.request.Request;
 import org.mcbain.template.Template;
 
+import static java.lang.System.currentTimeMillis;
+
 
 /************************************************************************
  * Border component used to render the common border around each page in
@@ -31,45 +33,39 @@ import org.mcbain.template.Template;
 
 public class Border implements Renderer, Container {
 
-    private Loop<String> archiveLoop;
-    private Link archive;
     private Renderer content;
-    
     private Blog blog;
-    
 
     public Border(final Blog blog) {
         this.blog = blog;
-
-        archive = new Link();
-        archiveLoop = new Loop<String>(blog.getArchives()) {
-            public void currentValue(String value) {
-                archive.value(value);
-                archive.uri("/blog/" + blog.getName() + "/" + value.replace('/', '-'));
-            }
-        };
     }
 
-    
     public void contents(Renderer content) {
         this.content = content;
     }
     
-    
     public void render(Request request, Writer writer) {
-        long timestamp = System.currentTimeMillis();
+        long timestamp = currentTimeMillis();
 
-        Template template = request.context().template("border");
+        final Template template = request.template("border");
 
         Link title = new Link("/blog/" + blog.getName());
         title.value(blog.getName());
 
+        Loop<String> archiveLoop = new Loop<String>(blog.getArchives()) {
+            public void currentValue(String value) {
+                Link archive = new Link();
+                archive.value(value);
+                archive.uri("/blog/" + blog.getName() + "/" + value.replace('/', '-'));
+                template.bind("archive", archive);
+            }
+        };
+
         template.bind(
             "archives", archiveLoop,
-            "archive", archive,
             "title", title,
             "newpost", new Link("/blog/" + blog.getName() + "/newpost"),
-            "time", System.currentTimeMillis() - timestamp,
+            "time", currentTimeMillis() - timestamp,
             "content", content
         );
 
