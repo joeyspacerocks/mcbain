@@ -19,12 +19,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-/************************************************************************
+/**
  * Collection of attributes from a markup element.
  */
 
 public class Element {
-    
+
 	private String tag;
 	private String id;
 	private Map<String, String> attributes;
@@ -32,55 +32,55 @@ public class Element {
 	private Element passThrough;
 	private boolean proxy;
 
-    public Element(String tag, String id) {
-    	this.tag = tag;
-    	this.id = id;
-    }
+	public Element(String tag, String id) {
+		this.tag = tag;
+		this.id = id;
+	}
 
-    public Element(Element element) {
-    	passThrough = element;
-    	proxy = true;
-    }
-    
-    public Element attribute(String key, Object value) {
-    	if (attributes == null) {
-    		attributes = new LinkedHashMap<String, String>();
-    	}
-    	
-    	if (proxy) {
-    		attributes.putAll(passThrough.attributes());
-    	}
-    	
-    	attributes.put(key, value == null ? null : value.toString());
-    	return this;
-    }
+	public Element(Element element) {
+		passThrough = element;
+		proxy = true;
+	}
 
-    public String tag() {
-    	return proxy ? passThrough.tag() : tag;
-    }
+	public Element attribute(String key, Object value) {
+		if (attributes == null) {
+			attributes = new LinkedHashMap<String, String>();
+		}
 
-    public String id() {
-    	return proxy ? passThrough.id() : id;
-    }
-    
-    public Set<String> attributeNames() {
-    	return attributes().keySet();
-    }
+		if (proxy) {
+			attributes.putAll(passThrough.attributes());
+		}
 
-    public String attribute(String key) {
-    	return attributes().get(key);
-    }
-    
-    protected Map<String, String> attributes() {
-    	if (attributes == null) {
-    		if (proxy) {
-    			return passThrough.attributes();
-    		} else {
-    			return Collections.emptyMap();
-    		}
+		attributes.put(key, value == null ? null : value.toString());
+		return this;
+	}
 
-    	} else {
-        	return attributes;
-    	}
-    }
+	public String tag() {
+		return proxy ? passThrough.tag() : tag;
+	}
+
+	public String id() {
+		return proxy ? passThrough.id() : id;
+	}
+
+	public Set<String> attributeNames() {
+		return attributes().keySet();
+	}
+
+	public String attribute(String key) {
+		return attributes().get(key);
+	}
+
+	protected Map<String, String> attributes() {
+		if (attributes == null) {
+			if (proxy) {
+				return passThrough.attributes();
+			} else {
+				return Collections.emptyMap();
+			}
+
+		} else {
+			return attributes;
+		}
+	}
 }

@@ -21,50 +21,50 @@ import org.mcbain.Writer;
 import org.mcbain.request.Request;
 import org.mcbain.template.Element;
 
-/************************************************************************
+/**
  * Link component.
  */
 
 public class Link implements Renderer, Elemental, Container {
 
-    private Element element;
-    private String path ;
-    private String value;
-    private Renderer content;
+	private Element element;
+	private String path;
+	private String value;
+	private Renderer content;
 
-    public Link() {
-	}
-    
-    public Link(String path) {
-    	uri(path);
+	public Link() {
 	}
 
-    public void uri(String path) {
-        this.path = path;
-    }
+	public Link(String path) {
+		uri(path);
+	}
 
-    public void value(String value) {
-        this.value = value;
-    }
-    
-    public void element(Element element) {
-        this.element = element;
-    }
+	public void uri(String path) {
+		this.path = path;
+	}
 
-    public void contents(Renderer content) {
-        this.content = content;
-    }
-    
-    public void render(Request context, Writer writer) {
-        element.attribute("href", context.context().link(path));
-        
-        writer.tag("a").attributes(element);
-        
-        if (value != null) {
-            writer.body(value);
-        } else {
-            content.render(context, writer);
-            writer.close();
-        }
-    }
+	public void value(String value) {
+		this.value = value;
+	}
+
+	public void element(Element element) {
+		this.element = element;
+	}
+
+	public void contents(Renderer content) {
+		this.content = content;
+	}
+
+	public void render(Request request, Writer writer) {
+		element.attribute("href", request.context().link(path));
+
+		writer.tag("a").attributes(element);
+
+		if (value != null) {
+			writer.body(value);
+		} else {
+			content.render(request, writer);
+			writer.close();
+		}
+	}
 }

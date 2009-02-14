@@ -15,29 +15,28 @@
 package org.mcbain.util;
 
 import static org.testng.Assert.assertEquals;
-
 import org.testng.annotations.Test;
 
-/************************************************************************
+/**
  * Unit tests for the strings utilities.
  */
 
 @Test
 public class StringsTest {
 
-    public void shouldConcatenateTwoStrings() {
-        assertEquals( Strings.string("one", "two"), "onetwo" );
-    }
+	public void shouldConcatenateTwoStrings() {
+		assertEquals(Strings.string("one", "two"), "onetwo");
+	}
 
-    public void shouldConcatenateThreeStrings() {
-        assertEquals( Strings.string("one", "two", "three"), "onetwothree" );
-    }
-    
-    public void shouldConcatenateMultipleStrings() {
-        assertEquals( Strings.string("one", "two", "three", "four"), "onetwothreefour" );
-    }
-    
-    public void shouldContatenateEmptyStringInPlaceOfNull() {
-        assertEquals( Strings.string("one", null, "two", "three"), "onetwothree" );
-    }
+	public void shouldConcatenateThreeStrings() {
+		assertEquals(Strings.string("one", "two", "three"), "onetwothree");
+	}
+
+	public void shouldConcatenateMultipleStrings() {
+		assertEquals(Strings.string("one", "two", "three", "four"), "onetwothreefour");
+	}
+
+	public void shouldContatenateEmptyStringInPlaceOfNull() {
+		assertEquals(Strings.string("one", null, "two", "three"), "onetwothree");
+	}
 }

@@ -22,31 +22,31 @@ import org.mcbain.request.Request;
 import org.mcbain.template.Template;
 
 
-/************************************************************************
+/**
  * Renders a post in full.
  */
 
 public class FullPost implements Renderer {
 
-    private Blog blog;
-    private Post post;
-    
-    
-    public FullPost(final Blog blog, final Post post) {
-        this.blog = blog;
-        this.post = post;
-    }
+	private Blog blog;
+	private Post post;
 
-    
-    public void render(Request request, Writer writer) {
-        Template template = request.template("post");
-        
-        template.bind(
-            "border", new Border(blog),
-            "title", post.getTitle(),
-            "content", post.getContent()
-        );
-        
-        template.render(request, writer);
-    }
+
+	public FullPost(final Blog blog, final Post post) {
+		this.blog = blog;
+		this.post = post;
+	}
+
+
+	public void render(Request request, Writer writer) {
+		Template template = request.template("post");
+
+		template.bind(
+			"border", new Border(blog),
+			"title", post.getTitle(),
+			"content", post.getContent()
+		);
+
+		template.render(request, writer);
+	}
 }

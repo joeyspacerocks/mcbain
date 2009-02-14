@@ -17,56 +17,56 @@ package org.mcbain.util;
 import java.util.ArrayList;
 import java.util.List;
 
-/************************************************************************
+/**
  * Simple LIFO stack implementation based on an array list.
  *
+ * @author Joe Trewin
  * @version $Revision$
- * @author  Joe Trewin
  */
 
-public class ArrayStack<E>    {
+public class ArrayStack<E> {
 
-    private List<E> stack;
-    
-    
-    /************************************************************************
-     * Constructs a new stack.
-     */
+	private List<E> stack;
 
-    public ArrayStack() {
-        stack = new ArrayList<E>();
-    }
-    
-    
-    /************************************************************************
-     * Pushes an element on to the end of the stack.
-     * 
-     * @param   element     Element to push on to the stack
-     */
-    
-    public void push(E element) {
-        stack.add(element);
-    }
-    
-    
-    /************************************************************************
-     * Pops the last element off of the end of the stack.
-     * 
-     * @return      Last element, or null if stack empty
-     */
-    
-    public E pop() {
-        return stack.isEmpty() ? null : stack.remove(stack.size() - 1);
-    }
-    
-    
-    /************************************************************************
-     * Gets the last element from the end of the stack, leaving it in place.
-     * 
-     * @return      Last element, or null if stack empty
-     */
-    
-    public E peek() {
-        return stack.isEmpty() ? null : stack.get(stack.size() - 1);
-    }
+
+	/**
+	 * Constructs a new stack.
+	 */
+
+	public ArrayStack() {
+		stack = new ArrayList<E>();
+	}
+
+
+	/**
+	 * Pushes an element on to the end of the stack.
+	 *
+	 * @param element Element to push on to the stack
+	 */
+
+	public void push(E element) {
+		stack.add(element);
+	}
+
+
+	/**
+	 * Pops the last element off of the end of the stack.
+	 *
+	 * @return Last element, or null if stack empty
+	 */
+
+	public E pop() {
+		return stack.isEmpty() ? null : stack.remove(stack.size() - 1);
+	}
+
+
+	/**
+	 * Gets the last element from the end of the stack, leaving it in place.
+	 *
+	 * @return Last element, or null if stack empty
+	 */
+
+	public E peek() {
+		return stack.isEmpty() ? null : stack.get(stack.size() - 1);
+	}
 }

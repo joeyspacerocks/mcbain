@@ -14,22 +14,22 @@
 
 package org.mcbain;
 
-/************************************************************************
+/**
  * Factory class that constructs components.
  *
+ * @author Joe Trewin
  * @version $Revision$
- * @author  Joe Trewin
  */
 
 public interface ComponentFactory {
-    
-    /************************************************************************
-     * Creates an instance of the component identified by the specified name
-     * (case-insensitive match).
-     * 
-     * @param   name        Component name
-     * @return              Component
-     */
-    
-    public Renderer createComponent(String name);
+
+	/**
+	 * Creates an instance of the component identified by the specified name
+	 * (case-insensitive match).
+	 *
+	 * @param name Component name
+	 * @return Component
+	 */
+
+	public Renderer createComponent(String name);
 }

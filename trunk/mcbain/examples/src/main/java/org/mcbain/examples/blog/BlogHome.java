@@ -21,32 +21,32 @@ import org.mcbain.request.Request;
 import org.mcbain.template.Template;
 
 
-/************************************************************************
+/**
  * Blog home page. Contains a list of archives, and a list of the last
  * few most recent posts.
  */
 
 public class BlogHome implements Renderer {
 
-    private Blog blog;
-    private String archive;
-    
-    
-    public BlogHome(final Blog blog, final String archive) {
-        this.blog = blog;
-        this.archive = archive;
-    }
+	private Blog blog;
+	private String archive;
 
-    
-    public void render(Request request, Writer writer) {
-        Template template = request.template("blog");
-        
-        template.bind(
-            "border", new Border(blog),
-            "posts", new Posts(blog, archive == null ? blog.latestPosts() : blog.archivedPosts(archive)),
-            "postTitle", archive == null ? "Recent Posts" : "Archive: " + archive
-        );
-        
-        template.render(request, writer);
-    }
+
+	public BlogHome(final Blog blog, final String archive) {
+		this.blog = blog;
+		this.archive = archive;
+	}
+
+
+	public void render(Request request, Writer writer) {
+		Template template = request.template("blog");
+
+		template.bind(
+			"border", new Border(blog),
+			"posts", new Posts(blog, archive == null ? blog.latestPosts() : blog.archivedPosts(archive)),
+			"postTitle", archive == null ? "Recent Posts" : "Archive: " + archive
+		);
+
+		template.render(request, writer);
+	}
 }

@@ -22,42 +22,42 @@ import org.mcbain.Writer;
 import org.mcbain.request.Request;
 import org.mcbain.template.Element;
 
-/************************************************************************
+/**
  * Component that renders a form.
  */
 
 public class Form implements Renderer, Container, Elemental {
 
 	private String path;
-	
-    private Renderer content;
-    private Element element;
-    
 
-    public Form(String path) {
-    	this.path = path;
-    }
-    
-    
-    public void contents(Renderer content) {
-        this.content = content;
-    }
+	private Renderer content;
+	private Element element;
 
-    
-    public void element(Element element) {
-        this.element = element;
-    }
 
-    
-    public void render(Request request, Writer writer) {
-        writer.tag(element.tag());
+	public Form(String path) {
+		this.path = path;
+	}
 
-        element.attribute("action", request.context().link(path));
-        element.attribute("method", "POST");
 
-        writer.attributes(element);
-        content.render(request, writer);
-    
-        writer.close();
-    }
+	public void contents(Renderer content) {
+		this.content = content;
+	}
+
+
+	public void element(Element element) {
+		this.element = element;
+	}
+
+
+	public void render(Request request, Writer writer) {
+		writer.tag(element.tag());
+
+		element.attribute("action", request.context().link(path));
+		element.attribute("method", "POST");
+
+		writer.attributes(element);
+		content.render(request, writer);
+
+		writer.close();
+	}
 }

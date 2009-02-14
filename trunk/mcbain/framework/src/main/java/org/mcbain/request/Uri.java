@@ -14,90 +14,92 @@
 
 package org.mcbain.request;
 
+import org.mcbain.util.PairIterator;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mcbain.util.PairIterator;
-
-/************************************************************************
+/**
  * A uri is an instance of a UriTemplate - i.e. it is a template plus a
  * map of parameters.
  */
 
 public class Uri {
 
-    public static final Uri NOMATCH = new Uri() {
-    	public boolean matches() { return false; }
-    };
-    
-    private Map<String,Object> parameters;
-    
-    
-    /************************************************************************
-     * Tests to see if the this result matches the incoming string.
-     * 
-     * @return      True if a match, else false
-     */
-    
-    public boolean matches() {
-        return true;
-    }
-    
-    
-    /************************************************************************
-     * Adds a parameter to the uri result.
-     * 
-     * @param   name        Parameter name
-     * @param   value       Parameter value
-     * @return              Uri instance
-     */
-    
-    public Uri addParameter(String name, Object value) {
-        parameters().put(name, value);
-        return this;
-    }
+	public static final Uri NOMATCH = new Uri() {
+		public boolean matches() {
+			return false;
+		}
+	};
 
-    
-    /************************************************************************
-     * Adds a set of parameters to the uri result from an array containing
-     * alternate name/value pairs.
-     * 
-     * @param   parameters  Parameter array
-     * @return              Uri instance
-     */
-    
-    public Uri parameters(Object[] parameters) {
-        PairIterator<String, String> it = new PairIterator<String, String>(parameters);
-        while(it.hasNext()) {
-            parameters().put(it.nextKey(), it.nextValue());
-        }
-        return this;
-    }
-    
-    
-    /************************************************************************
-     * Gets the named parameter, returning null if none present.
-     * 
-     * @param   name        Parameter name
-     * @return              Value, or null
-     */
-    
-    public String parameter(String name) {
-        Object value = parameters().get(name);
-        return (value == null ? null : value.toString());
-    }
+	private Map<String, Object> parameters;
 
-    
-    /************************************************************************
-     * Gets the parameters collection, lazy initialising if necessary.
-     * 
-     * @return      Parameter map
-     */
-    
-    public Map<String, Object> parameters() {
-        if (parameters == null) {
-            parameters = new HashMap<String, Object>();
-        }
-        return parameters;
-    }
+
+	/**
+	 * Tests to see if the this result matches the incoming string.
+	 *
+	 * @return True if a match, else false
+	 */
+
+	public boolean matches() {
+		return true;
+	}
+
+
+	/**
+	 * Adds a parameter to the uri result.
+	 *
+	 * @param name  Parameter name
+	 * @param value Parameter value
+	 * @return Uri instance
+	 */
+
+	public Uri addParameter(String name, Object value) {
+		parameters().put(name, value);
+		return this;
+	}
+
+
+	/**
+	 * Adds a set of parameters to the uri result from an array containing
+	 * alternate name/value pairs.
+	 *
+	 * @param parameters Parameter array
+	 * @return Uri instance
+	 */
+
+	public Uri parameters(Object[] parameters) {
+		PairIterator<String, String> it = new PairIterator<String, String>(parameters);
+		while (it.hasNext()) {
+			parameters().put(it.nextKey(), it.nextValue());
+		}
+		return this;
+	}
+
+
+	/**
+	 * Gets the named parameter, returning null if none present.
+	 *
+	 * @param name Parameter name
+	 * @return Value, or null
+	 */
+
+	public String parameter(String name) {
+		Object value = parameters().get(name);
+		return (value == null ? null : value.toString());
+	}
+
+
+	/**
+	 * Gets the parameters collection, lazy initialising if necessary.
+	 *
+	 * @return Parameter map
+	 */
+
+	public Map<String, Object> parameters() {
+		if (parameters == null) {
+			parameters = new HashMap<String, Object>();
+		}
+		return parameters;
+	}
 }

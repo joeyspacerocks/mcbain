@@ -14,106 +14,107 @@
 
 package org.mcbain.template;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
 import org.mcbain.request.Request;
 import org.mcbain.util.PairIterator;
 
-/************************************************************************
+import java.util.HashMap;
+import java.util.Map;
+
+/**
  * Instance of a template class for rendering a template with a specific
  * set of bound components/variables.
  */
 
 public class Template implements Renderer {
 
-    private TemplateClass templateClass;
-    private Map<String, Renderer> components;
-    
-    
-    /***************************************************************************
-     * Constructs a template instance for binding components to the specified 
-     * template class.
-     * 
-     * @param   templateClass		Template class
-     */
-
-    public Template(TemplateClass templateClass) {
-        this.templateClass = templateClass;
-        this.components = new HashMap<String, Renderer>();
-    }
+	private TemplateClass templateClass;
+	private Map<String, Renderer> components;
 
 
+	/**
+	 * **
+	 * Constructs a template instance for binding components to the specified
+	 * template class.
+	 *
+	 * @param templateClass Template class
+	 */
 
-    /***************************************************************************
-     * Binds a component collection from the supplied key/value pairs.
-     * 
-     * @param   content     Array of objects, in String/Object pairs
-     */
-
-    public Template bind(Object... content) {
-        PairIterator<String, Object> it = new PairIterator<String, Object>(content);
-        
-        while (it.hasNext()) {
-            String id = it.nextKey();
-            Object component = it.nextValue();
-            
-            if (component instanceof Renderer) {
-                bind(id, (Renderer) component);
-            } else {
-                bind(id, component);
-            }
-        }
-        
-        return this;
-    }
+	public Template(TemplateClass templateClass) {
+		this.templateClass = templateClass;
+		this.components = new HashMap<String, Renderer>();
+	}
 
 
-    /************************************************************************
-     * Adds a component to the collection.
-     * 
-     * @param   id              Component id in the context of it's container
-     * @param   component       Renderable component
-     * @return                  This object
-     */
-    
-    public Template bind(final String id, final Renderer component) {
-        components.put(id, component);
-        return this;
-    }
-    
-    
-    /************************************************************************
-     * Adds an object to the collection. The object will be rendered using
-     * its toString method.
-     * 
-     * @param   id              Component id in the context of it's container
-     * @param   value           Object to be rendererd
-     * @return                  This object
-     */
-    
-    public Template bind(final String id, final Object value) {
-        components.put(id, new Renderer() {
-            public void render(Request context, Writer writer) {
-                if (value != null)
-                    writer.print(value.toString(), false);
-            }
-        });
-        return this;
-    }
-    
+	/**
+	 * **
+	 * Binds a component collection from the supplied key/value pairs.
+	 *
+	 * @param content Array of objects, in String/Object pairs
+	 */
 
-    public boolean contains(final String id) {
-    	return components.containsKey(id);
-    }
+	public Template bind(Object... content) {
+		PairIterator<String, Object> it = new PairIterator<String, Object>(content);
 
-    public Renderer get(final String id) {
-    	return components.get(id);
-    }
-    
-    public void render(Request context, Writer writer) {
-        templateClass.render(context, writer, this);
-    }
+		while (it.hasNext()) {
+			String id = it.nextKey();
+			Object component = it.nextValue();
+
+			if (component instanceof Renderer) {
+				bind(id, (Renderer) component);
+			} else {
+				bind(id, component);
+			}
+		}
+
+		return this;
+	}
+
+
+	/**
+	 * Adds a component to the collection.
+	 *
+	 * @param id		Component id in the context of it's container
+	 * @param component Renderable component
+	 * @return This object
+	 */
+
+	public Template bind(final String id, final Renderer component) {
+		components.put(id, component);
+		return this;
+	}
+
+
+	/**
+	 * Adds an object to the collection. The object will be rendered using
+	 * its toString method.
+	 *
+	 * @param id	Component id in the context of it's container
+	 * @param value Object to be rendererd
+	 * @return This object
+	 */
+
+	public Template bind(final String id, final Object value) {
+		components.put(id, new Renderer() {
+			public void render(Request context, Writer writer) {
+				if (value != null)
+					writer.print(value.toString(), false);
+			}
+		});
+		return this;
+	}
+
+
+	public boolean contains(final String id) {
+		return components.containsKey(id);
+	}
+
+	public Renderer get(final String id) {
+		return components.get(id);
+	}
+
+	public void render(Request context, Writer writer) {
+		templateClass.render(context, writer, this);
+	}
 }

@@ -16,34 +16,33 @@ package org.mcbain.util;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
-
 import org.testng.annotations.Test;
 
-/************************************************************************
+/**
  * Unit tests for pair iterator.
  */
 
 @Test
 public class PairIteratorTest {
 
-    public void shouldIterateOverPairs() {
-        String[] data = new String[] { "key1", "value1", "key2", "value2", "key3", "value3" };
-        PairIterator<String, String> it = new PairIterator<String, String>(data);
-        
-        int i = 0;
-        while (it.hasNext()) {
-            assertEquals(data[i++], it.nextKey());
-            assertEquals(data[i++], it.nextValue());
-        }
-    }
-    
-    public void shouldNotHaveNextIfNullSourceData() {
-        PairIterator<String, String> it = new PairIterator<String, String>(null);
-        assertFalse(it.hasNext());
-    }
-    
-    public void shouldNotHaveNextIfNoSourceData() {
-        PairIterator<String, String> it = new PairIterator<String, String>( new String[0] );
-        assertFalse(it.hasNext());
-    }
+	public void shouldIterateOverPairs() {
+		String[] data = new String[]{"key1", "value1", "key2", "value2", "key3", "value3"};
+		PairIterator<String, String> it = new PairIterator<String, String>(data);
+
+		int i = 0;
+		while (it.hasNext()) {
+			assertEquals(data[i++], it.nextKey());
+			assertEquals(data[i++], it.nextValue());
+		}
+	}
+
+	public void shouldNotHaveNextIfNullSourceData() {
+		PairIterator<String, String> it = new PairIterator<String, String>(null);
+		assertFalse(it.hasNext());
+	}
+
+	public void shouldNotHaveNextIfNoSourceData() {
+		PairIterator<String, String> it = new PairIterator<String, String>(new String[0]);
+		assertFalse(it.hasNext());
+	}
 }

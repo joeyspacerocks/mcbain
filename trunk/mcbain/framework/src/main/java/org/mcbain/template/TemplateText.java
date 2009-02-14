@@ -17,33 +17,33 @@ package org.mcbain.template;
 import org.mcbain.Writer;
 import org.mcbain.request.Request;
 
-/************************************************************************
- * Template part used to store and render the portions of text that lie 
+/**
+ * Template part used to store and render the portions of text that lie
  * between component specifications in a template.
  */
 
 public class TemplateText implements TemplatePart {
 
-    private String text;
-    
-    
-    public TemplateText(String text) {
-        this.text = text;
-    }
-    
+	private String text;
 
-    public void render(Request context, Writer writer, Template templateInstance) {
-        writer.print(text, true);
-    }
-    
-    
-    public String text() {
-        return text;
-    }
 
-    
-    @Override
-    public String toString() {
-        return text;
-    }
+	public TemplateText(String text) {
+		this.text = text;
+	}
+
+
+	public void render(Request context, Writer writer, Template templateInstance) {
+		writer.print(text, true);
+	}
+
+
+	public String text() {
+		return text;
+	}
+
+
+	@Override
+	public String toString() {
+		return text;
+	}
 }

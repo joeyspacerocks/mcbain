@@ -14,83 +14,83 @@
 
 package org.mcbain.components;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
 import org.mcbain.request.Request;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/************************************************************************
+import java.util.Arrays;
+import java.util.List;
+
+/**
  * Unit tests for Loop component.
  *
+ * @author Joe Trewin
  * @version $Revision$
- * @author  Joe Trewin
  */
 
 public class LoopTest {
 
-    /************************************************************************
-     * Tests looping with no source set.
-     */
-    
-    @Test
-    public void testNullSource() {
-        Loop<String> loop = new Loop<String>(null);
+	/**
+	 * Tests looping with no source set.
+	 */
 
-        Writer writer = loop(loop);
-        Assert.assertEquals(writer.toString(), "");
-    }
-    
-    
-    /************************************************************************
-     * Tests looping over an array of one item.
-     */
-    
-    @Test
-    public void testSingleItemArray() {
-        final List<String> source = Arrays.asList("test");
-        
-        Loop<String> loop = new Loop<String>(source);
+	@Test
+	public void testNullSource() {
+		Loop<String> loop = new Loop<String>(null);
 
-        Writer writer = loop(loop);
-        Assert.assertEquals(writer.toString(), "content");
-    }
-    
-    
-    /************************************************************************
-     * Tests looping over a collection of two items.
-     */
-    
-    @Test
-    public void testTwoItemArray() {
-        final List<String> source = Arrays.asList("test1", "test2");
+		Writer writer = loop(loop);
+		Assert.assertEquals(writer.toString(), "");
+	}
 
-        Loop<String> loop = new Loop<String>(source);
-        
-        Writer writer = loop(loop);
-        Assert.assertEquals(writer.toString(), "contentcontent");
-    }
-    
-    
-    /************************************************************************
-     * Set up and render the loop component.
-     */
-    
-    private Writer loop(Loop<String> loop) {
-        Renderer content = new Renderer() {
-            public void render(Request context, Writer writer) {
-                writer.print("content", false);
-            }
-        };
-        
-        loop.contents(content);
-        
-        Writer writer = new Writer();
-        loop.render(null, writer);
-        
-        return writer;
-    }
+
+	/**
+	 * Tests looping over an array of one item.
+	 */
+
+	@Test
+	public void testSingleItemArray() {
+		final List<String> source = Arrays.asList("test");
+
+		Loop<String> loop = new Loop<String>(source);
+
+		Writer writer = loop(loop);
+		Assert.assertEquals(writer.toString(), "content");
+	}
+
+
+	/**
+	 * Tests looping over a collection of two items.
+	 */
+
+	@Test
+	public void testTwoItemArray() {
+		final List<String> source = Arrays.asList("test1", "test2");
+
+		Loop<String> loop = new Loop<String>(source);
+
+		Writer writer = loop(loop);
+		Assert.assertEquals(writer.toString(), "contentcontent");
+	}
+
+
+	/**
+	 * Set up and render the loop component.
+	 */
+
+	private Writer loop(Loop<String> loop) {
+		Renderer content = new Renderer() {
+			public void render(Request context, Writer writer) {
+				writer.print("content", false);
+			}
+		};
+
+		loop.contents(content);
+
+		Writer writer = new Writer();
+		loop.render(null, writer);
+
+		return writer;
+	}
 }

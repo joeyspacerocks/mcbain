@@ -22,69 +22,68 @@ import org.mcbain.Writer;
 import org.mcbain.request.Request;
 import org.mcbain.template.Element;
 
-/************************************************************************
+/**
  * Component that renders its content multiple times.
  */
 
 public class Loop<T> implements Renderer, Container, Elemental {
 
-    private Iterable<T> source;
-    private Renderer content;
-    private Element element;
-    private T currentValue;
-    
+	private Iterable<T> source;
+	private Renderer content;
+	private Element element;
+	private T currentValue;
 
-    /************************************************************************
-     * Constructs a new loop component.
-     */
 
-    public Loop(Iterable<T> source) {
-        this.source = source;
-    }
+	/**
+	 * Constructs a new loop component.
+	 */
 
-    
-    /************************************************************************
-     * Sets the binding to the variable to use for the loop value.
-     * 
-     * @param binding
-     * @return
-     */
-    
-    public void currentValue(T value) {
-        currentValue = value;
-    }
+	public Loop(Iterable<T> source) {
+		this.source = source;
+	}
 
-    
-    /************************************************************************
-     * Gets the current value in the loop.
-     * 
-     * @return      Current loop value
-     */
-    
-    public T value() {
-        return currentValue;
-    }
-    
-    public void contents(Renderer content) {
-        this.content = content;
-    }
 
-    public void element(Element element) {
-        this.element = element;
-    }
+	/**
+	 * Sets the binding to the variable to use for the loop value.
+	 *
+	 * @param value Current loop value
+	 */
 
-    public void render(Request context, Writer writer) {
-        if (source == null) return;
+	public void currentValue(T value) {
+		currentValue = value;
+	}
 
-        if (element != null)
-            writer.tag(element.tag());
 
-        for (T value : source) {
-            currentValue(value);
-            content.render(context, writer);
-        }
-        
-        if (element != null)
-            writer.close();
-    }
+	/**
+	 * Gets the current value in the loop.
+	 *
+	 * @return Current loop value
+	 */
+
+	public T value() {
+		return currentValue;
+	}
+
+	public void contents(Renderer content) {
+		this.content = content;
+	}
+
+	public void element(Element element) {
+		this.element = element;
+	}
+
+	public void render(Request request, Writer writer) {
+		if (source == null) return;
+
+		if (element != null)
+			writer.tag(element.tag());
+
+		for (T value : source) {
+			currentValue(value);
+			content.render(request, writer);
+		}
+
+		if (element != null)
+			writer.close();
+	}
 }
