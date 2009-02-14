@@ -87,7 +87,11 @@ public class Writer {
     
     public Writer attribute(String name, String value) {
         value = safe(value);
-        buffer.append(' ').append(name).append("=\"").append(value).append('"');
+        buffer.append(' ').append(name).append("=\"");
+        if (value != null) {
+            buffer.append(value);
+        }
+        buffer.append('"');
         return this;
     }
 
@@ -137,10 +141,13 @@ public class Writer {
     public Writer print(String content, boolean raw) {
         closeOpenTag();
 
-        if (!raw)
-            content = safe(content);
+        if (content != null) {
+            if (!raw) {
+                content = safe(content);
+            }
+            buffer.append(content);
+        }
         
-        buffer.append(content);
         state = State.CONTENT;
         return this;
     }
@@ -283,11 +290,13 @@ public class Writer {
     /************************************************************************
      * Escapes markup in a value to make it safe for writing to output.
      * 
-     * @param   value       Value to make safe
-     * @return              Safe value
+     * @param   value       Value to make safe (may be null)
+     * @return              Safe value (null if value is null)
      */
     
     private String safe(String value) {
+        if (value == null) return value;
+        
         StringBuilder s = new StringBuilder(value.length());
         
         for (int i = 0; i < value.length(); i++) {

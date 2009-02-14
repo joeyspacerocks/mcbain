@@ -44,7 +44,7 @@ public class Posts implements Renderer {
     }
     
     public void render(Request request, Writer writer) {
-        final Template template = request.context().template("posts");
+        final Template template = request.template("posts");
 
         template.bind(
         	"empty", new If(posts.isEmpty()),

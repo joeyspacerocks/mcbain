@@ -47,7 +47,16 @@ public class WriterTest {
         
         assertWriter(writer, "<tag attr1=\"value1\" attr2=\"value2\" />");
     }
-    
+
+    public void shouldWriteNullAttributeAsEmptyString() {
+        Writer writer = new Writer();
+
+        writer
+            .emptyTag("tag")
+            .attribute("attr", null);
+
+        assertWriter(writer, "<tag attr=\"\" />");
+    }
     
     public void shouldWriteTagWithEmptyBody() {
         Writer writer = new Writer();
@@ -86,6 +95,13 @@ public class WriterTest {
     }
     
     
+    public void shouldOutputNothingIfPassedNull() {
+        Writer writer = new Writer();
+        writer.print(null, false);
+        assertWriter(writer, "");
+    }
+
+
     public void shouldPrintEscapedTextToWriter() {
         Writer writer = new Writer();
         writer.print("Some <b>unsafe</b> &amp; content", false);

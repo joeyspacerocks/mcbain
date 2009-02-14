@@ -39,7 +39,7 @@ public class FullPost implements Renderer {
 
     
     public void render(Request request, Writer writer) {
-        Template template = request.context().template("post");
+        Template template = request.template("post");
         
         template.bind(
             "border", new Border(blog),
