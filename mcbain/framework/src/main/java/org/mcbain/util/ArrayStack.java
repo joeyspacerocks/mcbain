@@ -19,14 +19,11 @@ import java.util.List;
 
 /**
  * Simple LIFO stack implementation based on an array list.
- *
- * @author Joe Trewin
- * @version $Revision$
  */
 
 public class ArrayStack<E> {
 
-	private List<E> stack;
+	private final List<E> stack;
 
 
 	/**

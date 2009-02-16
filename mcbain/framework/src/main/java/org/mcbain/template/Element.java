@@ -71,7 +71,7 @@ public class Element {
 		return attributes().get(key);
 	}
 
-	protected Map<String, String> attributes() {
+	Map<String, String> attributes() {
 		if (attributes == null) {
 			if (proxy) {
 				return passThrough.attributes();

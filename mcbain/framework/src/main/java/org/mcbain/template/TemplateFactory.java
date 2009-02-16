@@ -154,8 +154,6 @@ public class TemplateFactory {
 			SEEK, ENTITY, FOUND, OPEN, BODY, CLOSE
 		}
 
-		;
-
 		private InputStream in;
 		private State state;
 

@@ -17,7 +17,7 @@ package org.mcbain.request;
 
 public class ConfigurationBuilder {
 
-	private Context context;
+	private final Context context;
 	private ControllerChain currentControllerChain;
 
 	public ConfigurationBuilder(Context context) {

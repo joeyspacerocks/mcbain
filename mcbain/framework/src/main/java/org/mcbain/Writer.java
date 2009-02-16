@@ -37,7 +37,7 @@ public class Writer {
 	private StringBuilder buffer;
 	private State state;
 	private List<String> tags;
-	public String sealed;
+	private String sealed;
 
 
 	/**

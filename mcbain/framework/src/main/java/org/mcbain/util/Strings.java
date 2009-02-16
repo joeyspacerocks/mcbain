@@ -66,9 +66,9 @@ public class Strings {
 
 	public static String string(Object... parts) {
 		StringBuilder b = new StringBuilder();
-		for (int i = 0; i < parts.length; i++) {
-			if (parts[i] != null)
-				b.append(parts[i]);
+		for (Object part : parts) {
+			if (part != null)
+				b.append(part);
 		}
 		return b.toString();
 	}

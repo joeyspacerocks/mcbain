@@ -26,7 +26,7 @@ import java.util.Set;
 
 public class Router {
 
-	private Map<UriTemplate, ControllerChain> routes;
+	private final Map<UriTemplate, ControllerChain> routes;
 
 
 	public Router() {
