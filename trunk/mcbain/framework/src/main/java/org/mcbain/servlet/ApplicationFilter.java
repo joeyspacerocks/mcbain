@@ -21,7 +21,6 @@ import org.mcbain.request.Request;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -75,7 +74,7 @@ public class ApplicationFilter implements Filter {
 			servletResponse.getWriter().write(writer.toString());
 
 		} else {
-			chain.doFilter(servletRequest, (HttpServletResponse) servletResponse);
+			chain.doFilter(servletRequest, servletResponse);
 		}
 	}
 

@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ControllerChain {
 
-	private List<Interceptor> interceptors;
+	private final List<Interceptor> interceptors;
 	private Controller controller;
 
 	public ControllerChain() {

@@ -29,12 +29,12 @@ import java.util.List;
 
 class ComponentSpec implements TemplatePart {
 
-	private TemplateClass templateClass;
+	private final TemplateClass templateClass;
 	private String id;
 	private Element element;
 
 	private ComponentSpec parent;
-	private List<TemplatePart> children;
+	private final List<TemplatePart> children;
 
 
 	/**
@@ -43,7 +43,7 @@ class ComponentSpec implements TemplatePart {
 	 * @param template Template the specification belongs to
 	 */
 
-	protected ComponentSpec(TemplateClass template) {
+	ComponentSpec(TemplateClass template) {
 		this.templateClass = template;
 		children = new ArrayList<TemplatePart>(0);
 	}
@@ -74,7 +74,7 @@ class ComponentSpec implements TemplatePart {
 	 * @return New child specification
 	 */
 
-	protected ComponentSpec add(String id, Element element) {
+	ComponentSpec add(String id, Element element) {
 		ComponentSpec child = new ComponentSpec(id, this, element);
 
 		templateClass.add(id, child);
@@ -90,7 +90,7 @@ class ComponentSpec implements TemplatePart {
 	 * @param text Template text
 	 */
 
-	protected void addTemplateText(String text) {
+	void addTemplateText(String text) {
 		TemplatePart child = new TemplateText(text);
 		children.add(child);
 	}
@@ -102,7 +102,7 @@ class ComponentSpec implements TemplatePart {
 	 * @return List of children
 	 */
 
-	protected List<TemplatePart> children() {
+	List<TemplatePart> children() {
 		return children;
 	}
 
@@ -113,7 +113,7 @@ class ComponentSpec implements TemplatePart {
 	 * @return Parent template, or null
 	 */
 
-	protected ComponentSpec parent() {
+	ComponentSpec parent() {
 		return parent;
 	}
 

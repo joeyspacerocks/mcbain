@@ -21,7 +21,7 @@ package org.mcbain.util;
 
 public class PairIterator<K, V> {
 
-	private Object[] source;
+	private final Object[] source;
 	private int keyIndex;
 	private int valueIndex;
 

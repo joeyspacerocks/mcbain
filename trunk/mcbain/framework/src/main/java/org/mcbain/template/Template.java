@@ -29,8 +29,8 @@ import java.util.Map;
 
 public class Template implements Renderer {
 
-	private TemplateClass templateClass;
-	private Map<String, Renderer> components;
+	private final TemplateClass templateClass;
+	private final Map<String, Renderer> components;
 
 
 	/**

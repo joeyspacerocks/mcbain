@@ -33,9 +33,9 @@ import java.util.Map;
  * structure of component specifications.
  */
 
-public class TemplateSAXHandler extends DefaultHandler2 {
+class TemplateSAXHandler extends DefaultHandler2 {
 
-	public static final String DEFAULT_ID_ATTRIBUTE = "id";
+	private static final String DEFAULT_ID_ATTRIBUTE = "id";
 
 	private Locator locator;
 

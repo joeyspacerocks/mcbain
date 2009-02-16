@@ -138,7 +138,7 @@ public class TemplateLoaderTest {
 		InputStream in = new TemplateFactory.WrappedInputStream(new ByteArrayInputStream(input.getBytes()));
 
 		StringBuilder actual = new StringBuilder();
-		int b = 0;
+		int b;
 		while ((b = in.read()) > 0) {
 			actual.append((char) b);
 		}
