@@ -15,7 +15,7 @@
 package org.mcbain.template;
 
 import org.mcbain.Container;
-import org.mcbain.Elemental;
+import org.mcbain.ElementAware;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
 import org.mcbain.request.Request;
@@ -135,7 +135,7 @@ public class ComponentSpecTest {
 	}
 
 	public void shouldInjectElementInElementalComponent() {
-		ElementalRenderer component = new ElementalRenderer();
+		ElementAwareRenderer component = new ElementAwareRenderer();
 		stub(element.id()).toReturn("element");
 
 		bindToTemplate(component);
@@ -156,7 +156,7 @@ public class ComponentSpecTest {
 		root.render(request, writer, template);
 	}
 
-	private class ElementalRenderer implements Renderer, Elemental {
+	private class ElementAwareRenderer implements Renderer, ElementAware {
 		public Element element;
 
 		public void render(Request context, Writer writer) {

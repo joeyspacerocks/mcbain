@@ -17,9 +17,6 @@ package org.mcbain;
 /**
  * Component type that indicates that the component contains other
  * components.
- *
- * @author Joe Trewin
- * @version $Revision$
  */
 
 public interface Container {

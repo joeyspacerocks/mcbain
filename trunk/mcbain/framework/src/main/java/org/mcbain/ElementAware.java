@@ -14,22 +14,19 @@
 
 package org.mcbain;
 
+import org.mcbain.template.Element;
+
 /**
- * Factory class that constructs components.
- *
- * @author Joe Trewin
- * @version $Revision$
+ * Type indicating that the implementor accepts informal attributes.
  */
 
-public interface ComponentFactory {
+public interface ElementAware {
 
 	/**
-	 * Creates an instance of the component identified by the specified name
-	 * (case-insensitive match).
+	 * Passes the markup element that was used when the object was defined.
 	 *
-	 * @param name Component name
-	 * @return Component
+	 * @param element Element
 	 */
 
-	public Renderer createComponent(String name);
+	public void element(Element element);
 }

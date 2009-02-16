@@ -23,9 +23,6 @@ import java.util.Set;
 
 /**
  * Writer for capturing and writing markup.
- *
- * @author Joe Trewin
- * @version $Revision$
  */
 
 public class Writer {

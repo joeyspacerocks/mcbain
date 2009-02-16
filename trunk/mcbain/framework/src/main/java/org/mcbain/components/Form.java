@@ -16,7 +16,7 @@ package org.mcbain.components;
 
 
 import org.mcbain.Container;
-import org.mcbain.Elemental;
+import org.mcbain.ElementAware;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
 import org.mcbain.request.Request;
@@ -26,7 +26,7 @@ import org.mcbain.template.Element;
  * Component that renders a form.
  */
 
-public class Form implements Renderer, Container, Elemental {
+public class Form implements Renderer, Container, ElementAware {
 
 	private String path;
 
