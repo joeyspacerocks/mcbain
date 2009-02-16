@@ -14,7 +14,7 @@
 
 package org.mcbain.components;
 
-import org.mcbain.Elemental;
+import org.mcbain.ElementAware;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
 import org.mcbain.request.Request;
@@ -25,7 +25,7 @@ import org.mcbain.template.Element;
  * Input field component.
  */
 
-public class Input implements Renderer, Elemental {
+public class Input implements Renderer, ElementAware {
 
 	private Object value;
 	private Element element;

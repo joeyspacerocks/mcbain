@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain.servlet;
+package org.mcbain.examples.blog;
 
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
@@ -22,8 +22,6 @@ import org.mcbain.request.Request;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Application filter - gateway to framework.
@@ -35,31 +33,8 @@ public class ApplicationFilter implements Filter {
 
 
 	public void init(FilterConfig config) throws ServletException {
-		ServletContext servletContext = config.getServletContext();
-		context = new Context(servletContext);
-
-		String appClassname = config.getInitParameter("application");
-
-		if (appClassname == null) {
-			throw new RuntimeException("No application class specified");
-		}
-
-		try {
-			Class<?> appClass = Class.forName(appClassname);
-			Constructor<?> c = appClass.getConstructor(Context.class);
-			c.newInstance(context);
-
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Application class not found: " + appClassname, e);
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException("Application class does not contain a constructor: " + appClassname + "(Context context)", e);
-		} catch (InvocationTargetException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (InstantiationException e) {
-			throw new RuntimeException(e);
-		}
+		context = new Context(config.getServletContext());
+		new BlogApplication(context);
 	}
 
 

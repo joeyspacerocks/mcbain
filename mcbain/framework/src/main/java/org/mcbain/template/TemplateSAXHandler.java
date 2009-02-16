@@ -14,7 +14,6 @@
 
 package org.mcbain.template;
 
-import org.mcbain.ComponentFactory;
 import org.mcbain.util.ArrayStack;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -39,7 +38,6 @@ class TemplateSAXHandler extends DefaultHandler2 {
 
 	private Locator locator;
 
-	private ComponentFactory factory;
 	private String idAttribute = DEFAULT_ID_ATTRIBUTE;
 
 	private ComponentSpec current;
@@ -57,13 +55,11 @@ class TemplateSAXHandler extends DefaultHandler2 {
 	/**
 	 * Constructs a new handler instance.
 	 *
-	 * @param factory Component factory
-	 * @param root	Root template
+	 * @param template Root template
 	 */
 
-	public TemplateSAXHandler(ComponentFactory factory, TemplateClass template) {
+	public TemplateSAXHandler(TemplateClass template) {
 		this.current = template.root();
-		this.factory = factory;
 		this.tagStack = new ArrayStack<String>();
 		this.componentCount = new HashMap<String, Integer>();
 	}

@@ -15,7 +15,7 @@
 package org.mcbain.template;
 
 import org.mcbain.Container;
-import org.mcbain.Elemental;
+import org.mcbain.ElementAware;
 import org.mcbain.Renderer;
 import org.mcbain.Writer;
 import org.mcbain.request.Request;
@@ -146,8 +146,8 @@ class ComponentSpec implements TemplatePart {
 					});
 				}
 
-				if (component instanceof Elemental) {
-					((Elemental) component).element(new Element(element));
+				if (component instanceof ElementAware) {
+					((ElementAware) component).element(new Element(element));
 				}
 
 				component.render(request, writer);

@@ -72,7 +72,7 @@ public class TemplateLoaderTest {
 		stub(context.getResourceAsStream("/test.html")).toReturn(in);
 
 		TemplateFactory templateFactory = new TemplateFactory(context);
-		TemplateClass t = templateFactory.parseTemplate("test", in);
+		TemplateClass t = templateFactory.parseTemplate(in);
 
 		List<TemplatePart> children = t.root().children();
 
@@ -95,7 +95,7 @@ public class TemplateLoaderTest {
 		stub(context.getResourceAsStream("/test.html")).toReturn(in);
 
 		TemplateFactory templateFactory = new TemplateFactory(context);
-		TemplateClass t = templateFactory.parseTemplate("test", in);
+		TemplateClass t = templateFactory.parseTemplate(in);
 
 		List<TemplatePart> children = t.root().children();
 
@@ -119,7 +119,7 @@ public class TemplateLoaderTest {
 		stub(context.getResourceAsStream("/test.html")).toReturn(in);
 
 		TemplateFactory templateFactory = new TemplateFactory(context);
-		TemplateClass t = templateFactory.parseTemplate("test", in);
+		TemplateClass t = templateFactory.parseTemplate(in);
 
 		List<TemplatePart> children = t.root().children();
 
@@ -156,7 +156,7 @@ public class TemplateLoaderTest {
 		stub(context.getResourceAsStream("/test.html")).toReturn(in);
 
 		TemplateFactory templateFactory = new TemplateFactory(context);
-		TemplateClass t = templateFactory.parseTemplate("test", in);
+		TemplateClass t = templateFactory.parseTemplate(in);
 
 		List<TemplatePart> children = t.root().children();
 

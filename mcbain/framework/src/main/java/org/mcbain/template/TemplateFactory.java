@@ -14,7 +14,6 @@
 
 package org.mcbain.template;
 
-import org.mcbain.ComponentFactory;
 import org.mcbain.util.Strings;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
@@ -41,7 +40,6 @@ public class TemplateFactory {
 
 	protected static final String FAKE_ROOT = "ROOT";
 
-	private ComponentFactory factory;
 	private ServletContext context;
 	private Map<String, TemplateClass> templates;
 
@@ -98,7 +96,7 @@ public class TemplateFactory {
 				throw new RuntimeException("Template file could not be found: " + path);
 			}
 
-			template = parseTemplate(name, in);
+			template = parseTemplate(in);
 			templates.put(name, template);
 		}
 
@@ -109,15 +107,14 @@ public class TemplateFactory {
 	/**
 	 * Loads and parses a template from an open input stream.
 	 *
-	 * @param id Template id
 	 * @param in Input stream
 	 * @return Template specification
 	 */
 
-	public TemplateClass parseTemplate(String id, InputStream in) {
+	public TemplateClass parseTemplate(InputStream in) {
 		TemplateClass root = new TemplateClass();
 
-		DefaultHandler handler = new TemplateSAXHandler(factory, root);
+		DefaultHandler handler = new TemplateSAXHandler(root);
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 
 		try {
