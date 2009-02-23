@@ -14,8 +14,8 @@
 
 package org.mcbain.examples.blog;
 
-import org.mcbain.Renderer;
-import org.mcbain.Writer;
+import org.mcbain.render.Renderer;
+import org.mcbain.render.Writer;
 import org.mcbain.components.Form;
 import org.mcbain.components.Input;
 import org.mcbain.components.Loop;

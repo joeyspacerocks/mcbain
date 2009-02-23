@@ -14,10 +14,10 @@
 
 package org.mcbain.template;
 
-import org.mcbain.Container;
-import org.mcbain.ElementAware;
-import org.mcbain.Renderer;
-import org.mcbain.Writer;
+import org.mcbain.template.Container;
+import org.mcbain.render.Writer;
+import org.mcbain.template.ElementAware;
+import org.mcbain.render.Renderer;
 import org.mcbain.request.Request;
 import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations.Mock;

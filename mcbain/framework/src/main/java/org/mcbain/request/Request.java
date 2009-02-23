@@ -15,6 +15,7 @@
 package org.mcbain.request;
 
 import org.mcbain.template.Template;
+import org.mcbain.route.Uri;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -57,7 +58,7 @@ public class Request {
 		return this;
 	}
 
-	protected void uri(Uri uri) {
+	public void uri(Uri uri) {
 		this.uri = uri;
 	}
 

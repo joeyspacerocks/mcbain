@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ******
  * SAX handler that is used to decompose an XML template into a hierarchical
  * structure of component specifications.
  */
@@ -65,14 +64,10 @@ class TemplateSAXHandler extends DefaultHandler2 {
 	}
 
 
-	// @see org.xml.sax.helpers.DefaultHandler#setDocumentLocator(org.xml.sax.Locator)
-
 	public void setDocumentLocator(Locator locator) {
 		this.locator = locator;
 	}
 
-
-	// @see org.xml.sax.helpers.DefaultHandler#startDocument()
 
 	public void startDocument() throws SAXException {
 		tween = new StringBuilder();
@@ -80,14 +75,9 @@ class TemplateSAXHandler extends DefaultHandler2 {
 	}
 
 
-	// @see org.xml.sax.helpers.DefaultHandler#endDocument()
-
 	public void endDocument() throws SAXException {
 		endTween();
 	}
-
-
-	// @see org.xml.sax.ext.DefaultHandler2#startDTD(java.lang.String, java.lang.String, java.lang.String)
 
 	public void startDTD(String name, String publicId, String systemId) throws SAXException {
 		tween("<!DOCTYPE ").tween(name).tween(" PUBLIC \"").tween(publicId)
@@ -95,23 +85,14 @@ class TemplateSAXHandler extends DefaultHandler2 {
 		parsingDtd = true;
 	}
 
-
-	// @see org.xml.sax.ext.DefaultHandler2#endDTD()
-
 	public void endDTD() throws SAXException {
 		parsingDtd = false;
 	}
-
-
-	// @see org.xml.sax.ext.DefaultHandler2#comment(char[], int, int)
 
 	public void comment(char[] ch, int start, int length) throws SAXException {
 		if (!parsingDtd)
 			tween("<!--").tween(new String(ch, start, length)).tween("-->");
 	}
-
-
-	// @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
 
 	public void characters(char[] ch, int start, int length) throws SAXException {
 		String value = new String(ch, start, length);
@@ -134,9 +115,6 @@ class TemplateSAXHandler extends DefaultHandler2 {
 
 		tween.append(value.substring(endPos + 1));
 	}
-
-
-	// @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
 
 	public void startElement(String uri, String localName, String name, Attributes attributes) throws SAXException {
 		if (name.equals(TemplateFactory.FAKE_ROOT)) return;
@@ -177,8 +155,6 @@ class TemplateSAXHandler extends DefaultHandler2 {
 	}
 
 
-	// @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-
 	public void endElement(String uri, String localName, String name) throws SAXException {
 		if (name.equals(TemplateFactory.FAKE_ROOT)) return;
 
@@ -201,10 +177,9 @@ class TemplateSAXHandler extends DefaultHandler2 {
 	}
 
 
-	// @see org.xml.sax.ext.DefaultHandler2#resolveEntity(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-
 	public InputSource resolveEntity(String name, String publicId, String baseURI, String systemId) throws SAXException, IOException {
-		String leaf = "org/mcbain/dtd" + systemId.substring(systemId.lastIndexOf('/'));
+        int leafStart = systemId.lastIndexOf('/');
+        String leaf = "org/mcbain/dtd/" + systemId.substring(leafStart + 1);
 
 		InputStream in = getClass().getClassLoader().getResourceAsStream(leaf);
 

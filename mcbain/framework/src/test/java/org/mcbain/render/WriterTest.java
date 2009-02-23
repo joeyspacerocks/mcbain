@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain;
+package org.mcbain.render;
 
 import org.mcbain.template.Element;
+import org.mcbain.render.Writer;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

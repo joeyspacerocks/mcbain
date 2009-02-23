@@ -12,23 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain;
+package org.mcbain.template;
 
-import org.mcbain.request.Request;
+import org.mcbain.template.Element;
 
 /**
- * Renderers provide a method for rendering themselves using the supplied
- * writer.
+ * Type indicating that the implementor accepts informal attributes.
  */
 
-public interface Renderer {
+public interface ElementAware {
 
 	/**
-	 * Renders using the supplied writer.
+	 * Passes the markup element that was used when the object was defined.
 	 *
-	 * @param request Render context
-	 * @param writer  Writer to render to
+	 * @param element Element
 	 */
 
-	public void render(Request request, Writer writer);
+	public void element(Element element);
 }

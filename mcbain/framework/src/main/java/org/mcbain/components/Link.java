@@ -14,10 +14,10 @@
 
 package org.mcbain.components;
 
-import org.mcbain.Container;
-import org.mcbain.ElementAware;
-import org.mcbain.Renderer;
-import org.mcbain.Writer;
+import org.mcbain.template.ElementAware;
+import org.mcbain.render.Renderer;
+import org.mcbain.template.Container;
+import org.mcbain.render.Writer;
 import org.mcbain.request.Request;
 import org.mcbain.template.Element;
 

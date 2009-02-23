@@ -14,9 +14,9 @@
 
 package org.mcbain.examples.blog;
 
-import org.mcbain.Container;
-import org.mcbain.Renderer;
-import org.mcbain.Writer;
+import org.mcbain.template.Container;
+import org.mcbain.render.Writer;
+import org.mcbain.render.Renderer;
 import org.mcbain.components.Link;
 import org.mcbain.components.Loop;
 import org.mcbain.examples.blog.model.Blog;

@@ -2,6 +2,8 @@ package org.mcbain.request;
 
 import org.mcbain.template.Template;
 import org.mcbain.template.TemplateFactory;
+import org.mcbain.route.Router;
+import org.mcbain.route.RouteBuilder;
 
 import javax.servlet.ServletContext;
 
@@ -45,7 +47,7 @@ public class Context {
 		return path;
 	}
 
-	public ConfigurationBuilder configure() {
-		return new ConfigurationBuilder(this);
+	public RouteBuilder configure() {
+		return new RouteBuilder(this);
 	}
 }

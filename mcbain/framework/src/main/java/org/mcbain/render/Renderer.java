@@ -12,20 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain;
+package org.mcbain.render;
+
+import org.mcbain.request.Request;
 
 /**
- * Component type that indicates that the component contains other
- * components.
+ * Renderers provide a method for rendering themselves using the supplied
+ * writer.
  */
 
-public interface Container {
+public interface Renderer {
 
 	/**
-	 * Sets the content of the container.
+	 * Renders using the supplied writer.
 	 *
-	 * @param content Content renderer
+	 * @param request Render context
+	 * @param writer  Writer to render to
 	 */
 
-	public void contents(Renderer content);
+	public void render(Request request, Writer writer);
 }

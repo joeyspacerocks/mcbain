@@ -12,21 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain;
+package org.mcbain.template;
 
-import org.mcbain.template.Element;
+import org.mcbain.render.Renderer;
 
 /**
- * Type indicating that the implementor accepts informal attributes.
+ * Component type that indicates that the component contains other
+ * components.
  */
 
-public interface ElementAware {
+public interface Container {
 
 	/**
-	 * Passes the markup element that was used when the object was defined.
+	 * Sets the content of the container.
 	 *
-	 * @param element Element
+	 * @param content Content renderer
 	 */
 
-	public void element(Element element);
+	public void contents(Renderer content);
 }

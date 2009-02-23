@@ -14,7 +14,7 @@
 
 package org.mcbain.template;
 
-import org.mcbain.Writer;
+import org.mcbain.render.Writer;
 import org.mcbain.request.Request;
 
 import java.util.ArrayList;

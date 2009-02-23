@@ -14,7 +14,7 @@
 
 package org.mcbain.examples.blog;
 
-import org.mcbain.Renderer;
+import org.mcbain.render.Renderer;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.BlogService;
 import org.mcbain.examples.blog.model.Post;
