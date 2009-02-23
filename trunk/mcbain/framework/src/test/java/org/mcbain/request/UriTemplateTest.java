@@ -16,6 +16,8 @@ package org.mcbain.request;
 
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
+import org.mcbain.route.Uri;
+import org.mcbain.route.UriTemplate;
 
 /**
  * Unit tests for UriTemplate.

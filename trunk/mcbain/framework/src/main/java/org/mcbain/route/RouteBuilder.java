@@ -12,30 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain.request;
+package org.mcbain.route;
+
+import org.mcbain.request.Context;
+import org.mcbain.request.ControllerChain;
+import org.mcbain.request.Controller;
+import org.mcbain.request.Interceptor;
 
 
-public class ConfigurationBuilder {
+public class RouteBuilder {
 
 	private final Context context;
 	private ControllerChain currentControllerChain;
 
-	public ConfigurationBuilder(Context context) {
+	public RouteBuilder(Context context) {
 		this.context = context;
 	}
 
-	public ConfigurationBuilder route(String path) {
+    public RouteBuilder route(String path) {
 		currentControllerChain = new ControllerChain();
 		context.router().add(path, currentControllerChain);
 		return this;
 	}
 
-	public ConfigurationBuilder to(Controller controller) {
+	public RouteBuilder to(Controller controller) {
 		currentControllerChain.controller(controller);
 		return this;
 	}
 
-	public ConfigurationBuilder via(Interceptor interceptor) {
+	public RouteBuilder via(Interceptor interceptor) {
 		currentControllerChain.addInterceptor(interceptor);
 		return this;
 	}

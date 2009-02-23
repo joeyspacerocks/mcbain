@@ -61,7 +61,7 @@ public class TemplateLoaderTest {
 
 
 	/**
-	 * Tests parsing plain HTML templates with with no recognised components.
+	 * Tests parsing plain HTML templates with no recognised components.
 	 */
 
 	@Test(dataProvider = "plain")

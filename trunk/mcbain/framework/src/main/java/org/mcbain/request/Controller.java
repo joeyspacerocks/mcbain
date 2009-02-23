@@ -14,7 +14,7 @@
 
 package org.mcbain.request;
 
-import org.mcbain.Renderer;
+import org.mcbain.render.Renderer;
 
 /**
  * A controller takes an incoming request to a URI and decides what to

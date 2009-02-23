@@ -14,8 +14,8 @@
 
 package org.mcbain.examples.blog;
 
-import org.mcbain.Renderer;
-import org.mcbain.Writer;
+import org.mcbain.render.Renderer;
+import org.mcbain.render.Writer;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.request.Request;
 import org.mcbain.template.Template;
