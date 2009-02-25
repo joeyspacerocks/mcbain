@@ -15,13 +15,9 @@
 package org.mcbain.route;
 
 import org.mcbain.render.Renderer;
-import org.mcbain.request.ControllerChain;
 import org.mcbain.request.Request;
-import org.mcbain.request.Interceptor;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Forwards requests to the appropriate controller based on the path.
@@ -29,69 +25,31 @@ import java.util.Set;
 
 public class Router {
 
-	private final Map<UriTemplate, ControllerChain> routes;
-
+    private final List<Route> routes;
 
 	public Router() {
-		routes = new LinkedHashMap<UriTemplate, ControllerChain>();
+		routes = new ArrayList<Route>();
 	}
 
-
-	/**
-	 * Adds a new uri/controller to the resource pool.
-	 *
-	 * @param path	   Path to route from
-	 * @param controller Controller chain to route requests to
-	 */
-
-	public void add(String path, ControllerChain controller) {
-		UriTemplate template = new UriTemplate(path);
-		routes.put(template, controller);
+	public void add(Route route) {
+		routes.add(route);
 	}
-
 
 	public Renderer route(Request request) {
-		UriTemplate uri = matchUri(request);
-		return uri == null ? null : process(uri, request);
-	}
+        String path = request.servletRequest().getServletPath();
 
-
-	private UriTemplate matchUri(Request request) {
-		String path = request.servletRequest().getServletPath();
-
-		Set<UriTemplate> templates = routes.keySet();
-		for (UriTemplate template : templates) {
-			Uri testUri = template.match(path);
-			if (testUri.matches()) {
-				request.uri(testUri);
-				return template;
-			}
-		}
-
+        for (Route route : routes) {
+            Uri testUri = route.matches(path);
+            if (testUri.matches()) {
+                request.uri(testUri);
+                return route.process(request);
+            }
+        }
+        
 		return null;
 	}
 
-	private Renderer process(UriTemplate uri, Request request) {
-		String method = request.servletRequest().getMethod().toUpperCase();
-		ControllerChain c = routes.get(uri);
-
-		boolean handled = false;
-		for (Interceptor interceptor : c.interceptors()) {
-			handled = interceptor.intercept(request);
-			if (!handled) {
-				break;
-			}
-		}
-
-		if (handled) {
-			if ("GET".equals(method)) {
-				return c.controller().get(request);
-
-			} else if ("POST".equals(method)) {
-				return c.controller().post(request);
-			}
-		}
-
-		return null;
-	}
+    public List<Route> routes() {
+        return routes;
+    }
 }
