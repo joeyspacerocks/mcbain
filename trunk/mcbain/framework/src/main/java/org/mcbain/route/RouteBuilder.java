@@ -14,34 +14,58 @@
 
 package org.mcbain.route;
 
-import org.mcbain.request.Context;
-import org.mcbain.request.ControllerChain;
 import org.mcbain.request.Controller;
 import org.mcbain.request.Interceptor;
+
+import java.util.List;
+import java.util.ArrayList;
 
 
 public class RouteBuilder {
 
-	private final Context context;
-	private ControllerChain currentControllerChain;
+    private String name;
+    private String pattern;
+    private List<Interceptor> interceptors;
+    private Controller controller;
 
-	public RouteBuilder(Context context) {
-		this.context = context;
-	}
+    private Router router;
+
+    public RouteBuilder() {
+        this(new Router());
+    }
+
+    public RouteBuilder(Router router) {
+        this.router = router;
+        interceptors = new ArrayList<Interceptor>();
+    }
 
     public RouteBuilder route(String path) {
-		currentControllerChain = new ControllerChain();
-		context.router().add(path, currentControllerChain);
+		pattern = path;
 		return this;
 	}
 
 	public RouteBuilder to(Controller controller) {
-		currentControllerChain.controller(controller);
+		this.controller = controller;
+        saveRoute();
 		return this;
 	}
 
 	public RouteBuilder via(Interceptor interceptor) {
-		currentControllerChain.addInterceptor(interceptor);
+		interceptors.add(interceptor);
 		return this;
 	}
+
+    public Router end() {
+        return router;
+    }
+
+    private void saveRoute() {
+        Route route = new Route(name, pattern, interceptors, controller);
+        router.add(route);
+
+        name = null;
+        pattern = null;
+        interceptors.clear();
+        controller = null;
+    }
 }

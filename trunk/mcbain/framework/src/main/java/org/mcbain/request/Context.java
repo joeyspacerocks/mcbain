@@ -48,6 +48,6 @@ public class Context {
 	}
 
 	public RouteBuilder configure() {
-		return new RouteBuilder(this);
+		return new RouteBuilder(router);
 	}
 }
