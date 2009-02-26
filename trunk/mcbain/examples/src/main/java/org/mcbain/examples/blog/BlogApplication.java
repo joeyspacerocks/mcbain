@@ -14,14 +14,15 @@
 
 package org.mcbain.examples.blog;
 
-import org.mcbain.render.Renderer;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.BlogService;
 import org.mcbain.examples.blog.model.Post;
-import org.mcbain.request.Context;
+import org.mcbain.render.Renderer;
 import org.mcbain.request.Controller;
 import org.mcbain.request.Interceptor;
 import org.mcbain.request.Request;
+import org.mcbain.route.RouteBuilder;
+import org.mcbain.route.Router;
 
 
 /**
@@ -30,7 +31,9 @@ import org.mcbain.request.Request;
 
 public class BlogApplication {
 
-	public BlogApplication(final Context context) {
+	public Router buildRouter() {
+        RouteBuilder routes = new RouteBuilder();
+
 		final BlogService blogService = new BlogService();
 
 		Interceptor blogLocator = new Interceptor() {
@@ -45,10 +48,10 @@ public class BlogApplication {
 			}
 		};
 
-		context.configure()
+		routes
 			.route("/").to(new Controller() {
 			public Renderer get(Request request) {
-				return context.template("index");
+				return request.template("index");
 			}
 		})
 
@@ -97,5 +100,7 @@ public class BlogApplication {
 				return new BlogHome((Blog) request.resource("blog"), archive);
 			}
 		});
+
+        return routes.end();
 	}
 }
