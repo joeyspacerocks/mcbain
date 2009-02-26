@@ -20,6 +20,9 @@ import org.mcbain.request.Interceptor;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * The route builder provides a fluent interface for configuring routes in a router.
+ */
 
 public class RouteBuilder {
 

@@ -1,9 +1,8 @@
 package org.mcbain.request;
 
+import org.mcbain.route.Router;
 import org.mcbain.template.Template;
 import org.mcbain.template.TemplateFactory;
-import org.mcbain.route.Router;
-import org.mcbain.route.RouteBuilder;
 
 import javax.servlet.ServletContext;
 
@@ -22,9 +21,9 @@ public class Context {
 	 * Constructs a new instance.
 	 */
 
-	public Context(ServletContext servletContext) {
+	public Context(ServletContext servletContext, Router router) {
 		context = servletContext;
-		router = new Router();
+		this.router = router;
 		templateFactory = new TemplateFactory(context);
 	}
 
@@ -45,9 +44,5 @@ public class Context {
 
 	public String link(String path) {
 		return path;
-	}
-
-	public RouteBuilder configure() {
-		return new RouteBuilder(router);
 	}
 }

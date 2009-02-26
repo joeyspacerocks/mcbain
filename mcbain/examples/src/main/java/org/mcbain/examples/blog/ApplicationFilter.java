@@ -18,6 +18,7 @@ import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
 import org.mcbain.request.Context;
 import org.mcbain.request.Request;
+import org.mcbain.route.Router;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -33,8 +34,8 @@ public class ApplicationFilter implements Filter {
 
 
 	public void init(FilterConfig config) throws ServletException {
-		context = new Context(config.getServletContext());
-		new BlogApplication(context);
+		Router router = new BlogApplication().buildRouter();
+        context = new Context(config.getServletContext(), router);
 	}
 
 
