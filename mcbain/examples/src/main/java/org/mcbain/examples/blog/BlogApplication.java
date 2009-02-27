@@ -42,7 +42,7 @@ public class BlogApplication {
 				if (blog == null) {
 					return false;
 				} else {
-					request.resource("blog", blog);
+					request.resource(blog);
 					return true;
 				}
 			}
@@ -57,13 +57,13 @@ public class BlogApplication {
 
 			.route("/blog/$blog").via(blogLocator).to(new Controller() {
 			public Renderer get(Request request) {
-				return new BlogHome((Blog) request.resource("blog"), null);
+				return new BlogHome(request.resource(Blog.class), null);
 			}
 		})
 
 			.route("/blog/$blog/$archive/$post").via(blogLocator).to(new Controller() {
 			public Renderer get(Request request) {
-				Blog blog = (Blog) request.resource("blog");
+				Blog blog = request.resource(Blog.class);
 				Post post = blog.getPost(request.parameter("post"));
 				return (post == null ? null : new FullPost(blog, post));
 			}
@@ -73,11 +73,11 @@ public class BlogApplication {
 
 
 			public Renderer get(Request request) {
-				return new NewPost((Blog) request.resource("blog"));
+				return new NewPost(request.resource(Blog.class));
 			}
 
 			public Renderer post(Request request) {
-				Blog blog = (Blog) request.resource("blog");
+				Blog blog = request.resource(Blog.class);
 
 				if (request
 					.has("title")
@@ -97,7 +97,7 @@ public class BlogApplication {
 			.route("/blog/$blog/$archive").via(blogLocator).to(new Controller() {
 			public Renderer get(Request request) {
 				String archive = request.parameter("archive").replace('-', '/');
-				return new BlogHome((Blog) request.resource("blog"), archive);
+				return new BlogHome(request.resource(Blog.class), archive);
 			}
 		});
 

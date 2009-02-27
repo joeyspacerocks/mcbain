@@ -34,13 +34,13 @@ public class Request {
 	private Uri uri;
 	private Map<String, String> errors;
 	private Context context;
-	private Map<String, Object> resources;
+	private Map<Class, Object> resources;
 
 	public Request(Context context, HttpServletRequest servletRequest) {
 		this.servletRequest = servletRequest;
 		this.errors = new LinkedHashMap<String, String>();
 		this.context = context;
-		this.resources = new HashMap<String, Object>();
+		this.resources = new HashMap<Class, Object>();
 	}
 
 	public String parameter(String name) {
@@ -78,12 +78,12 @@ public class Request {
 		return context;
 	}
 
-	public void resource(String name, Object resource) {
-		resources.put(name, resource);
+	public <T> void resource(T resource) {
+		resources.put(resource.getClass(), resource);
 	}
 
-	public Object resource(String name) {
-		return resources.get(name);
+	public <T> T resource(Class<T> type) {
+		return (T) resources.get(type);
 	}
 
 	public Template template(String name) {
