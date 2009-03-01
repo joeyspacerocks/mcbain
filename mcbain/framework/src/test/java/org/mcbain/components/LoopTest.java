@@ -14,9 +14,9 @@
 
 package org.mcbain.components;
 
+import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.request.Request;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -81,7 +81,7 @@ public class LoopTest {
 
 	private Writer loop(Loop<String> loop) {
 		Renderer content = new Renderer() {
-			public void render(Request context, Writer writer) {
+			public void render(RenderContext context, Writer writer) {
 				writer.print("content", false);
 			}
 		};

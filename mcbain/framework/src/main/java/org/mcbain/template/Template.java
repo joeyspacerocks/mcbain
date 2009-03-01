@@ -14,9 +14,9 @@
 
 package org.mcbain.template;
 
+import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.request.Request;
 import org.mcbain.util.PairIterator;
 
 import java.util.HashMap;
@@ -97,7 +97,7 @@ public class Template implements Renderer {
 
 	public Template bind(final String id, final Object value) {
 		components.put(id, new Renderer() {
-			public void render(Request context, Writer writer) {
+			public void render(RenderContext context, Writer writer) {
 				if (value != null)
 					writer.print(value.toString(), false);
 			}
@@ -114,7 +114,7 @@ public class Template implements Renderer {
 		return components.get(id);
 	}
 
-	public void render(Request context, Writer writer) {
+	public void render(RenderContext context, Writer writer) {
 		templateClass.render(context, writer, this);
 	}
 }

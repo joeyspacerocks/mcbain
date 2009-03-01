@@ -14,14 +14,14 @@
 
 package org.mcbain.examples.blog;
 
-import org.mcbain.render.Renderer;
-import org.mcbain.render.Writer;
 import org.mcbain.components.If;
 import org.mcbain.components.Link;
 import org.mcbain.components.Loop;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.Post;
-import org.mcbain.request.Request;
+import org.mcbain.render.RenderContext;
+import org.mcbain.render.Renderer;
+import org.mcbain.render.Writer;
 import org.mcbain.template.Template;
 
 import java.io.UnsupportedEncodingException;
@@ -43,8 +43,8 @@ public class Posts implements Renderer {
 		this.posts = posts;
 	}
 
-	public void render(Request request, Writer writer) {
-		final Template template = request.template("posts");
+	public void render(RenderContext context, Writer writer) {
+		final Template template = context.template("posts");
 
 		template.bind(
 			"empty", new If(posts.isEmpty()),
@@ -60,7 +60,7 @@ public class Posts implements Renderer {
 			}
 		);
 
-		template.render(request, writer);
+		template.render(context, writer);
 	}
 
 	private String postLink(Post post) {

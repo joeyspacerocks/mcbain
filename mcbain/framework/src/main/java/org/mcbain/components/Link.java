@@ -14,12 +14,12 @@
 
 package org.mcbain.components;
 
-import org.mcbain.template.ElementAware;
+import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
-import org.mcbain.template.Container;
 import org.mcbain.render.Writer;
-import org.mcbain.request.Request;
+import org.mcbain.template.Container;
 import org.mcbain.template.Element;
+import org.mcbain.template.ElementAware;
 
 /**
  * Link component.
@@ -55,15 +55,15 @@ public class Link implements Renderer, ElementAware, Container {
 		this.content = content;
 	}
 
-	public void render(Request request, Writer writer) {
-		element.attribute("href", request.context().link(path));
+	public void render(RenderContext context, Writer writer) {
+		element.attribute("href", context.link(path));
 
 		writer.tag("a").attributes(element);
 
 		if (value != null) {
 			writer.body(value);
 		} else {
-			content.render(request, writer);
+			content.render(context, writer);
 			writer.close();
 		}
 	}

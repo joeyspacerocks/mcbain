@@ -14,8 +14,8 @@
 
 package org.mcbain.template;
 
+import org.mcbain.render.RenderContext;
 import org.mcbain.render.Writer;
-import org.mcbain.request.Request;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +56,7 @@ public class TemplateClass implements TemplatePart {
 	}
 
 
-	public void render(Request context, Writer writer, Template templateInstance) {
+	public void render(RenderContext context, Writer writer, Template templateInstance) {
 		root.render(context, writer, templateInstance);
 	}
 

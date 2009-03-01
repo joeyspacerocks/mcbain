@@ -14,13 +14,13 @@
 
 package org.mcbain.examples.blog;
 
-import org.mcbain.template.Container;
-import org.mcbain.render.Writer;
-import org.mcbain.render.Renderer;
 import org.mcbain.components.Link;
 import org.mcbain.components.Loop;
 import org.mcbain.examples.blog.model.Blog;
-import org.mcbain.request.Request;
+import org.mcbain.render.RenderContext;
+import org.mcbain.render.Renderer;
+import org.mcbain.render.Writer;
+import org.mcbain.template.Container;
 import org.mcbain.template.Template;
 
 import static java.lang.System.currentTimeMillis;
@@ -44,10 +44,10 @@ public class Border implements Renderer, Container {
 		this.content = content;
 	}
 
-	public void render(Request request, Writer writer) {
+	public void render(RenderContext context, Writer writer) {
 		long timestamp = currentTimeMillis();
 
-		final Template template = request.template("border");
+		final Template template = context.template("border");
 
 		Link title = new Link("/blog/" + blog.getName());
 		title.value(blog.getName());
@@ -70,7 +70,7 @@ public class Border implements Renderer, Container {
 		);
 
 		writer.reset();
-		template.render(request, writer);
+		template.render(context, writer);
 		writer.seal();
 	}
 }

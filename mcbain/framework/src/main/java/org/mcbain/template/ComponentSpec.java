@@ -14,11 +14,9 @@
 
 package org.mcbain.template;
 
-import org.mcbain.template.Container;
-import org.mcbain.template.ElementAware;
+import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.request.Request;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,9 +128,9 @@ class ComponentSpec implements TemplatePart {
 	}
 
 
-	public void render(Request request, Writer writer, final Template template) {
+	public void render(RenderContext context, Writer writer, final Template template) {
 		if (isRoot()) {
-			renderChildren(request, writer, template);
+			renderChildren(context, writer, template);
 
 		} else if (template.contains(id)) {
 			Renderer component = template.get(id);
@@ -140,8 +138,8 @@ class ComponentSpec implements TemplatePart {
 			if (component != null) {
 				if (component instanceof Container) {
 					((Container) component).contents(new Renderer() {
-						public void render(Request request, Writer writer) {
-							renderChildren(request, writer, template);
+						public void render(RenderContext context, Writer writer) {
+							renderChildren(context, writer, template);
 						}
 					});
 				}
@@ -150,20 +148,20 @@ class ComponentSpec implements TemplatePart {
 					((ElementAware) component).element(new Element(element));
 				}
 
-				component.render(request, writer);
+				component.render(context, writer);
 			}
 
 		} else if (element != null) {
 			writer.tag(element.tag()).attribute("id", id).attributes(element);
-			renderChildren(request, writer, template);
+			renderChildren(context, writer, template);
 			writer.close();
 		}
 	}
 
 
-	private void renderChildren(Request request, Writer writer, final Template templateInstance) {
+	private void renderChildren(RenderContext context, Writer writer, final Template templateInstance) {
 		for (TemplatePart part : children) {
-			part.render(request, writer, templateInstance);
+			part.render(context, writer, templateInstance);
 		}
 	}
 

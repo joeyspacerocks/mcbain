@@ -14,11 +14,11 @@
 
 package org.mcbain.examples.blog;
 
-import org.mcbain.render.Renderer;
-import org.mcbain.render.Writer;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.Post;
-import org.mcbain.request.Request;
+import org.mcbain.render.RenderContext;
+import org.mcbain.render.Renderer;
+import org.mcbain.render.Writer;
 import org.mcbain.template.Template;
 
 
@@ -38,8 +38,8 @@ public class FullPost implements Renderer {
 	}
 
 
-	public void render(Request request, Writer writer) {
-		Template template = request.template("post");
+	public void render(RenderContext context, Writer writer) {
+		Template template = context.template("post");
 
 		template.bind(
 			"border", new Border(blog),
@@ -47,6 +47,6 @@ public class FullPost implements Renderer {
 			"content", post.getContent()
 		);
 
-		template.render(request, writer);
+		template.render(context, writer);
 	}
 }

@@ -14,11 +14,11 @@
 
 package org.mcbain.components;
 
-import org.mcbain.template.ElementAware;
+import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.request.Request;
 import org.mcbain.template.Element;
+import org.mcbain.template.ElementAware;
 
 
 /**
@@ -52,8 +52,8 @@ public class Input implements Renderer, ElementAware {
 
 	// FIXME: unique id/name when in loop ...
 
-	public void render(Request request, Writer writer) {
-		Object renderValue = valueSet ? value : request.parameter(element.id());
+	public void render(RenderContext context, Writer writer) {
+		Object renderValue = valueSet ? value : context.request().parameter(element.id());
 
 		if (element.tag().equals("textarea")) {
 			writer
