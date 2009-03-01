@@ -15,12 +15,12 @@
 package org.mcbain.components;
 
 
-import org.mcbain.template.Container;
-import org.mcbain.template.ElementAware;
+import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.request.Request;
+import org.mcbain.template.Container;
 import org.mcbain.template.Element;
+import org.mcbain.template.ElementAware;
 
 /**
  * Component that renders its content multiple times.
@@ -72,7 +72,7 @@ public class Loop<T> implements Renderer, Container, ElementAware {
 		this.element = element;
 	}
 
-	public void render(Request request, Writer writer) {
+	public void render(RenderContext context, Writer writer) {
 		if (source == null) return;
 
 		if (element != null)
@@ -80,7 +80,7 @@ public class Loop<T> implements Renderer, Container, ElementAware {
 
 		for (T value : source) {
 			currentValue(value);
-			content.render(request, writer);
+			content.render(context, writer);
 		}
 
 		if (element != null)

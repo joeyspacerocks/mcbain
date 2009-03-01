@@ -14,8 +14,8 @@
 
 package org.mcbain.template;
 
+import org.mcbain.render.RenderContext;
 import org.mcbain.render.Writer;
-import org.mcbain.request.Request;
 
 /**
  * Template part used to store and render the portions of text that lie
@@ -32,7 +32,7 @@ public class TemplateText implements TemplatePart {
 	}
 
 
-	public void render(Request context, Writer writer, Template templateInstance) {
+	public void render(RenderContext context, Writer writer, Template templateInstance) {
 		writer.print(text, true);
 	}
 

@@ -14,13 +14,13 @@
 
 package org.mcbain.examples.blog;
 
-import org.mcbain.render.Renderer;
-import org.mcbain.render.Writer;
 import org.mcbain.components.Form;
 import org.mcbain.components.Input;
 import org.mcbain.components.Loop;
 import org.mcbain.examples.blog.model.Blog;
-import org.mcbain.request.Request;
+import org.mcbain.render.RenderContext;
+import org.mcbain.render.Renderer;
+import org.mcbain.render.Writer;
 import org.mcbain.template.Template;
 
 
@@ -37,21 +37,21 @@ public class NewPost implements Renderer {
 	}
 
 
-	public void render(final Request request, Writer writer) {
-		final Template template = request.template("newpost");
+	public void render(final RenderContext context, Writer writer) {
+		final Template template = context.template("newpost");
 
 		template.bind(
 			"border", new Border(blog),
 			"form", new Form("/blog/" + blog.getName() + "/newpost"),
 			"title", new Input(),
 			"content", new Input(),
-			"errors", new Loop<String>(request.errors().values()) {
+			"errors", new Loop<String>(context.request().errors().values()) {
 				public void currentValue(String value) {
 					template.bind("error", value);
 				}
 			}
 		);
 
-		template.render(request, writer);
+		template.render(context, writer);
 	}
 }

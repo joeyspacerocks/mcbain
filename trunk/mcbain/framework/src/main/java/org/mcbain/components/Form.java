@@ -15,12 +15,12 @@
 package org.mcbain.components;
 
 
-import org.mcbain.template.ElementAware;
+import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
-import org.mcbain.template.Container;
 import org.mcbain.render.Writer;
-import org.mcbain.request.Request;
+import org.mcbain.template.Container;
 import org.mcbain.template.Element;
+import org.mcbain.template.ElementAware;
 
 /**
  * Component that renders a form.
@@ -49,14 +49,14 @@ public class Form implements Renderer, Container, ElementAware {
 	}
 
 
-	public void render(Request request, Writer writer) {
+	public void render(RenderContext context, Writer writer) {
 		writer.tag(element.tag());
 
-		element.attribute("action", request.context().link(path));
+		element.attribute("action", context.link(path));
 		element.attribute("method", "POST");
 
 		writer.attributes(element);
-		content.render(request, writer);
+		content.render(context, writer);
 
 		writer.close();
 	}

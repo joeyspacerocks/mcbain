@@ -14,11 +14,9 @@
 
 package org.mcbain.template;
 
-import org.mcbain.template.Container;
-import org.mcbain.render.Writer;
-import org.mcbain.template.ElementAware;
+import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
-import org.mcbain.request.Request;
+import org.mcbain.render.Writer;
 import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations.Mock;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -40,7 +38,7 @@ public class ComponentSpecTest {
 	@Mock
 	private Element element;
 	@Mock
-	private Request request;
+	private RenderContext rc;
 	@Mock
 	private Writer writer;
 	@Mock
@@ -101,7 +99,7 @@ public class ComponentSpecTest {
 		root.addTemplateText("child1");
 		root.addTemplateText("child2");
 
-		root.render(request, writer, template);
+		root.render(rc, writer, template);
 
 		verify(writer).print("child1", true);
 		verify(writer).print("child2", true);
@@ -111,14 +109,14 @@ public class ComponentSpecTest {
 		stubWriterForUnboundId("id");
 
 		root.add("id", element);
-		root.render(request, writer, template);
+		root.render(rc, writer, template);
 	}
 
 	public void shouldRenderNothingIfNullBound() {
 		bindToTemplate(null);
 
 		root.add("id", element);
-		root.render(request, writer, template);
+		root.render(rc, writer, template);
 
 		verifyZeroInteractions(writer);
 	}
@@ -129,9 +127,9 @@ public class ComponentSpecTest {
 		bindToTemplate(component);
 
 		root.add("id", element);
-		root.render(request, writer, template);
+		root.render(rc, writer, template);
 
-		verify(component).render(request, writer);
+		verify(component).render(rc, writer);
 	}
 
 	public void shouldInjectElementInElementalComponent() {
@@ -141,7 +139,7 @@ public class ComponentSpecTest {
 		bindToTemplate(component);
 
 		root.add("id", element);
-		root.render(request, writer, template);
+		root.render(rc, writer, template);
 
 		assertEquals(component.element.id(), element.id());
 	}
@@ -153,13 +151,13 @@ public class ComponentSpecTest {
 		stubWriterForUnboundId("child");
 
 		root.add("id", element).add("child", element);
-		root.render(request, writer, template);
+		root.render(rc, writer, template);
 	}
 
 	private class ElementAwareRenderer implements Renderer, ElementAware {
 		public Element element;
 
-		public void render(Request context, Writer writer) {
+		public void render(RenderContext context, Writer writer) {
 		}
 
 		public void element(Element element) {
@@ -168,11 +166,11 @@ public class ComponentSpecTest {
 	}
 
 	private class ContainerRenderer implements Renderer, Container {
-		public void render(Request context, Writer writer) {
+		public void render(RenderContext context, Writer writer) {
 		}
 
 		public void contents(Renderer content) {
-			content.render(request, writer);
+			content.render(rc, writer);
 		}
 	}
 

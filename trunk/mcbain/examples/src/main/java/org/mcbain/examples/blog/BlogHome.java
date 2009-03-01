@@ -14,10 +14,10 @@
 
 package org.mcbain.examples.blog;
 
+import org.mcbain.examples.blog.model.Blog;
+import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.examples.blog.model.Blog;
-import org.mcbain.request.Request;
 import org.mcbain.template.Template;
 
 
@@ -38,8 +38,8 @@ public class BlogHome implements Renderer {
 	}
 
 
-	public void render(Request request, Writer writer) {
-		Template template = request.template("blog");
+	public void render(RenderContext context, Writer writer) {
+		Template template = context.template("blog");
 
 		template.bind(
 			"border", new Border(blog),
@@ -47,6 +47,6 @@ public class BlogHome implements Renderer {
 			"postTitle", archive == null ? "Recent Posts" : "Archive: " + archive
 		);
 
-		template.render(request, writer);
+		template.render(context, writer);
 	}
 }

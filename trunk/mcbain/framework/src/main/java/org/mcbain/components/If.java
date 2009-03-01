@@ -15,12 +15,12 @@
 package org.mcbain.components;
 
 
-import org.mcbain.template.Container;
-import org.mcbain.template.ElementAware;
+import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.request.Request;
+import org.mcbain.template.Container;
 import org.mcbain.template.Element;
+import org.mcbain.template.ElementAware;
 
 /**
  * Component that conditionally renders its content.
@@ -76,12 +76,12 @@ public class If implements Renderer, Container, ElementAware {
 	}
 
 
-	public void render(Request request, Writer writer) {
+	public void render(RenderContext context, Writer writer) {
 		if (condition) {
 			if (element != null)
 				writer.tag(element.tag());
 
-			content.render(request, writer);
+			content.render(context, writer);
 
 			if (element != null)
 				writer.close();
