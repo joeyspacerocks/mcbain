@@ -18,25 +18,22 @@ package org.mcbain.components;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.template.Container;
 import org.mcbain.template.Element;
-import org.mcbain.template.ElementAware;
 
 /**
  * Component that renders its content multiple times.
  */
 
-public class Loop<T> implements Renderer, Container, ElementAware {
+public class Loop<T> implements Renderer {
 
 	private Iterable<T> source;
-	private Renderer content;
-	private Element element;
 	private T currentValue;
 
 
 	/**
 	 * Constructs a new loop component.
-	 */
+     * @param source    Collection to iterate over
+     */
 
 	public Loop(Iterable<T> source) {
 		this.source = source;
@@ -64,23 +61,17 @@ public class Loop<T> implements Renderer, Container, ElementAware {
 		return currentValue;
 	}
 
-	public void contents(Renderer content) {
-		this.content = content;
-	}
-
-	public void element(Element element) {
-		this.element = element;
-	}
-
 	public void render(RenderContext context, Writer writer) {
 		if (source == null) return;
+
+        Element element = context.element();
 
 		if (element != null)
 			writer.tag(element.tag());
 
 		for (T value : source) {
 			currentValue(value);
-			content.render(context, writer);
+			context.contents().render(context, writer);
 		}
 
 		if (element != null)

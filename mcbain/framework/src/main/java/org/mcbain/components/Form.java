@@ -18,45 +18,31 @@ package org.mcbain.components;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.template.Container;
 import org.mcbain.template.Element;
-import org.mcbain.template.ElementAware;
 
 /**
  * Component that renders a form.
  */
 
-public class Form implements Renderer, Container, ElementAware {
+public class Form implements Renderer {
 
 	private String path;
-
-	private Renderer content;
-	private Element element;
-
 
 	public Form(String path) {
 		this.path = path;
 	}
 
 
-	public void contents(Renderer content) {
-		this.content = content;
-	}
-
-
-	public void element(Element element) {
-		this.element = element;
-	}
-
-
 	public void render(RenderContext context, Writer writer) {
-		writer.tag(element.tag());
+        Element element = context.element();
+
+        writer.tag(element.tag());
 
 		element.attribute("action", context.link(path));
 		element.attribute("method", "POST");
 
 		writer.attributes(element);
-		content.render(context, writer);
+		context.contents().render(context, writer);
 
 		writer.close();
 	}

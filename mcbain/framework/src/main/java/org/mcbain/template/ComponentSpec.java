@@ -53,7 +53,6 @@ class ComponentSpec implements TemplatePart {
 	 * @param id		Component specification id
 	 * @param parent	Parent fragment
 	 * @param element   Markup element
-	 * @param component Component the specification defines
 	 */
 
 	private ComponentSpec(String id, ComponentSpec parent, Element element) {
@@ -136,19 +135,27 @@ class ComponentSpec implements TemplatePart {
 			Renderer component = template.get(id);
 
 			if (component != null) {
-				if (component instanceof Container) {
-					((Container) component).contents(new Renderer() {
+//				if (component instanceof Container) {
+//					((Container) component).contents(new Renderer() {
+//						public void render(RenderContext context, Writer writer) {
+//							renderChildren(context, writer, template);
+//						}
+//					});
+//				}
+//
+//				if (component instanceof ElementAware) {
+//					((ElementAware) component).element(new Element(element));
+//				}
+
+                context.pushTemplateContext(new Element(element), new Renderer() {
 						public void render(RenderContext context, Writer writer) {
 							renderChildren(context, writer, template);
 						}
 					});
-				}
-
-				if (component instanceof ElementAware) {
-					((ElementAware) component).element(new Element(element));
-				}
 
 				component.render(context, writer);
+
+                context.popTemplateContents();
 			}
 
 		} else if (element != null) {

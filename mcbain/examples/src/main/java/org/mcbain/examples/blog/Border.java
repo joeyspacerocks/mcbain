@@ -20,7 +20,6 @@ import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.template.Container;
 import org.mcbain.template.Template;
 
 import static java.lang.System.currentTimeMillis;
@@ -31,17 +30,12 @@ import static java.lang.System.currentTimeMillis;
  * the blog.
  */
 
-public class Border implements Renderer, Container {
+public class Border implements Renderer {
 
-	private Renderer content;
 	private Blog blog;
 
 	public Border(final Blog blog) {
 		this.blog = blog;
-	}
-
-	public void contents(Renderer content) {
-		this.content = content;
 	}
 
 	public void render(RenderContext context, Writer writer) {
@@ -66,7 +60,7 @@ public class Border implements Renderer, Container {
 			"title", title,
 			"newpost", new Link("/blog/" + blog.getName() + "/newpost"),
 			"time", currentTimeMillis() - timestamp,
-			"content", content
+			"content", context.contents()
 		);
 
 		writer.reset();

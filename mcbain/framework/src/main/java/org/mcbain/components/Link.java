@@ -17,20 +17,16 @@ package org.mcbain.components;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.template.Container;
 import org.mcbain.template.Element;
-import org.mcbain.template.ElementAware;
 
 /**
  * Link component.
  */
 
-public class Link implements Renderer, ElementAware, Container {
+public class Link implements Renderer {
 
-	private Element element;
 	private String path;
 	private String value;
-	private Renderer content;
 
 	public Link() {
 	}
@@ -47,15 +43,8 @@ public class Link implements Renderer, ElementAware, Container {
 		this.value = value;
 	}
 
-	public void element(Element element) {
-		this.element = element;
-	}
-
-	public void contents(Renderer content) {
-		this.content = content;
-	}
-
 	public void render(RenderContext context, Writer writer) {
+        Element element = context.element();
 		element.attribute("href", context.link(path));
 
 		writer.tag("a").attributes(element);
@@ -63,7 +52,7 @@ public class Link implements Renderer, ElementAware, Container {
 		if (value != null) {
 			writer.body(value);
 		} else {
-			content.render(context, writer);
+			context.contents().render(context, writer);
 			writer.close();
 		}
 	}

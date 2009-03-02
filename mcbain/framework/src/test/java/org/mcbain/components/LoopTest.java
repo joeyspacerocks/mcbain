@@ -19,6 +19,7 @@ import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.List;
@@ -86,10 +87,11 @@ public class LoopTest {
 			}
 		};
 
-		loop.contents(content);
-
+        RenderContext rc = Mockito.mock(RenderContext.class);
+        Mockito.stub(rc.contents()).toReturn(content);
+        
 		Writer writer = new Writer();
-		loop.render(null, writer);
+		loop.render(rc, writer);
 
 		return writer;
 	}

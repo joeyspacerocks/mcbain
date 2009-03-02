@@ -132,47 +132,47 @@ public class ComponentSpecTest {
 		verify(component).render(rc, writer);
 	}
 
-	public void shouldInjectElementInElementalComponent() {
-		ElementAwareRenderer component = new ElementAwareRenderer();
-		stub(element.id()).toReturn("element");
+//	public void shouldInjectElementInElementalComponent() {
+//		ElementAwareRenderer component = new ElementAwareRenderer();
+//		stub(element.id()).toReturn("element");
+//
+//		bindToTemplate(component);
+//
+//		root.add("id", element);
+//		root.render(rc, writer, template);
+//
+//		assertEquals(component.element.id(), element.id());
+//	}
+//
+//	public void shouldInjectChildRendererIntoContainerComponent() {
+//		ContainerRenderer component = new ContainerRenderer();
+//
+//		bindToTemplate(component);
+//		stubWriterForUnboundId("child");
+//
+//		root.add("id", element).add("child", element);
+//		root.render(rc, writer, template);
+//	}
 
-		bindToTemplate(component);
-
-		root.add("id", element);
-		root.render(rc, writer, template);
-
-		assertEquals(component.element.id(), element.id());
-	}
-
-	public void shouldInjectChildRendererIntoContainerComponent() {
-		ContainerRenderer component = new ContainerRenderer();
-
-		bindToTemplate(component);
-		stubWriterForUnboundId("child");
-
-		root.add("id", element).add("child", element);
-		root.render(rc, writer, template);
-	}
-
-	private class ElementAwareRenderer implements Renderer, ElementAware {
-		public Element element;
-
-		public void render(RenderContext context, Writer writer) {
-		}
-
-		public void element(Element element) {
-			this.element = element;
-		}
-	}
-
-	private class ContainerRenderer implements Renderer, Container {
-		public void render(RenderContext context, Writer writer) {
-		}
-
-		public void contents(Renderer content) {
-			content.render(rc, writer);
-		}
-	}
+//	private class ElementAwareRenderer implements Renderer, ElementAware {
+//		public Element element;
+//
+//		public void render(RenderContext context, Writer writer) {
+//		}
+//
+//		public void element(Element element) {
+//			this.element = element;
+//		}
+//	}
+//
+//	private class ContainerRenderer implements Renderer, Container {
+//		public void render(RenderContext context, Writer writer) {
+//		}
+//
+//		public void contents(Renderer content) {
+//			content.render(rc, writer);
+//		}
+//	}
 
 	private void bindToTemplate(Renderer component) {
 		stub(template.contains("id")).toReturn(true);

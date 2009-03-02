@@ -18,9 +18,7 @@ package org.mcbain.components;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.template.Container;
 import org.mcbain.template.Element;
-import org.mcbain.template.ElementAware;
 
 /**
  * Component that conditionally renders its content.
@@ -29,16 +27,9 @@ import org.mcbain.template.ElementAware;
  * @version $Revision$
  */
 
-public class If implements Renderer, Container, ElementAware {
+public class If implements Renderer {
 
-	private Renderer content;
-	private Element element;
 	private boolean condition;
-
-
-	/**
-	 * Constructs a new instance.
-	 */
 
 	public If() {
 	}
@@ -66,22 +57,14 @@ public class If implements Renderer, Container, ElementAware {
 	}
 
 
-	public void contents(Renderer content) {
-		this.content = content;
-	}
-
-
-	public void element(Element element) {
-		this.element = element;
-	}
-
-
 	public void render(RenderContext context, Writer writer) {
+        Element element = context.element();
+
 		if (condition) {
 			if (element != null)
 				writer.tag(element.tag());
 
-			content.render(context, writer);
+			context.contents().render(context, writer);
 
 			if (element != null)
 				writer.close();
