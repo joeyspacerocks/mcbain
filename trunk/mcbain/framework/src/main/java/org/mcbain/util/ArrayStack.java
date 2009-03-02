@@ -66,4 +66,8 @@ public class ArrayStack<E> {
 	public E peek() {
 		return stack.isEmpty() ? null : stack.get(stack.size() - 1);
 	}
+
+    public void clear() {
+        stack.clear();
+    }
 }

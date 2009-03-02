@@ -18,17 +18,15 @@ import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
 import org.mcbain.template.Element;
-import org.mcbain.template.ElementAware;
 
 
 /**
  * Input field component.
  */
 
-public class Input implements Renderer, ElementAware {
+public class Input implements Renderer {
 
 	private Object value;
-	private Element element;
 	private boolean valueSet;
 
 	public Input() {
@@ -37,11 +35,6 @@ public class Input implements Renderer, ElementAware {
 	public Input(Object value) {
 		value(value);
 	}
-
-	public void element(Element element) {
-		this.element = element;
-	}
-
 
 	public Input value(Object value) {
 		this.value = value;
@@ -53,6 +46,8 @@ public class Input implements Renderer, ElementAware {
 	// FIXME: unique id/name when in loop ...
 
 	public void render(RenderContext context, Writer writer) {
+        Element element = context.element();
+        
 		Object renderValue = valueSet ? value : context.request().parameter(element.id());
 
 		if (element.tag().equals("textarea")) {

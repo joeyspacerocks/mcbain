@@ -17,6 +17,8 @@ package org.mcbain.render;
 import org.mcbain.request.Request;
 import org.mcbain.template.Template;
 import org.mcbain.template.TemplateFactory;
+import org.mcbain.template.Element;
+import org.mcbain.util.ArrayStack;
 
 /**
  * A render context provides access to resources used when rendering, such as
@@ -27,9 +29,15 @@ public class RenderContext {
 	private TemplateFactory templates;
 	private Request request;
 
+    private ArrayStack<Element> elements;
+    private ArrayStack<Renderer> contents;
+
 	public RenderContext(Request request, TemplateFactory templates) {
 		this.templates = templates;
 		this.request = request;
+
+        elements = new ArrayStack<Element>();
+        contents = new ArrayStack<Renderer>();
 	}
 
 	public Template template(String name) {
@@ -43,4 +51,22 @@ public class RenderContext {
 	public Request request() {
 		return request;
 	}
+
+    public Element element() {
+        return elements.peek();
+    }
+
+    public Renderer contents() {
+        return contents.peek();
+    }
+
+    public void pushTemplateContext(Element element, Renderer contents) {
+        this.elements.push(element);
+        this.contents.push(contents);
+    }
+
+    public void popTemplateContents() {
+        elements.clear();
+        contents.clear();
+    }
 }
