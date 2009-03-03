@@ -14,7 +14,6 @@
 
 package org.mcbain.template;
 
-import org.mcbain.util.Strings;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.ParserAdapter;
@@ -78,7 +77,7 @@ public class TemplateFactory {
 
 	public TemplateClass findTemplate(String name) {
 		TemplateClass template = templates.get(name);
-		String path = Strings.string("/", name, ".html");
+		String path = "/" + name + ".html";
 
 		if (template != null) {
 			String filename = context.getRealPath(path);

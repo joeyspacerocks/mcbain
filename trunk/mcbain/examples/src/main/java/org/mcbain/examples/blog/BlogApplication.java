@@ -17,7 +17,9 @@ package org.mcbain.examples.blog;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.BlogService;
 import org.mcbain.examples.blog.model.Post;
+import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
+import org.mcbain.render.Writer;
 import org.mcbain.request.Controller;
 import org.mcbain.request.Interceptor;
 import org.mcbain.request.Request;
@@ -32,7 +34,7 @@ import org.mcbain.route.Router;
 public class BlogApplication {
 
 	public Router buildRouter() {
-        RouteBuilder routes = new RouteBuilder();
+		RouteBuilder routes = new RouteBuilder();
 
 		final BlogService blogService = new BlogService();
 
@@ -51,7 +53,11 @@ public class BlogApplication {
 		routes
 			.route("/").to(new Controller() {
 			public Renderer get(Request request) {
-				return request.template("index");
+				return new Renderer() {
+					public void render(RenderContext context, Writer writer) {
+						context.template("index").render(context, writer);
+					}
+				};
 			}
 		})
 
@@ -101,6 +107,6 @@ public class BlogApplication {
 			}
 		});
 
-        return routes.end();
+		return routes.end();
 	}
 }

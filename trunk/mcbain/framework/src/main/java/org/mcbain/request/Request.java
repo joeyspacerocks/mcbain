@@ -15,7 +15,6 @@
 package org.mcbain.request;
 
 import org.mcbain.route.Uri;
-import org.mcbain.template.Template;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -84,17 +83,5 @@ public class Request {
 
 	public <T> T resource(Class<T> type) {
 		return (T) resources.get(type);
-	}
-
-	public Template template(String name) {
-		return context.template(name);
-	}
-
-	public String link(String path) {
-		return context.link(path);
-	}
-
-	public Request request() {
-		return this;
 	}
 }

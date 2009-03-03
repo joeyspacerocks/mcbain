@@ -15,6 +15,7 @@
 package org.mcbain.render;
 
 import org.mcbain.request.Request;
+import org.mcbain.route.LinkBuilder;
 import org.mcbain.template.Element;
 import org.mcbain.template.Template;
 import org.mcbain.template.TemplateFactory;
@@ -28,13 +29,15 @@ import org.mcbain.util.ArrayStack;
 public class RenderContext {
 	private TemplateFactory templates;
 	private Request request;
+	private LinkBuilder linkBuilder;
 
 	private ArrayStack<Element> elements;
 	private ArrayStack<Renderer> contents;
 
-	public RenderContext(Request request, TemplateFactory templates) {
+	public RenderContext(Request request, TemplateFactory templates, LinkBuilder linkBuilder) {
 		this.templates = templates;
 		this.request = request;
+		this.linkBuilder = linkBuilder;
 
 		elements = new ArrayStack<Element>();
 		contents = new ArrayStack<Renderer>();
@@ -45,7 +48,7 @@ public class RenderContext {
 	}
 
 	public String link(String path) {
-		return path;
+		return linkBuilder.link(path);
 	}
 
 	public Request request() {
