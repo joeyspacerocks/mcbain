@@ -17,7 +17,10 @@ package org.mcbain.route;
 import org.mcbain.render.Renderer;
 import org.mcbain.request.Request;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Forwards requests to the appropriate controller based on the path.
@@ -25,31 +28,40 @@ import java.util.*;
 
 public class Router {
 
-    private final List<Route> routes;
+	private final List<Route> routes;
+	private final Map<String, Route> namedRoutes;
 
 	public Router() {
 		routes = new ArrayList<Route>();
+		namedRoutes = new HashMap<String, Route>();
 	}
 
 	public void add(Route route) {
 		routes.add(route);
+		if (route.named()) {
+			namedRoutes.put(route.name(), route);
+		}
 	}
 
 	public Renderer route(Request request) {
-        String path = request.servletRequest().getServletPath();
+		String path = request.servletRequest().getServletPath();
 
-        for (Route route : routes) {
-            Uri testUri = route.matches(path);
-            if (testUri.matches()) {
-                request.uri(testUri);
-                return route.process(request);
-            }
-        }
-        
+		for (Route route : routes) {
+			Uri testUri = route.matches(path);
+			if (testUri.matches()) {
+				request.uri(testUri);
+				return route.process(request);
+			}
+		}
+
 		return null;
 	}
 
-    public List<Route> routes() {
-        return routes;
-    }
+	public Route route(String name) {
+		return namedRoutes.get(name);
+	}
+
+	public List<Route> routes() {
+		return routes;
+	}
 }

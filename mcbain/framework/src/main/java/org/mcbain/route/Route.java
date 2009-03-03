@@ -19,8 +19,8 @@ import org.mcbain.request.Controller;
 import org.mcbain.request.Interceptor;
 import org.mcbain.request.Request;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A route maps a URL pattern to a controller chain. The route may also have
@@ -29,43 +29,50 @@ import java.util.ArrayList;
 
 public class Route {
 
-    private final String name;
-    private final UriTemplate pattern;
-    private final List<Interceptor> interceptors;
-    private Controller controller;
+	private final String name;
+	private final UriTemplate pattern;
+	private final List<Interceptor> interceptors;
+	private Controller controller;
 
-    public Route(String name, String pattern, List<Interceptor> interceptors, Controller controller) {
-        this.name = name;
-        this.pattern = new UriTemplate(pattern);
-        this.interceptors = new ArrayList<Interceptor>(interceptors);
-        this.controller = controller;
-    }
+	public Route(String name, String pattern, List<Interceptor> interceptors, Controller controller) {
+		this.name = name;
+		this.pattern = new UriTemplate(pattern);
+		this.interceptors = new ArrayList<Interceptor>(interceptors);
+		this.controller = controller;
+	}
 
-    public Uri matches(String url) {
-        return pattern.match(url);
-    }
+	public Uri matches(String url) {
+		return pattern.match(url);
+	}
 
-    public Renderer process(Request request) {
-        String method = request.servletRequest().getMethod().toUpperCase();
+	public Renderer process(Request request) {
+		String method = request.servletRequest().getMethod().toUpperCase();
 
-        boolean handled = false;
-        for (Interceptor interceptor : interceptors) {
-            handled = interceptor.intercept(request);
-            if (!handled) {
-                break;
-            }
-        }
+		boolean handled = false;
+		for (Interceptor interceptor : interceptors) {
+			handled = interceptor.intercept(request);
+			if (!handled) {
+				break;
+			}
+		}
 
-        if (handled) {
-            if ("GET".equals(method)) {
-                return controller.get(request);
+		if (handled) {
+			if ("GET".equals(method)) {
+				return controller.get(request);
 
-            } else if ("POST".equals(method)) {
-                return controller.post(request);
-            }
-        }
+			} else if ("POST".equals(method)) {
+				return controller.post(request);
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
+	public String name() {
+		return name;
+	}
+
+	public boolean named() {
+		return name != null;
+	}
 }
