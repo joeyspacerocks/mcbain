@@ -43,13 +43,13 @@ public class Border implements Renderer {
 
 		final Template template = context.template("border");
 
-		Link title = new Link("/blog/" + blog.getName());
-		title.value(blog.getName());
+        String name = blog.getName();
+        Link title = new Link().route("blog", "blog", name).displayAs(name);
 
 		Loop<String> archiveLoop = new Loop<String>(blog.getArchives()) {
 			public void currentValue(String value) {
 				Link archive = new Link();
-				archive.value(value);
+				archive.displayAs(value);
 				archive.uri("/blog/" + blog.getName() + "/" + value.replace('/', '-'));
 				template.bind("archive", archive);
 			}

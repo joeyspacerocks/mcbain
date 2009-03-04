@@ -47,9 +47,13 @@ public class RenderContext {
 		return templates.instance(name);
 	}
 
-	public String link(String path) {
-		return linkBuilder.link(path);
+	public String linkRoute(String route, Object... parameters) {
+		return linkBuilder.linkRoute(route, parameters);
 	}
+
+    public String link(String path) {
+        return linkBuilder.link(path);
+    }
 
 	public Request request() {
 		return request;

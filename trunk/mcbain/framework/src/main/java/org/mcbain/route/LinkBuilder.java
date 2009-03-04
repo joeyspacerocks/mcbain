@@ -19,8 +19,23 @@ package org.mcbain.route;
  */
 
 public class LinkBuilder {
+    private Router router;
 
+    public LinkBuilder(Router router) {
+        this.router = router;
+    }
+
+    // TODO: make context relative
 	public String link(String path) {
 		return path;
 	}
+
+    public String linkRoute(String routeName, Object... parameters) {
+        Route route = router.namedRoute(routeName);
+        if (route == null) {
+            throw new RuntimeException("Named route does not exist: " + routeName);
+        }
+
+        return route.pattern().build(parameters);
+    }
 }

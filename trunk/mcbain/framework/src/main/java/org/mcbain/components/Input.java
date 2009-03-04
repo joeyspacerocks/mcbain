@@ -60,7 +60,7 @@ public class Input implements Renderer {
 				.close();
 
 		} else {
-			element.attribute("value", renderValue);
+			element.attribute("displayAs", renderValue);
 
 			writer
 				.emptyTag("input")

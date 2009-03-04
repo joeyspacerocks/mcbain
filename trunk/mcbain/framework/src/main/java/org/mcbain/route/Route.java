@@ -75,4 +75,8 @@ public class Route {
 	public boolean named() {
 		return name != null;
 	}
+
+    public UriTemplate pattern() {
+        return pattern;
+    }
 }
