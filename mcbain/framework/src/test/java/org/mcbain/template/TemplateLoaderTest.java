@@ -149,7 +149,7 @@ public class TemplateLoaderTest {
 
 	@Test
 	public void shouldInterpolateValues() {
-		String html = "<html>The ${value} value</html>";
+		String html = "<html>The ${displayAs} displayAs</html>";
 		InputStream in = new ByteArrayInputStream(html.getBytes());
 
 		ServletContext context = mock(ServletContext.class);
@@ -162,8 +162,8 @@ public class TemplateLoaderTest {
 
 		assertEquals(children.size(), 3);
 		assertContent(children.get(0), "<html>The ");
-		assertEquals(((ComponentSpec) children.get(1)).element().id(), "value");
-		assertContent(children.get(2), " value</html>");
+		assertEquals(((ComponentSpec) children.get(1)).element().id(), "displayAs");
+		assertContent(children.get(2), " displayAs</html>");
 	}
 
 

@@ -42,7 +42,7 @@ public class ApplicationFilter implements Filter {
 		Router router = new BlogApplication().buildRouter();
 		context = new Context(config.getServletContext(), router);
 		templates = new TemplateFactory(config.getServletContext());
-		linkBuilder = new LinkBuilder();
+		linkBuilder = new LinkBuilder(router);
 	}
 
 

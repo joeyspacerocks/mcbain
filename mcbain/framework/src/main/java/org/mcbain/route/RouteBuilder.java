@@ -47,6 +47,11 @@ public class RouteBuilder {
 		return this;
 	}
 
+    public RouteBuilder as(String name) {
+        this.name = name;
+        return this;
+    }
+
 	public RouteBuilder to(Controller controller) {
 		this.controller = controller;
         saveRoute();

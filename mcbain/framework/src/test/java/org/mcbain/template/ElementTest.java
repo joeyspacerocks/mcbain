@@ -35,8 +35,8 @@ public class ElementTest {
 
 	public void shouldExposeAddedAttributes() {
 		Element element = new Element("tag", "id");
-		element.attribute("name", "value");
-		assertEquals(element.attribute("name"), "value");
+		element.attribute("name", "displayAs");
+		assertEquals(element.attribute("name"), "displayAs");
 	}
 
 	public void shouldPreserveNullAttributeValue() {
@@ -49,16 +49,16 @@ public class ElementTest {
 		Element element = new Element("tag", "id");
 		element.attribute("name", new Object() {
 			public String toString() {
-				return "value";
+				return "displayAs";
 			}
 		});
-		assertEquals(element.attribute("name"), "value");
+		assertEquals(element.attribute("name"), "displayAs");
 	}
 
 	public void shouldExposeAttributeNames() {
 		Element element = new Element("tag", "id");
-		element.attribute("name1", "value");
-		element.attribute("name2", "value");
+		element.attribute("name1", "displayAs");
+		element.attribute("name2", "displayAs");
 		assertNames(element, "name1", "name2");
 	}
 
@@ -72,8 +72,8 @@ public class ElementTest {
 	public void shouldExposeAttributesFromWrappedElement() {
 		Element element = new Element("tag", "id");
 		Element proxy = new Element(element);
-		element.attribute("name", "value");
-		assertEquals(proxy.attribute("name"), "value");
+		element.attribute("name", "displayAs");
+		assertEquals(proxy.attribute("name"), "displayAs");
 	}
 
 	public void shouldMaskAttributeFromWrappedElementIfSetInWrapper() {
@@ -87,32 +87,32 @@ public class ElementTest {
 	public void shouldExposeAttributesSetOnlyInElementWrapper() {
 		Element element = new Element("tag", "id");
 		Element proxy = new Element(element);
-		proxy.attribute("name", "value");
-		assertEquals(proxy.attribute("name"), "value");
+		proxy.attribute("name", "displayAs");
+		assertEquals(proxy.attribute("name"), "displayAs");
 	}
 
 	public void shouldExposeAttributeNamesFromWrappedElementWhenNoneSetInProxy() {
 		Element element = new Element("tag", "id");
-		element.attribute("name1", "value");
-		element.attribute("name2", "value");
+		element.attribute("name1", "displayAs");
+		element.attribute("name2", "displayAs");
 		Element proxy = new Element(element);
 		assertNames(proxy, "name1", "name2");
 	}
 
 	public void shouldExposeAttributeNamesFromWrappedElementWhenSomeSetInProxy() {
 		Element element = new Element("tag", "id");
-		element.attribute("name1", "value");
-		element.attribute("name2", "value");
+		element.attribute("name1", "displayAs");
+		element.attribute("name2", "displayAs");
 		Element proxy = new Element(element);
-		proxy.attribute("name1", "value");
+		proxy.attribute("name1", "displayAs");
 		assertNames(proxy, "name1", "name2");
 	}
 
 	public void shouldExposeAttributeNamesFromProxyWhenOthersSetInDelegate() {
 		Element element = new Element("tag", "id");
-		element.attribute("name1", "value");
+		element.attribute("name1", "displayAs");
 		Element proxy = new Element(element);
-		proxy.attribute("name2", "value");
+		proxy.attribute("name2", "displayAs");
 		assertNames(proxy, "name1", "name2");
 	}
 

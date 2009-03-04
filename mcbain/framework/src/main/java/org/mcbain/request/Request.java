@@ -15,6 +15,7 @@
 package org.mcbain.request;
 
 import org.mcbain.route.Uri;
+import org.mcbain.template.Template;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -81,6 +82,7 @@ public class Request {
 		resources.put(resource.getClass(), resource);
 	}
 
+    @SuppressWarnings("unchecked")
 	public <T> T resource(Class<T> type) {
 		return (T) resources.get(type);
 	}

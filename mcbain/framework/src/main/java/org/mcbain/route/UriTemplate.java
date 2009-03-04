@@ -63,11 +63,15 @@ public class UriTemplate {
 	 * @return String uri
 	 */
 
-	public String build(Uri uri) {
+	public String build(Object... parameters) {
+        Uri uri = new Uri();
+        uri.parameters(parameters);
+
 		StringBuilder b = new StringBuilder();
 		for (Matcher m : matchers) {
 			b.append("/").append(m.toString(uri));
 		}
+        
 		return b.toString();
 	}
 

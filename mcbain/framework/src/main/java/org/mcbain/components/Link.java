@@ -28,6 +28,9 @@ public class Link implements Renderer {
 	private String path;
 	private String value;
 
+    private String route;
+    private Object[] parameters;
+
 	public Link() {
 	}
 
@@ -37,15 +40,30 @@ public class Link implements Renderer {
 
 	public void uri(String path) {
 		this.path = path;
-	}
+    }
 
-	public void value(String value) {
+    public Link route(String name, Object... parameters) {
+        this.route = name;
+        this.parameters = parameters;
+        return this;
+    }
+
+	public Link displayAs(String value) {
 		this.value = value;
+        return this;
 	}
 
 	public void render(RenderContext context, Writer writer) {
+        String url;
+
+        if (route != null) {
+            url = context.linkRoute(route, parameters);
+        } else {
+            url = context.link(path);
+        }
+
         Element element = context.element();
-		element.attribute("href", context.link(path));
+		element.attribute("href", url);
 
 		writer.tag("a").attributes(element);
 

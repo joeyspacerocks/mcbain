@@ -57,7 +57,7 @@ public class Router {
 		return null;
 	}
 
-	public Route route(String name) {
+	public Route namedRoute(String name) {
 		return namedRoutes.get(name);
 	}
 
