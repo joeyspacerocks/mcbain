@@ -15,25 +15,15 @@
 package org.mcbain.util;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Simple LIFO stack implementation based on an array list.
+ * 
+ * Note: The Stack implementation in Java extends Vector, so adds unneccesary
+ *       synchronisation checks.
  */
 
-public class ArrayStack<E> {
-
-	private final List<E> stack;
-
-
-	/**
-	 * Constructs a new stack.
-	 */
-
-	public ArrayStack() {
-		stack = new ArrayList<E>();
-	}
-
+public class ArrayStack<E> extends ArrayList<E> {
 
 	/**
 	 * Pushes an element on to the end of the stack.
@@ -42,7 +32,7 @@ public class ArrayStack<E> {
 	 */
 
 	public void push(E element) {
-		stack.add(element);
+		add(element);
 	}
 
 
@@ -53,7 +43,7 @@ public class ArrayStack<E> {
 	 */
 
 	public E pop() {
-		return stack.isEmpty() ? null : stack.remove(stack.size() - 1);
+		return isEmpty() ? null : remove(size() - 1);
 	}
 
 
@@ -64,10 +54,6 @@ public class ArrayStack<E> {
 	 */
 
 	public E peek() {
-		return stack.isEmpty() ? null : stack.get(stack.size() - 1);
+		return isEmpty() ? null : get(size() - 1);
 	}
-
-    public void clear() {
-        stack.clear();
-    }
 }
