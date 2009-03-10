@@ -20,9 +20,7 @@ import org.mcbain.examples.blog.model.Post;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.request.Controller;
-import org.mcbain.request.Interceptor;
-import org.mcbain.request.Request;
+import org.mcbain.request.*;
 import org.mcbain.route.RouteBuilder;
 import org.mcbain.route.Router;
 
@@ -52,37 +50,37 @@ public class BlogApplication {
 
 		routes
 			.route("/").to(new Controller() {
-			public Renderer get(Request request) {
-				return new Renderer() {
+			public Response get(Request request) {
+				return new RenderedResponse(new Renderer() {
 					public void render(RenderContext context, Writer writer) {
 						context.template("index").render(context, writer);
 					}
-				};
+				});
 			}
 		})
 
 			.route("/blog/$blog").as("blog").via(blogLocator).to(new Controller() {
-			public Renderer get(Request request) {
-				return new BlogHome(request.resource(Blog.class), null);
+			public Response get(Request request) {
+				return new RenderedResponse(new BlogHome(request.resource(Blog.class), null));
 			}
 		})
 
 			.route("/blog/$blog/$archive/$post").via(blogLocator).to(new Controller() {
-			public Renderer get(Request request) {
+			public Response get(Request request) {
 				Blog blog = request.resource(Blog.class);
 				Post post = blog.getPost(request.parameter("post"));
-				return (post == null ? null : new FullPost(blog, post));
+				return (post == null ? null : new RenderedResponse(new FullPost(blog, post)));
 			}
 		})
 
 			.route("/blog/$blog/newpost").via(blogLocator).to(new Controller() {
 
 
-			public Renderer get(Request request) {
-				return new NewPost(request.resource(Blog.class));
+			public Response get(Request request) {
+				return new RenderedResponse(new NewPost(request.resource(Blog.class)));
 			}
 
-			public Renderer post(Request request) {
+			public Response post(Request request) {
 				Blog blog = request.resource(Blog.class);
 
 				if (request
@@ -92,18 +90,18 @@ public class BlogApplication {
 
 					blog.addPost(request.parameter("title"), request.parameter("content"));
 
-					return new BlogHome(blog, null);
+					return new RenderedResponse(new BlogHome(blog, null));
 
 				} else {
-					return new NewPost(blog);
+					return new RenderedResponse(new NewPost(blog));
 				}
 			}
 		})
 
 			.route("/blog/$blog/$archive").via(blogLocator).to(new Controller() {
-			public Renderer get(Request request) {
+			public Response get(Request request) {
 				String archive = request.parameter("archive").replace('-', '/');
-				return new BlogHome(request.resource(Blog.class), archive);
+				return new RenderedResponse(new BlogHome(request.resource(Blog.class), archive));
 			}
 		});
 

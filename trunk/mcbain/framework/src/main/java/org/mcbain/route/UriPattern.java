@@ -26,7 +26,7 @@ import java.util.List;
  * extracting parameters.
  */
 
-public class UriTemplate {
+public class UriPattern {
 
 	public String pattern;
 	public List<Matcher> matchers;
@@ -38,13 +38,13 @@ public class UriTemplate {
 	 * @param pattern Uri pattern
 	 */
 
-	public UriTemplate(String pattern) {
+	public UriPattern(String pattern) {
 		this.pattern = pattern;
 		this.matchers = parse(pattern);
 	}
 
 
-	/**
+    /**
 	 * Creates an uri with no parameters, based on the template.
 	 *
 	 * @return Uri

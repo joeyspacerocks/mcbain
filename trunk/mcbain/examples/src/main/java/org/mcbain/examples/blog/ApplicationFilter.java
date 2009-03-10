@@ -19,12 +19,14 @@ import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
 import org.mcbain.request.Context;
 import org.mcbain.request.Request;
+import org.mcbain.request.Response;
 import org.mcbain.route.LinkBuilder;
 import org.mcbain.route.Router;
 import org.mcbain.template.TemplateFactory;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -48,17 +50,16 @@ public class ApplicationFilter implements Filter {
 
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
 		Request request = new Request(context, (HttpServletRequest) servletRequest);
+		Response response = context.router().route(request);
 
-		RenderContext rc = new RenderContext(request, templates, linkBuilder);
+        boolean handled = false;
 
-		Renderer renderer = context.router().route(request);
+		if (response != null) {
+            RenderContext rc = new RenderContext(request, templates, linkBuilder);
+            handled = response.commit((HttpServletResponse) servletResponse, rc);
+        }
 
-		if (renderer != null) {
-			Writer writer = new Writer();
-			renderer.render(rc, writer);
-			servletResponse.getWriter().write(writer.toString());
-
-		} else {
+		if (!handled) {
 			chain.doFilter(servletRequest, servletResponse);
 		}
 	}
