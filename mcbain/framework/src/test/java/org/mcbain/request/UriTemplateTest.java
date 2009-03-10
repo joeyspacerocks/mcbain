@@ -17,7 +17,7 @@ package org.mcbain.request;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import org.mcbain.route.Uri;
-import org.mcbain.route.UriTemplate;
+import org.mcbain.route.UriPattern;
 
 /**
  * Unit tests for UriTemplate.
@@ -31,12 +31,12 @@ public class UriTemplateTest {
 
 	@Test
 	public void testStringMatch() {
-		UriTemplate uri1 = new UriTemplate("/");
+		UriPattern uri1 = new UriPattern("/");
 
 		assertTrue(uri1.match("/").matches());
 		assertFalse(uri1.match("/bad").matches());
 
-		UriTemplate uri2 = new UriTemplate("/part1/part2");
+		UriPattern uri2 = new UriPattern("/part1/part2");
 
 		assertTrue(uri2.match("/part1/part2").matches());
 		assertFalse(uri2.match("/bad").matches());
@@ -51,7 +51,7 @@ public class UriTemplateTest {
 
 	@Test
 	public void testSingleParameterMatch() {
-		UriTemplate uri = new UriTemplate("/$p");
+		UriPattern uri = new UriPattern("/$p");
 
 		Uri result = uri.match("/test");
 		assertTrue(result.matches());
@@ -65,7 +65,7 @@ public class UriTemplateTest {
 
 	@Test
 	public void testMultipleParameterMatch() {
-		UriTemplate uri = new UriTemplate("/$p1/$p2");
+		UriPattern uri = new UriPattern("/$p1/$p2");
 
 		Uri result = uri.match("/test1/test2");
 		assertTrue(result.matches());

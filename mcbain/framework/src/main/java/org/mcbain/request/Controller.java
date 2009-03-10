@@ -23,11 +23,11 @@ import org.mcbain.render.Renderer;
 
 public class Controller {
 
-	public Renderer get(Request request) {
+	public Response get(Request request) {
 		throw new UnsupportedOperationException();
 	}
 
-	public Renderer post(Request request) {
+	public Response post(Request request) {
 		throw new UnsupportedOperationException();
 	}
 }

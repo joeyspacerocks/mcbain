@@ -16,6 +16,7 @@ package org.mcbain.route;
 
 import org.mcbain.render.Renderer;
 import org.mcbain.request.Request;
+import org.mcbain.request.Response;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +44,7 @@ public class Router {
 		}
 	}
 
-	public Renderer route(Request request) {
+	public Response route(Request request) {
 		String path = request.servletRequest().getServletPath();
 
 		for (Route route : routes) {

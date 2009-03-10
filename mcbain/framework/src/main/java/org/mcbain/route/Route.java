@@ -14,10 +14,10 @@
 
 package org.mcbain.route;
 
-import org.mcbain.render.Renderer;
 import org.mcbain.request.Controller;
 import org.mcbain.request.Interceptor;
 import org.mcbain.request.Request;
+import org.mcbain.request.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +30,13 @@ import java.util.List;
 public class Route {
 
 	private final String name;
-	private final UriTemplate pattern;
+	private final UriPattern pattern;
 	private final List<Interceptor> interceptors;
 	private Controller controller;
 
 	public Route(String name, String pattern, List<Interceptor> interceptors, Controller controller) {
 		this.name = name;
-		this.pattern = new UriTemplate(pattern);
+		this.pattern = new UriPattern(pattern);
 		this.interceptors = new ArrayList<Interceptor>(interceptors);
 		this.controller = controller;
 	}
@@ -45,7 +45,7 @@ public class Route {
 		return pattern.match(url);
 	}
 
-	public Renderer process(Request request) {
+	public Response process(Request request) {
 		String method = request.servletRequest().getMethod().toUpperCase();
 
 		boolean handled = false;
@@ -76,7 +76,7 @@ public class Route {
 		return name != null;
 	}
 
-    public UriTemplate pattern() {
+    public UriPattern pattern() {
         return pattern;
     }
 }
