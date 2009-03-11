@@ -110,7 +110,7 @@ class TemplateSAXHandler extends DefaultHandler2 {
 
 			endTween();
 			String id = value.substring(valuePos + 2, endPos);
-			current.add(id, new Element(null, id));
+			current.add(id, new Element(null, id), startLine);
 		}
 
 		tween.append(value.substring(endPos + 1));
@@ -126,7 +126,7 @@ class TemplateSAXHandler extends DefaultHandler2 {
 		if (id != null) {		   // if has id attribute, create a component to be later bound
 			endTween();
 			tagStack.push(name + depth);
-			current = current.add(id, createElement(name, attributes));
+			current = current.add(id, createElement(name, attributes), startLine);
 
 		} else {					// if no id, look for default anonymous component
 //            Renderer r = factory.createComponent(name);
@@ -178,8 +178,8 @@ class TemplateSAXHandler extends DefaultHandler2 {
 
 
 	public InputSource resolveEntity(String name, String publicId, String baseURI, String systemId) throws SAXException, IOException {
-        int leafStart = systemId.lastIndexOf('/');
-        String leaf = "org/mcbain/dtd/" + systemId.substring(leafStart + 1);
+		int leafStart = systemId.lastIndexOf('/');
+		String leaf = "org/mcbain/dtd/" + systemId.substring(leafStart + 1);
 
 		InputStream in = getClass().getClassLoader().getResourceAsStream(leaf);
 

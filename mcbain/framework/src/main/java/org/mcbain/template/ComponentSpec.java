@@ -30,6 +30,7 @@ class ComponentSpec implements TemplatePart {
 	private final TemplateClass templateClass;
 	private String id;
 	private Element element;
+	private int line;
 
 	private ComponentSpec parent;
 	private final List<TemplatePart> children;
@@ -50,16 +51,17 @@ class ComponentSpec implements TemplatePart {
 	/**
 	 * Constructs a new component specification.
 	 *
-	 * @param id		Component specification id
-	 * @param parent	Parent fragment
-	 * @param element   Markup element
+	 * @param id	  Component specification id
+	 * @param parent  Parent fragment
+	 * @param element Markup element
 	 */
 
-	private ComponentSpec(String id, ComponentSpec parent, Element element) {
+	private ComponentSpec(String id, ComponentSpec parent, Element element, int line) {
 		this(parent.templateClass);
 		this.id = id;
 		this.parent = parent;
 		this.element = element;
+		this.line = line;
 	}
 
 
@@ -71,8 +73,8 @@ class ComponentSpec implements TemplatePart {
 	 * @return New child specification
 	 */
 
-	ComponentSpec add(String id, Element element) {
-		ComponentSpec child = new ComponentSpec(id, this, element);
+	ComponentSpec add(String id, Element element, int line) {
+		ComponentSpec child = new ComponentSpec(id, this, element, line);
 
 		templateClass.add(id, child);
 		children.add(child);
@@ -128,6 +130,18 @@ class ComponentSpec implements TemplatePart {
 
 
 	public void render(RenderContext context, Writer writer, final Template template) {
+		try {
+			renderInternal(context, writer, template);
+		} catch (RuntimeException e) {
+			if (line > 0 && !(e instanceof TemplateContextException)) {
+				throw new TemplateContextException(e, line);
+			} else {
+				throw e;
+			}
+		}
+	}
+
+	private void renderInternal(RenderContext context, Writer writer, final Template template) {
 		if (isRoot()) {
 			renderChildren(context, writer, template);
 
@@ -135,15 +149,15 @@ class ComponentSpec implements TemplatePart {
 			Renderer component = template.get(id);
 
 			if (component != null) {
-                context.pushTemplateContext(new Element(element), new Renderer() {
-						public void render(RenderContext context, Writer writer) {
-							renderChildren(context, writer, template);
-						}
-					});
+				context.pushTemplateContext(new Element(element), new Renderer() {
+					public void render(RenderContext context, Writer writer) {
+						renderChildren(context, writer, template);
+					}
+				});
 
 				component.render(context, writer);
 
-                context.popTemplateContents();
+				context.popTemplateContents();
 			}
 
 		} else if (element != null) {
