@@ -57,13 +57,13 @@ public class ComponentSpecTest {
 	}
 
 	public void shouldHaveParentIfChild() {
-		ComponentSpec child = root.add("id", element);
+		ComponentSpec child = root.add("id", element, 1);
 		assertEquals(child.parent(), root);
 	}
 
 	public void shouldListChildren() {
-		ComponentSpec child1 = root.add("id1", element);
-		ComponentSpec child2 = root.add("id2", element);
+		ComponentSpec child1 = root.add("id1", element, 1);
+		ComponentSpec child2 = root.add("id2", element, 1);
 
 		List<TemplatePart> children = root.children();
 		assertEquals(children.size(), 2);
@@ -72,12 +72,12 @@ public class ComponentSpecTest {
 	}
 
 	public void shouldRegisterChildWithTemplate() {
-		ComponentSpec child = root.add("id", element);
+		ComponentSpec child = root.add("id", element, 1);
 		verify(templateClass).add("id", child);
 	}
 
 	public void shouldListTemplateTextWithChildren() {
-		ComponentSpec child = root.add("id", element);
+		ComponentSpec child = root.add("id", element, 1);
 		root.addTemplateText("text");
 
 		List<TemplatePart> children = root.children();
@@ -91,7 +91,7 @@ public class ComponentSpecTest {
 	}
 
 	public void shouldHaveElementIfChild() {
-		ComponentSpec child = root.add("id", element);
+		ComponentSpec child = root.add("id", element, 1);
 		assertSame(child.element(), element);
 	}
 
@@ -108,14 +108,14 @@ public class ComponentSpecTest {
 	public void shouldRenderTemplateElementIfNothingBound() {
 		stubWriterForUnboundId("id");
 
-		root.add("id", element);
+		root.add("id", element, 1);
 		root.render(rc, writer, template);
 	}
 
 	public void shouldRenderNothingIfNullBound() {
 		bindToTemplate(null);
 
-		root.add("id", element);
+		root.add("id", element, 1);
 		root.render(rc, writer, template);
 
 		verifyZeroInteractions(writer);
@@ -126,7 +126,7 @@ public class ComponentSpecTest {
 
 		bindToTemplate(component);
 
-		root.add("id", element);
+		root.add("id", element, 1);
 		root.render(rc, writer, template);
 
 		verify(component).render(rc, writer);

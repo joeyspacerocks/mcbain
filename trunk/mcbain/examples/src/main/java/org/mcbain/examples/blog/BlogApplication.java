@@ -83,6 +83,10 @@ public class BlogApplication {
 			public Response post(Request request) {
 				Blog blog = request.resource(Blog.class);
 
+//				InputHandler in = new InputHandler();
+//				in.addField("title", new RequiredValidator());
+//				in.addField("content", new RequiredValidator());
+
 				if (request
 					.has("title")
 					.has("content")
