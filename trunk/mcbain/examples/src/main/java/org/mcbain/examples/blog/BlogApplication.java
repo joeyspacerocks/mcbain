@@ -83,23 +83,23 @@ public class BlogApplication {
 			public Response post(Request request) {
 				Blog blog = request.resource(Blog.class);
 
-//				InputHandler in = new InputHandler();
-//				in.addField("title", new RequiredValidator());
-//				in.addField("content", new RequiredValidator());
+                InputHandler in = input();
 
-				if (request
-					.has("title")
-					.has("content")
-					.ok()) {
-
+				if (in.ok()) {
 					blog.addPost(request.parameter("title"), request.parameter("content"));
-
 					return new RenderedResponse(new BlogHome(blog, null));
 
 				} else {
 					return new RenderedResponse(new NewPost(blog));
 				}
 			}
+
+            private InputHandler input() {
+                InputHandler in = new InputHandler();
+                in.addField("title", new RequiredValidator());
+                in.addField("content", new RequiredValidator());
+                return in;
+            }
 		})
 
 			.route("/blog/$blog/$archive").via(blogLocator).to(new Controller() {

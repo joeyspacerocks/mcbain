@@ -39,7 +39,7 @@ public class Posts implements Renderer {
 	private List<Post> posts;
 
 	public Posts(final Blog blog, final List<Post> posts) {
-		//this.blog = blog;
+		this.blog = blog;
 		this.posts = posts;
 	}
 

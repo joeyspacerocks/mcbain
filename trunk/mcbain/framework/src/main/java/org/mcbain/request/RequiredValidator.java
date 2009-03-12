@@ -14,12 +14,19 @@
 
 package org.mcbain.request;
 
+import java.util.Map;
+
 /**
  * Validates that a value is non-null and not an empty string.
  */
 
 public class RequiredValidator implements Validator {
-	public boolean validates(String value) {
-		return value != null && value.length() > 0;
+	public boolean validates(String field, String value, Errors errors) {
+		if (value != null && value.length() > 0) {
+            return true;
+        } else {
+            errors.add(field, field + " is a required field");
+            return false;
+        }
 	}
 }
