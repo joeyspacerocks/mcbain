@@ -16,6 +16,7 @@ package org.mcbain.request;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Input handlers parse, validate and process request data.
@@ -24,18 +25,47 @@ import java.util.Map;
 public class InputHandler {
 
 	private Map<String, Field> fields;
+    private Map<String, String> values;
+    private Errors errors;
 
 	public InputHandler() {
-		this.fields = new LinkedHashMap<String, Field>();
+		fields = new LinkedHashMap<String, Field>();
+        values = new HashMap<String, String>();
+        errors = new Errors();
 	}
 
 	public void addField(String name, Validator validator) {
 		fields.put(name, new Field(name, validator));
 	}
 
+    public Errors errors() {
+        return errors;
+    }
+
+    private boolean validate() {
+        for (Field field : fields.values()) {
+            String value = values.get(field.name());
+            field.validate(value, errors);
+        }
+
+        return !errors.hasErrors();
+    }
+
+    public boolean ok() {
+        return validate();
+    }
+
 	private class Field {
 		private String name;
 		private Validator validator;
+
+        private boolean validate(String value, Errors errors) {
+            return validator.validates(name, value, errors);
+        }
+
+        private String name() {
+            return name;
+        }
 
 		private Field(String name, Validator validator) {
 			this.name = name;

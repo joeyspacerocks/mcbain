@@ -14,10 +14,12 @@
 
 package org.mcbain.request;
 
+import java.util.Map;
+
 /**
- *
+ * Validators check that the value confirms to some rule, recording an error if not.
  */
 
 public interface Validator {
-	public boolean validates(String value);
+	public boolean validates(String field, String value, Errors errors);
 }
