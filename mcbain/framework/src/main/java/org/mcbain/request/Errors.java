@@ -13,8 +13,9 @@
 
 package org.mcbain.request;
 
-import java.util.Map;
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Contains a list of validation errors.
@@ -22,17 +23,21 @@ import java.util.LinkedHashMap;
 
 public class Errors {
 
-    private Map<String, Error> errors;
+	private Map<String, RequestError> errors;
 
-    public Errors() {
-        errors = new LinkedHashMap<String, Error>();
-    }
+	public Errors() {
+		errors = new LinkedHashMap<String, RequestError>();
+	}
 
-    public void add(String field, String message) {
-        errors.put(field, new Error(field, message));
-    }
+	public void add(String field, String message) {
+		errors.put(field, new RequestError(field, message));
+	}
 
-    public boolean hasErrors() {
-        return !errors.isEmpty();
-    }
+	public boolean hasErrors() {
+		return !errors.isEmpty();
+	}
+
+	public Collection<RequestError> errors() {
+		return errors.values();
+	}
 }

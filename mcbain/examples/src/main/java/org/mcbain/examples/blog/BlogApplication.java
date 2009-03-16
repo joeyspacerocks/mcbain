@@ -75,31 +75,30 @@ public class BlogApplication {
 
 			.route("/blog/$blog/newpost").via(blogLocator).to(new Controller() {
 
-
 			public Response get(Request request) {
-				return new RenderedResponse(new NewPost(request.resource(Blog.class)));
+				return new RenderedResponse(new NewPost(request.resource(Blog.class), input(request)));
 			}
 
 			public Response post(Request request) {
 				Blog blog = request.resource(Blog.class);
 
-                InputHandler in = input();
+				InputHandler in = input(request);
 
 				if (in.ok()) {
 					blog.addPost(request.parameter("title"), request.parameter("content"));
 					return new RenderedResponse(new BlogHome(blog, null));
 
 				} else {
-					return new RenderedResponse(new NewPost(blog));
+					return new RenderedResponse(new NewPost(blog, in));
 				}
 			}
 
-            private InputHandler input() {
-                InputHandler in = new InputHandler();
-                in.addField("title", new RequiredValidator());
-                in.addField("content", new RequiredValidator());
-                return in;
-            }
+			private InputHandler input(Request request) {
+				InputHandler in = new InputHandler(request);
+				in.addField("title", new RequiredValidator());
+				in.addField("content", new RequiredValidator());
+				return in;
+			}
 		})
 
 			.route("/blog/$blog/$archive").via(blogLocator).to(new Controller() {

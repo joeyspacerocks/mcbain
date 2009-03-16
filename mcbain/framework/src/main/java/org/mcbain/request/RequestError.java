@@ -17,21 +17,21 @@ package org.mcbain.request;
  * Holds details of a validation error for a field value.
  */
 
-public class Error {
+public class RequestError {
 
-    private String field;
-    private String message;
+	private String field;
+	private String message;
 
-    public Error(String field, String message) {
-        this.field = field;
-        this.message = message;
-    }
+	public RequestError(String field, String message) {
+		this.field = field;
+		this.message = message;
+	}
 
-    public String field() {
-        return field;
-    }
+	public String field() {
+		return field;
+	}
 
-    public String message() {
-        return message;
-    }
+	public String message() {
+		return message;
+	}
 }
