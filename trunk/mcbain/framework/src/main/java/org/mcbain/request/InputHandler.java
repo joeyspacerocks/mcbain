@@ -14,9 +14,9 @@
 
 package org.mcbain.request;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.HashMap;
 
 /**
  * Input handlers parse, validate and process request data.
@@ -25,47 +25,53 @@ import java.util.HashMap;
 public class InputHandler {
 
 	private Map<String, Field> fields;
-    private Map<String, String> values;
-    private Errors errors;
+	private Map<String, String> values;
+	private Errors errors;
+	private Request request;
 
-	public InputHandler() {
+	public InputHandler(Request request) {
 		fields = new LinkedHashMap<String, Field>();
-        values = new HashMap<String, String>();
-        errors = new Errors();
+		values = new HashMap<String, String>();
+		errors = new Errors();
+		this.request = request;
 	}
 
 	public void addField(String name, Validator validator) {
 		fields.put(name, new Field(name, validator));
 	}
 
-    public Errors errors() {
-        return errors;
-    }
+	public Errors errors() {
+		return errors;
+	}
 
-    private boolean validate() {
-        for (Field field : fields.values()) {
-            String value = values.get(field.name());
-            field.validate(value, errors);
-        }
+	private boolean validate() {
+		for (Field field : fields.values()) {
+			String value = value(field.name());
+			field.validate(value, errors);
+		}
 
-        return !errors.hasErrors();
-    }
+		return !errors.hasErrors();
+	}
 
-    public boolean ok() {
-        return validate();
-    }
+	public boolean ok() {
+		return validate();
+	}
+
+	public String value(String field) {
+		return request.parameter(field); //values.get(field);
+	}
 
 	private class Field {
 		private String name;
 		private Validator validator;
 
-        private boolean validate(String value, Errors errors) {
-            return validator.validates(name, value, errors);
-        }
+		private boolean validate(String value, Errors errors) {
+			return validator.validates(name, value, errors);
+		}
 
-        private String name() {
-            return name;
-        }
+		private String name() {
+			return name;
+		}
 
 		private Field(String name, Validator validator) {
 			this.name = name;

@@ -21,6 +21,8 @@ import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
+import org.mcbain.request.InputHandler;
+import org.mcbain.request.RequestError;
 import org.mcbain.template.Template;
 
 
@@ -31,23 +33,24 @@ import org.mcbain.template.Template;
 public class NewPost implements Renderer {
 
 	private Blog blog;
+	private InputHandler in;
 
-	public NewPost(final Blog blog) {
+	public NewPost(final Blog blog, InputHandler in) {
 		this.blog = blog;
+		this.in = in;
 	}
-
 
 	public void render(final RenderContext context, Writer writer) {
 		final Template template = context.template("newpost");
 
 		template.bind(
 			"border", new Border(blog),
-			"form", new Form("/blog/" + blog.getName() + "/newpost"),
-			"title", new Input(),
-			"content", new Input(),
-			"errors", new Loop<String>(context.request().errors().values()) {
-				public void currentValue(String value) {
-					template.bind("error", value);
+			"form", new Form("/blog/" + blog.getName() + "/newpost", in),
+			"title", new Input(in),
+			"content", new Input(in),
+			"errors", new Loop<RequestError>(in.errors().errors()) {
+				public void currentValue(RequestError value) {
+					template.bind("error", value.message());
 				}
 			}
 		);

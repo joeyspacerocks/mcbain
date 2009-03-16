@@ -18,6 +18,7 @@ package org.mcbain.components;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
+import org.mcbain.request.InputHandler;
 import org.mcbain.template.Element;
 
 /**
@@ -27,16 +28,22 @@ import org.mcbain.template.Element;
 public class Form implements Renderer {
 
 	private String path;
+	private InputHandler in;
 
-	public Form(String path) {
+	public Form(String path, InputHandler in) {
 		this.path = path;
+		this.in = in;
 	}
 
 
-	public void render(RenderContext context, Writer writer) {
-        Element element = context.element();
+	public Form bind(Object... components) {
+		return this;
+	}
 
-        writer.tag(element.tag());
+	public void render(RenderContext context, Writer writer) {
+		Element element = context.element();
+
+		writer.tag(element.tag());
 
 		element.attribute("action", context.link(path));
 		element.attribute("method", "POST");

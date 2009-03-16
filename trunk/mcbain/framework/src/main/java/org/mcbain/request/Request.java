@@ -15,11 +15,9 @@
 package org.mcbain.request;
 
 import org.mcbain.route.Uri;
-import org.mcbain.template.Template;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -32,13 +30,12 @@ public class Request {
 
 	private HttpServletRequest servletRequest;
 	private Uri uri;
-	private Map<String, String> errors;
 	private Context context;
 	private Map<Class, Object> resources;
+//	private InputHandler inputHandler;
 
 	public Request(Context context, HttpServletRequest servletRequest) {
 		this.servletRequest = servletRequest;
-		this.errors = new LinkedHashMap<String, String>();
 		this.context = context;
 		this.resources = new HashMap<Class, Object>();
 	}
@@ -48,27 +45,17 @@ public class Request {
 		return uriParameter == null ? servletRequest.getParameter(name) : uriParameter;
 	}
 
-	public Request has(String... names) {
-		for (String name : names) {
-			String value = parameter(name);
-			if (value == null || value.equals("")) {
-				errors.put(name, "Please enter a " + name);
-			}
-		}
-		return this;
-	}
-
 	public void uri(Uri uri) {
 		this.uri = uri;
 	}
 
-	public boolean ok() {
-		return errors.isEmpty();
-	}
-
-	public Map<String, String> errors() {
-		return errors;
-	}
+//	public InputHandler input() {
+//		return inputHandler;
+//	}
+//
+//	public void input(InputHandler inputHandler) {
+//		this.inputHandler = inputHandler;
+//	}
 
 	public HttpServletRequest servletRequest() {
 		return servletRequest;
@@ -82,7 +69,7 @@ public class Request {
 		resources.put(resource.getClass(), resource);
 	}
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public <T> T resource(Class<T> type) {
 		return (T) resources.get(type);
 	}
