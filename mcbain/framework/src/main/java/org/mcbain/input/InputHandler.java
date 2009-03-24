@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain.request;
+package org.mcbain.input;
+
+import org.mcbain.request.Request;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;

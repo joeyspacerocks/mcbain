@@ -12,14 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.mcbain.request;
-
-import java.util.Map;
+package org.mcbain.input;
 
 /**
- * Validators check that the value confirms to some rule, recording an error if not.
+ * Validates that a value is non-null and not an empty string.
  */
 
-public interface Validator {
-	public boolean validates(String field, String value, Errors errors);
+public class RequiredValidator implements Validator {
+	public boolean validates(String field, String value, Errors errors) {
+		if (value != null && value.length() > 0) {
+			return true;
+		} else {
+			errors.add(field, field + " is a required field");
+			return false;
+		}
+	}
 }

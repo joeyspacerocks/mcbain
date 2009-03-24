@@ -17,6 +17,8 @@ package org.mcbain.examples.blog;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.BlogService;
 import org.mcbain.examples.blog.model.Post;
+import org.mcbain.input.InputHandler;
+import org.mcbain.input.RequiredValidator;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
@@ -85,7 +87,7 @@ public class BlogApplication {
 				InputHandler in = input(request);
 
 				if (in.ok()) {
-					blog.addPost(request.parameter("title"), request.parameter("content"));
+					blog.addPost(in.value("title"), in.value("content"));
 					return new RenderedResponse(new BlogHome(blog, null));
 
 				} else {

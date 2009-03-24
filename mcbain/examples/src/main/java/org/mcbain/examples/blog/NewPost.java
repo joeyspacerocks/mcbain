@@ -18,11 +18,11 @@ import org.mcbain.components.Form;
 import org.mcbain.components.Input;
 import org.mcbain.components.Loop;
 import org.mcbain.examples.blog.model.Blog;
+import org.mcbain.input.InputError;
+import org.mcbain.input.InputHandler;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.request.InputHandler;
-import org.mcbain.request.RequestError;
 import org.mcbain.template.Template;
 
 
@@ -48,8 +48,8 @@ public class NewPost implements Renderer {
 			"form", new Form("/blog/" + blog.getName() + "/newpost", in),
 			"title", new Input(in),
 			"content", new Input(in),
-			"errors", new Loop<RequestError>(in.errors().errors()) {
-				public void currentValue(RequestError value) {
+			"errors", new Loop<InputError>(in.errors().errors()) {
+				public void currentValue(InputError value) {
 					template.bind("error", value.message());
 				}
 			}
