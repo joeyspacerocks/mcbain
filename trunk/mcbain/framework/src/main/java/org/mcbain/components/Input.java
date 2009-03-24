@@ -14,10 +14,10 @@
 
 package org.mcbain.components;
 
+import org.mcbain.input.InputHandler;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.request.InputHandler;
 import org.mcbain.template.Element;
 
 

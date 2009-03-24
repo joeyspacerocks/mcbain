@@ -11,33 +11,27 @@
 // the program(s) have been supplied.
 //-----------------------------------------------------------------------
 
-package org.mcbain.request;
-
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+package org.mcbain.input;
 
 /**
- * Contains a list of validation errors.
+ * Holds details of a validation error for a field value.
  */
 
-public class Errors {
+public class InputError {
 
-	private Map<String, RequestError> errors;
+	private String field;
+	private String message;
 
-	public Errors() {
-		errors = new LinkedHashMap<String, RequestError>();
+	public InputError(String field, String message) {
+		this.field = field;
+		this.message = message;
 	}
 
-	public void add(String field, String message) {
-		errors.put(field, new RequestError(field, message));
+	public String field() {
+		return field;
 	}
 
-	public boolean hasErrors() {
-		return !errors.isEmpty();
-	}
-
-	public Collection<RequestError> errors() {
-		return errors.values();
+	public String message() {
+		return message;
 	}
 }
