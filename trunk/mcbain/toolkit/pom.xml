@@ -4,18 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.mcbain</groupId>
     <version>1.0-SNAPSHOT</version>
-    <artifactId>framework</artifactId>
+    <artifactId>toolkit</artifactId>
     <packaging>jar</packaging>
     <parent>
         <groupId>org.mcbain</groupId>
         <artifactId>mcbain</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <dependencies>
-        <dependency>
-            <groupId>org.mcbain</groupId>
-            <artifactId>toolkit</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
 </project>
