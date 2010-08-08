@@ -24,7 +24,7 @@ import org.mcbain.response.Response;
  * tests.
  */
 
-public class MockResponseHandler implements RouteHandler {
+public class MockRouteHandler implements RouteHandler {
     @Override
     public Response handle(Request request) {
         return null;
