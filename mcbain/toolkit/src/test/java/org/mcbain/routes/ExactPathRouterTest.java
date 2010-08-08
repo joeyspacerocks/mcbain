@@ -45,7 +45,7 @@ public class ExactPathRouterTest {
     }
 
     public void shouldReturnDefaultWhenNoRouteFound() {
-        RouteHandler defaultHandler = new MockResponseHandler();
+        RouteHandler defaultHandler = new MockRouteHandler();
         router.defaultHandler(defaultHandler);
 
         RouteHandler handler = router.route(request);
@@ -53,25 +53,25 @@ public class ExactPathRouterTest {
     }
 
     public void shouldReturnHandlerMatchedByPath() {
-        RouteHandler pathHandler = new MockResponseHandler();
+        RouteHandler pathHandler = new MockRouteHandler();
         router.add("/path", pathHandler);
-        router.add("/path2", new MockResponseHandler());
+        router.add("/path2", new MockRouteHandler());
 
         RouteHandler handler = router.route(request);
         assertEquals(handler, pathHandler);
     }
 
     public void shouldReturnFirstHandlerIfMultipleMatches() {
-        RouteHandler pathHandler = new MockResponseHandler();
+        RouteHandler pathHandler = new MockRouteHandler();
         router.add("/path", pathHandler);
-        router.add("/path", new MockResponseHandler());
+        router.add("/path", new MockRouteHandler());
 
         RouteHandler handler = router.route(request);
         assertEquals(handler, pathHandler);
     }
 
     public void shouldNotReturnHandlerIfPathDoesNotMatches() {
-        RouteHandler pathHandler = new MockResponseHandler();
+        RouteHandler pathHandler = new MockRouteHandler();
         router.add("/path2", pathHandler);
 
         RouteHandler handler = router.route(request);

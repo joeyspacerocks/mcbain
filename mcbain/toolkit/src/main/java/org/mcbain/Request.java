@@ -17,6 +17,8 @@
 package org.mcbain;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Encapsulates an incoming HTTP request.
@@ -24,8 +26,10 @@ import javax.servlet.http.HttpServletRequest;
 
 public class Request {
     private HttpServletRequest request;
+    private Map<String, String> params;
 
     public Request(HttpServletRequest request) {
+        this();
         this.request = request;
     }
 
@@ -34,5 +38,14 @@ public class Request {
     }
 
     protected Request() {
+        params = new HashMap<String, String>();
+    }
+
+    public String param(String name) {
+        return params.containsKey(name) ? params.get(name) : request.getParameter(name);
+    }
+
+    public void param(String name, String value) {
+        params.put(name, value);
     }
 }

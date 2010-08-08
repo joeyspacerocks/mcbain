@@ -35,14 +35,14 @@ public class NamedRouterTest {
     }
 
     public void shouldBuildLinkForNamedRoute() {
-        router.add("route", "/path", new MockResponseHandler());
+        router.add("route", "/path", new MockRouteHandler());
 
         String path = router.buildNamedPath("route");
         assertEquals(path, "/path");
     }
 
     public void shouldBuildLinkForNamedRouteWithParameters() {
-        router.add("route", "/path", new MockResponseHandler());
+        router.add("route", "/path", new MockRouteHandler());
 
         String path = router.buildNamedPath("route");
         assertEquals(path, "/path");
