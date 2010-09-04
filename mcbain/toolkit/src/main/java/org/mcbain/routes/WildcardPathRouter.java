@@ -58,12 +58,8 @@ public class WildcardPathRouter implements Router {
 
     private static final Pattern numeric = Pattern.compile("\\d*");
 
-    private PathNode pathsRoot;
+    private PathNode pathsRoot = new PathNode();
     private RouteHandler defaultHandler;
-
-    public WildcardPathRouter() {
-        pathsRoot = new PathNode();
-    }
 
     @Override
     public Router add(String path, RouteHandler handler) {
@@ -116,16 +112,22 @@ public class WildcardPathRouter implements Router {
         return result.toString();
     }
 
+    /**
+     * Paths are parsed into an internal tree structure to improve matching speed.
+     * This inner class represents a single node in the tree, each of which corresponds
+     * with a path section.
+     */
+
     private class PathNode {
         private String value = "";
         private String rawValue = "";
         private RouteHandler handler;
-        private List<PathNode> children = new ArrayList<PathNode>();
         private boolean wildcard;
         private boolean multiWildcard;
         private boolean numericWildcard;
         private String captureName;
-
+        private List<PathNode> children = new ArrayList<PathNode>();
+        
         public PathNode create(String[] sections, int offset) {
             if (rawValue.equals(sections[offset])) {
                 if (offset >= sections.length - 1) {
