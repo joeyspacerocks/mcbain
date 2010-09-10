@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package org.mcbain.request;
+package org.mcbain.render;
 
-import org.mcbain.render.RenderContext;
-import org.mcbain.render.Renderer;
-import org.mcbain.render.Writer;
+import org.mcbain.response.Response;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -26,26 +24,34 @@ import java.io.IOException;
 /**
  * Response handler that writes the output of a renderer to the response
  * output stream.
+ *
+ * FIXME: sort out interface to this response - specifically how/where the render context comes from
  */
 
 public class RenderedResponse implements Response {
 
     private Renderer renderer;
+    private RenderContext renderContext;
 
     public RenderedResponse(Renderer renderer) {
         this.renderer = renderer;
     }
 
-    public boolean commit(HttpServletResponse servletResponse, RenderContext rc) {
+    @Override
+    public void commit(HttpServletResponse servletResponse) {
         Writer writer = new Writer();
-        renderer.render(rc, writer);
+        renderer.render(renderContext, writer);
 
         try {
             servletResponse.getWriter().write(writer.toString());
         } catch (IOException e) {
             throw new RuntimeException("Error rendering response to output stream", e);
         }
+    }
 
+    public boolean commit(HttpServletResponse servletResponse, RenderContext rc) {
+        renderContext = rc;
+        commit(servletResponse);
         return true;
     }
 }

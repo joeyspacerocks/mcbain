@@ -32,13 +32,11 @@ public class Request {
 
 	private HttpServletRequest servletRequest;
 	private Uri uri;
-	private Context context;
 	private Map<Class, Object> resources;
 //	private InputHandler inputHandler;
 
-	public Request(Context context, HttpServletRequest servletRequest) {
+	public Request(HttpServletRequest servletRequest) {
 		this.servletRequest = servletRequest;
-		this.context = context;
 		this.resources = new HashMap<Class, Object>();
 	}
 
@@ -61,10 +59,6 @@ public class Request {
 
 	public HttpServletRequest servletRequest() {
 		return servletRequest;
-	}
-
-	public Context context() {
-		return context;
 	}
 
 	public <T> void resource(T resource) {

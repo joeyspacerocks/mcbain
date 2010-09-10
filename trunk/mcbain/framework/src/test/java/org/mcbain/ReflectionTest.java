@@ -45,23 +45,23 @@ public class ReflectionTest {
 		java.lang.reflect.Method method = c.getMethod("test", new Class[]{String.class});
 
 		for (int i = 0; i < loops; i++) {
-			method.invoke(object, new Object[]{"value"});
+			method.invoke(object, "value");
 		}
 
 		start = System.currentTimeMillis();
 		for (int i = 0; i < loops; i++) {
-			method.invoke(object, new Object[]{"value"});
+			method.invoke(object, "value");
 		}
 
 		System.out.println(loops + " reflective method calls without lookup:" + (System.currentTimeMillis() - start) + " milliseconds.");
 		for (int i = 0; i < loops; i++) {
 			method = c.getMethod("test", new Class[]{String.class});
-			method.invoke(object, new Object[]{"value"});
+			method.invoke(object, "value");
 		}
 		start = System.currentTimeMillis();
 		for (int i = 0; i < loops; i++) {
 			method = c.getMethod("test", new Class[]{String.class});
-			method.invoke(object, new Object[]{"value"});
+			method.invoke(object, "value");
 		}
 		System.out.println(loops + " reflective method calls with lookup:" + (System.currentTimeMillis() - start) + " milliseconds.");
 	}

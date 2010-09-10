@@ -16,17 +16,15 @@
 
 package org.mcbain.examples.blog;
 
-import org.mcbain.examples.blog.model.Blog;
-import org.mcbain.examples.blog.model.BlogService;
-import org.mcbain.examples.blog.model.Post;
-import org.mcbain.input.InputHandler;
-import org.mcbain.input.RequiredValidator;
 import org.mcbain.render.RenderContext;
+import org.mcbain.render.RenderedResponse;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mcbain.request.*;
-import org.mcbain.route.RouteBuilder;
-import org.mcbain.route.Router;
+import org.mcbain.request.Request;
+import org.mcbain.response.Response;
+import org.mcbain.routes.MethodRouteHandler;
+import org.mcbain.routes.Router;
+import org.mcbain.routes.WildcardPathRouter;
 
 
 /**
@@ -36,82 +34,89 @@ import org.mcbain.route.Router;
 public class BlogApplication {
 
 	public Router buildRouter() {
-		RouteBuilder routes = new RouteBuilder();
 
-		final BlogService blogService = new BlogService();
+        Router router = new WildcardPathRouter()
+            .add("/", new MethodRouteHandler() {
+                public Response get(Request request) {
+                    return new RenderedResponse(new Renderer() {
+                        public void render(RenderContext context, Writer writer) {
+                            context.template("index").render(context, writer);
+                        }
+                    });
+                }
+            });
+//
+//
+//
+//		RouteBuilder routes = new RouteBuilder();
+//
+//		final BlogService blogService = new BlogService();
+//
+//		Interceptor blogLocator = new Interceptor() {
+//			public boolean intercept(Request request) {
+//				Blog blog = blogService.getBlog(request.parameter("blog"));
+//				if (blog == null) {
+//					return false;
+//				} else {
+//					request.resource(blog);
+//					return true;
+//				}
+//			}
+//		};
+//
+//		routes
+//
+//			.route("/blog/$blog").as("blog").via(blogLocator).to(new Controller() {
+//			public Response get(Request request) {
+//				return new RenderedResponse(new BlogHome(request.resource(Blog.class), null));
+//			}
+//		})
+//
+//			.route("/blog/$blog/$archive/$post").via(blogLocator).to(new Controller() {
+//			public Response get(Request request) {
+//				Blog blog = request.resource(Blog.class);
+//				Post post = blog.getPost(request.parameter("post"));
+//				return (post == null ? null : new RenderedResponse(new FullPost(blog, post)));
+//			}
+//		})
+//
+//			.route("/blog/$blog/newpost").via(blogLocator).to(new Controller() {
+//
+//			public Response get(Request request) {
+//				return new RenderedResponse(new NewPost(request.resource(Blog.class), input(request)));
+//			}
+//
+//			public Response post(Request request) {
+//				Blog blog = request.resource(Blog.class);
+//
+//				InputHandler in = input(request);
+//
+//				if (in.ok()) {
+//					blog.addPost(in.value("title"), in.value("content"));
+//					return new RenderedResponse(new BlogHome(blog, null));
+//
+//				} else {
+//					return new RenderedResponse(new NewPost(blog, in));
+//				}
+//			}
+//
+//			private InputHandler input(Request request) {
+//				InputHandler in = new InputHandler(request);
+//				in.addField("title", new RequiredValidator());
+//				in.addField("content", new RequiredValidator());
+//				return in;
+//			}
+//		})
+//
+//			.route("/blog/$blog/$archive").via(blogLocator).to(new Controller() {
+//			public Response get(Request request) {
+//				String archive = request.parameter("archive").replace('-', '/');
+//				return new RenderedResponse(new BlogHome(request.resource(Blog.class), archive));
+//			}
+//		});
+//
+//		return routes.end();
 
-		Interceptor blogLocator = new Interceptor() {
-			public boolean intercept(Request request) {
-				Blog blog = blogService.getBlog(request.parameter("blog"));
-				if (blog == null) {
-					return false;
-				} else {
-					request.resource(blog);
-					return true;
-				}
-			}
-		};
-
-		routes
-			.route("/").to(new Controller() {
-			public Response get(Request request) {
-				return new RenderedResponse(new Renderer() {
-					public void render(RenderContext context, Writer writer) {
-						context.template("index").render(context, writer);
-					}
-				});
-			}
-		})
-
-			.route("/blog/$blog").as("blog").via(blogLocator).to(new Controller() {
-			public Response get(Request request) {
-				return new RenderedResponse(new BlogHome(request.resource(Blog.class), null));
-			}
-		})
-
-			.route("/blog/$blog/$archive/$post").via(blogLocator).to(new Controller() {
-			public Response get(Request request) {
-				Blog blog = request.resource(Blog.class);
-				Post post = blog.getPost(request.parameter("post"));
-				return (post == null ? null : new RenderedResponse(new FullPost(blog, post)));
-			}
-		})
-
-			.route("/blog/$blog/newpost").via(blogLocator).to(new Controller() {
-
-			public Response get(Request request) {
-				return new RenderedResponse(new NewPost(request.resource(Blog.class), input(request)));
-			}
-
-			public Response post(Request request) {
-				Blog blog = request.resource(Blog.class);
-
-				InputHandler in = input(request);
-
-				if (in.ok()) {
-					blog.addPost(in.value("title"), in.value("content"));
-					return new RenderedResponse(new BlogHome(blog, null));
-
-				} else {
-					return new RenderedResponse(new NewPost(blog, in));
-				}
-			}
-
-			private InputHandler input(Request request) {
-				InputHandler in = new InputHandler(request);
-				in.addField("title", new RequiredValidator());
-				in.addField("content", new RequiredValidator());
-				return in;
-			}
-		})
-
-			.route("/blog/$blog/$archive").via(blogLocator).to(new Controller() {
-			public Response get(Request request) {
-				String archive = request.parameter("archive").replace('-', '/');
-				return new RenderedResponse(new BlogHome(request.resource(Blog.class), archive));
-			}
-		});
-
-		return routes.end();
+        return router;
 	}
 }

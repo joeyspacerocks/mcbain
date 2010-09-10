@@ -24,6 +24,7 @@ public class Finder<T> {
 
     private Class<T> type;
 
+    @SuppressWarnings({"unchecked"})
     public Finder() {
         type = (Class<T>) Reflection.genericType(this);
     }
