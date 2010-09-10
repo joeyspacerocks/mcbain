@@ -52,6 +52,6 @@ public class ErrorResponseTest {
         response.commit(httpResponse);
 
         assertTrue(httpResponse.hasStatus(404));
-        verify(nextResponse, times(1));
+        verify(nextResponse, times(1)).commit(httpResponse);
     }
 }

@@ -24,7 +24,8 @@ import java.util.List;
 /**
  * A router that queries a list of internal routers until one returns a route.
  * The internal routers are queried in the order that they are defined in.
- * Any default routes defined by the internal routers are ignored.
+ * If an internal router returns a default, processing will end at that point,
+ * and that route will be returned.
  */
 
 public class ChainRouter implements Router {
