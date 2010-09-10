@@ -19,7 +19,7 @@ package org.mcbain.template;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
-import org.mockito.MockitoAnnotations.Mock;
+import org.mockito.Mock;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -36,16 +36,11 @@ import static org.testng.Assert.*;
 @Test
 public class ComponentSpecTest {
 
-	@Mock
-	private TemplateClass templateClass;
-	@Mock
-	private Element element;
-	@Mock
-	private RenderContext rc;
-	@Mock
-	private Writer writer;
-	@Mock
-	private Template template;
+	@Mock private TemplateClass templateClass;
+	@Mock private Element element;
+	@Mock private RenderContext rc;
+	@Mock private Writer writer;
+	@Mock private Template template;
 
 	private ComponentSpec root;
 

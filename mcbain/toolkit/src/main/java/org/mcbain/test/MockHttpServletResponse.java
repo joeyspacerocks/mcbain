@@ -53,11 +53,19 @@ public class MockHttpServletResponse implements HttpServletResponse {
         return null;
     }
 
+    /**
+     * @deprecated
+     */
+
     @Override
     public String encodeUrl(String s) {
         return null;
     }
 
+    /**
+     * @deprecated
+     */
+    
     @Override
     public String encodeRedirectUrl(String s) {
         return null;
@@ -105,6 +113,10 @@ public class MockHttpServletResponse implements HttpServletResponse {
         this.status = code;
     }
 
+    /**
+     * @deprecated
+     */
+    
     @Override
     public void setStatus(int code, String s) {
         this.status = code;
