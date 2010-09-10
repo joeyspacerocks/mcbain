@@ -15,6 +15,7 @@ package org.mcbain.response;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Response that writes out an HTTP error code in the status header.
@@ -23,7 +24,7 @@ import java.io.IOException;
 public class ErrorResponse implements Response {
     private int statusCode;
     private String message;
-    private Response response;
+    private Response nextResponse;
 
     /**
      * Constructs an error response that when committed sets the status to the supplied
@@ -60,22 +61,24 @@ public class ErrorResponse implements Response {
 
     public ErrorResponse(int statusCode, Response response) {
         this.statusCode = statusCode;
-        this.response = response;
+        this.nextResponse = response;
     }
 
     @Override
     public void commit(HttpServletResponse response) {
         response.setStatus(statusCode);
 
-        if (this.response != null) {
-            this.response.commit(response);
+        if (nextResponse != null) {
+            nextResponse.commit(response);
 
         } else if (message != null) {
             try {
-                response.getWriter().println(message);
+                PrintWriter writer = response.getWriter();
+                writer.print(message);
+                writer.flush();
+
             } catch (IOException e) {
-                // FIXME: logging? errors?
-                e.printStackTrace();
+                throw new RuntimeException("Error writing to servlet response stream", e);
             }
         }
     }

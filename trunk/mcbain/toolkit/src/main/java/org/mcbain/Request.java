@@ -41,11 +41,42 @@ public class Request {
         params = new HashMap<String, String>();
     }
 
+    /**
+     * Gets the underlying HttpServletRequest.
+     *
+     * @return  Servlet request
+     */
+    
+    public HttpServletRequest httpRequest() {
+        return request;
+    }
+
     public String param(String name) {
         return params.containsKey(name) ? params.get(name) : request.getParameter(name);
     }
 
     public void param(String name, String value) {
         params.put(name, value);
+    }
+
+    public boolean isGet() {
+        return methodEquals("GET");
+    }
+
+    public boolean isPost() {
+        return methodEquals("POST");
+    }
+
+    public boolean isDelete() {
+        return methodEquals("DELETE");
+    }
+
+    public boolean isPut() {
+        return methodEquals("PUT");
+    }
+
+    private boolean methodEquals(String value) {
+        String method = request.getMethod();
+        return method != null && method.toUpperCase().equals(value);
     }
 }

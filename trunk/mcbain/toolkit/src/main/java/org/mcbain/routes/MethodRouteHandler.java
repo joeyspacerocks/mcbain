@@ -29,10 +29,35 @@ abstract public class MethodRouteHandler implements RouteHandler {
 
     @Override
     public Response handle(Request request) {
+        if (request.isGet()) {
+            return get(request);
+
+        } else if (request.isPost()) {
+            return post(request);
+
+        } else if (request.isDelete()) {
+            return delete(request);
+
+        } else if (request.isPut()) {
+            return put(request);
+        }
+
         return null;
     }
 
     public Response get(Request request) {
+        return new ErrorResponse(405);
+    }
+
+    public Response post(Request request) {
+        return new ErrorResponse(405);
+    }
+
+    public Response delete(Request request) {
+        return new ErrorResponse(405);
+    }
+
+    public Response put(Request request) {
         return new ErrorResponse(405);
     }
 }

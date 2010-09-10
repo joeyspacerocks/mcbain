@@ -23,14 +23,21 @@ import org.mcbain.Request;
  */
 
 public class MockRequest extends Request {
-    private String uri;
 
     public MockRequest(String uri) {
-        this.uri = uri;
+        super(new MockHttpServletRequest(uri));
     }
 
-    @Override
-    public String uri() {
-        return uri;
+    public MockRequest() {
+        super(new MockHttpServletRequest());
+    }
+
+    public MockRequest method(String method) {
+        mockRequest().method(method);
+        return this;
+    }
+
+    private MockHttpServletRequest mockRequest() {
+        return (MockHttpServletRequest) httpRequest();
     }
 }
