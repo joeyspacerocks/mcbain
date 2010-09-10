@@ -18,7 +18,7 @@ import org.mcbain.response.ErrorResponse;
 import org.mcbain.response.Response;
 
 /**
- * Route handler base class that pass control to a handler method based on the
+ * Route handler base class that passes control to a handler method based on the
  * HTTP method of the request.
  *
  * The default implementations of each handler method is to return an error
