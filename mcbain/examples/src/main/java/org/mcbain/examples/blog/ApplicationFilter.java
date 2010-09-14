@@ -18,8 +18,8 @@ package org.mcbain.examples.blog;
 
 import org.mcbain.Request;
 import org.mcbain.render.RenderContext;
+import org.mcbain.render.RenderedResponse;
 import org.mcbain.response.Response;
-import org.mcbain.route.LinkBuilder;
 import org.mcbain.routes.RouteHandler;
 import org.mcbain.routes.Router;
 import org.mcbain.template.TemplateFactory;
@@ -36,34 +36,33 @@ import java.io.IOException;
 public class ApplicationFilter implements Filter {
 
 	private TemplateFactory templates;
-	private LinkBuilder linkBuilder;
     private Router router;
 
     public void init(FilterConfig config) throws ServletException {
         router = new BlogApplication().buildRouter();
 		templates = new TemplateFactory(config.getServletContext());
-//		linkBuilder = new LinkBuilder(router);
 	}
-
 
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
 		Request request = new Request((HttpServletRequest) servletRequest);
+        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+
 		RouteHandler handler = router.route(request);
+        Response response = handler == null ? null : handler.handle(request);
 
-        boolean handled = false;
+		if (response != null) {
+            if (response instanceof RenderedResponse) {
+                RenderContext rc = new RenderContext(request, templates, router);
+                ((RenderedResponse) response).commit(httpServletResponse, rc);
+                
+            } else {
+                response.commit(httpServletResponse);
+            }
 
-		if (handler != null) {
-            Response response = handler.handle(request);
-            
-            RenderContext rc = new RenderContext(request, templates, linkBuilder);
-            handled = response.commit((HttpServletResponse) servletResponse, rc);
-        }
-
-		if (!handled) {
+        } else {
 			chain.doFilter(servletRequest, servletResponse);
 		}
 	}
-
 
 	public void destroy() {
 	}

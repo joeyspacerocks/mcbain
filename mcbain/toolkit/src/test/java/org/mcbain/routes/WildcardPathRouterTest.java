@@ -51,6 +51,12 @@ public class WildcardPathRouterTest {
         assertEquals(router.route(request), expectedHandler);
     }
 
+    public void shouldMatchFixedPathForRootPath() {
+        Request request = new MockRequest("/");
+        router.add("/", expectedHandler);
+        assertEquals(router.route(request), expectedHandler);
+    }
+
     public void shouldMatchFixedPath() {
         Request request = new MockRequest("/path");
         router.add("/path", expectedHandler);

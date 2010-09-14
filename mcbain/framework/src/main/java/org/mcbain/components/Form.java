@@ -17,7 +17,6 @@
 package org.mcbain.components;
 
 
-import org.mcbain.input.InputHandler;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
@@ -30,16 +29,9 @@ import org.mcbain.template.Element;
 public class Form implements Renderer {
 
 	private String path;
-	private InputHandler in;
 
-	public Form(String path, InputHandler in) {
+	public Form(String path) {
 		this.path = path;
-		this.in = in;
-	}
-
-
-	public Form bind(Object... components) {
-		return this;
 	}
 
 	public void render(RenderContext context, Writer writer) {

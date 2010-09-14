@@ -17,7 +17,8 @@
 package org.mcbain.validation;
 
 /**
- *
+ * Validator that asserts that an integer lies between a minumum (inclusive)
+ * and maximum value (exclusive).
  */
 
 public class IntegerRangeValidator implements Validator<Integer> {
@@ -29,11 +30,11 @@ public class IntegerRangeValidator implements Validator<Integer> {
         this.max = max;
     }
 
-    public ValidationResult validate(Integer value) {
-        if (value < min || value > max) {
-            return new ValidationResult("Not in range");
+    public ValidationResult validate(String id, Integer value) {
+        if (value < min || value >= max) {
+            return ValidationResult.fail(id, "The value does not lie inside the range %d-%d", min, max);
         }
 
-        return ValidationResult.OK;
+        return ValidationResult.pass(id);
     }
 }

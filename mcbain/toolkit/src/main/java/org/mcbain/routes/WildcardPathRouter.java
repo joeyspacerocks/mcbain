@@ -18,6 +18,8 @@ package org.mcbain.routes;
 
 import org.mcbain.Request;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,9 +84,14 @@ public class WildcardPathRouter implements Router {
         PathNode node = pathsRoot.traverse(path.split("/"), 0, params);
 
         if (node != null) {
-            for (String key : params.keySet()) {
-                request.param(key, params.get(key));
+            try {
+                for (String key : params.keySet()) {
+                    request.param(key, URLDecoder.decode(params.get(key), "UTF-8"));
+                }
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException("Encoding 'UTF-8' not available", e);
             }
+
             return node.handler;
         }
 
@@ -129,6 +136,10 @@ public class WildcardPathRouter implements Router {
         private List<PathNode> children = new ArrayList<PathNode>();
         
         public PathNode create(String[] sections, int offset) {
+            if (sections.length == 0) {
+                return this;
+            }
+            
             if (rawValue.equals(sections[offset])) {
                 if (offset >= sections.length - 1) {
                     return this;
@@ -152,6 +163,10 @@ public class WildcardPathRouter implements Router {
         }
 
         public PathNode traverse(String[] sections, int offset, Map<String, String> params) {
+            if (sections.length == 0) {
+                return this;
+            }
+
             if (matches(this, sections[offset])) {
                 if (captureName != null) {
                     params.put(captureName, sections[offset]);
