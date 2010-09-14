@@ -17,10 +17,18 @@
 package org.mcbain.validation;
 
 /**
- *
+ * Validators assert that a value conforms to some set of rules.
  */
 
 public interface Validator<T> {
 
-    public ValidationResult validate(T value);
+    /**
+     * Asserts the value passes validation.
+     *
+     * @param   id      An identfier for the value source (e.g. field name)
+     * @param   value   Value to validate
+     * @return  Result of the validation
+     */
+
+    public ValidationResult validate(String id, T value);
 }

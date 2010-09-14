@@ -16,7 +16,6 @@
 
 package org.mcbain.components;
 
-import org.mcbain.input.InputHandler;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
@@ -29,14 +28,12 @@ import org.mcbain.template.Element;
 
 public class Input implements Renderer {
 
-	private InputHandler in;
 	private Object value;
 	private boolean valueSet;
 
-	public Input(InputHandler in) {
-		this.in = in;
-	}
-
+    public Input() {
+    }
+    
 	public Input(Object value) {
 		value(value);
 	}
@@ -53,7 +50,7 @@ public class Input implements Renderer {
 	public void render(RenderContext context, Writer writer) {
 		Element element = context.element();
 
-		Object renderValue = valueSet ? value : in.value(element.id());
+		Object renderValue = valueSet ? value : null; //in.value(element.id());
 
 		if (element.tag().equals("textarea")) {
 			writer

@@ -16,6 +16,8 @@
 
 package org.mcbain;
 
+import org.mcbain.binding.PropertyAccessor;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +26,7 @@ import java.util.Map;
  * Encapsulates an incoming HTTP request.
  */
 
-public class Request {
+public class Request implements PropertyAccessor {
     private HttpServletRequest request;
     private Map<String, String> params;
 
@@ -78,5 +80,15 @@ public class Request {
     private boolean methodEquals(String value) {
         String method = request.getMethod();
         return method != null && method.toUpperCase().equals(value);
+    }
+
+    @Override
+    public Object get(String property) {
+        return param(property);
+    }
+
+    @Override
+    public void set(String property, Object value) {
+        param(property, value == null ? null : value.toString());
     }
 }
