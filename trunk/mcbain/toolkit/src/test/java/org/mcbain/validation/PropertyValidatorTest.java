@@ -42,20 +42,20 @@ public class PropertyValidatorTest {
     }
 
     public void shouldPassIfAllRulesPass() {
-        validator.addRule("field", new RequiredValidator());
+        validator.addPropertyRule("field", new RequiredValidator());
         
         assertTrue(validator.validate("id", testValue).passed());
     }
 
     public void shouldFailIfARuleFails() {
-        validator.addRule("field2", new RequiredValidator());
+        validator.addPropertyRule("field2", new RequiredValidator());
 
         assertTrue(validator.validate("id", testValue).failed());
     }
 
     public void shouldFailIfOneRuleFailsAndAnotherPasses() {
-        validator.addRule("field", new RequiredValidator());
-        validator.addRule("field2", new RequiredValidator());
+        validator.addPropertyRule("field", new RequiredValidator());
+        validator.addPropertyRule("field2", new RequiredValidator());
 
         assertTrue(validator.validate("id", testValue).failed());
     }
