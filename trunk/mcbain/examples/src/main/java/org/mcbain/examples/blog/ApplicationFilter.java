@@ -48,7 +48,7 @@ public class ApplicationFilter implements Filter {
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
 
 		RouteHandler handler = router.route(request);
-        Response response = handler == null ? null : handler.handle(request);
+        Response response = handler.handle(request);
 
 		if (response != null) {
             if (response instanceof RenderedResponse) {

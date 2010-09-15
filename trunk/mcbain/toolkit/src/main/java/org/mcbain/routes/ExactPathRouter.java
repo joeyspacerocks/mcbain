@@ -28,7 +28,7 @@ import java.util.Map;
 public class ExactPathRouter implements Router {
 
     private Map<String, RouteHandler> handlers;
-    private RouteHandler defaultHandler;
+    private RouteHandler defaultHandler = RouteHandler.NONE;
 
     public ExactPathRouter() {
         handlers = new LinkedHashMap<String, RouteHandler>();

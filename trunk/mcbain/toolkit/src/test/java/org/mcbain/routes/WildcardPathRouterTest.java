@@ -22,7 +22,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
 
 /**
  * Tests for a router that uses Ant-style wildcard path matching.
@@ -40,9 +39,9 @@ public class WildcardPathRouterTest {
         expectedHandler = new MockRouteHandler();
     }
 
-    public void shouldReturnNullWhenNoDefaultAndNoMatch() {
+    public void shouldReturnNoneWhenNoDefaultAndNoMatch() {
         Request request = new MockRequest("/path");
-        assertNull(router.route(request));
+        assertEquals(router.route(request), RouteHandler.NONE);
     }
 
     public void shouldReturnDefaultWhenNoMatch() {
@@ -87,7 +86,7 @@ public class WildcardPathRouterTest {
     public void shouldNotMatchSingleSectionNumericWildcardAgainstNonNumericPath() {
         Request request = new MockRequest("/12path34");
         router.add("/#", expectedHandler);
-        assertNull(router.route(request));
+        assertEquals(router.route(request), RouteHandler.NONE);
     }
 
     public void shouldMatchSingleSectionNumericWildcardAfterFixedSection() {
@@ -105,7 +104,7 @@ public class WildcardPathRouterTest {
     public void shouldNotMatchSingleSectionWildcardWhenPrecedingSectionPresent() {
         Request request = new MockRequest("/path/leaf");
         router.add("/*", expectedHandler);
-        assertNull(router.route(request));
+        assertEquals(router.route(request), RouteHandler.NONE);
     }
 
     public void shouldMatchMultiSectionWildcard() {

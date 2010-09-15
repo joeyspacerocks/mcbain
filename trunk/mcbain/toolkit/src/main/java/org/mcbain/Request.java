@@ -29,18 +29,16 @@ import java.util.Map;
 public class Request implements PropertyAccessor {
     private HttpServletRequest request;
     private Map<String, String> params;
+    private Map<String, Object> resources;
 
     public Request(HttpServletRequest request) {
-        this();
+        params = new HashMap<String, String>();
+        resources = new HashMap<String, Object>();
         this.request = request;
     }
 
     public String uri() {
         return request.getRequestURI();
-    }
-
-    protected Request() {
-        params = new HashMap<String, String>();
     }
 
     /**
@@ -90,5 +88,19 @@ public class Request implements PropertyAccessor {
     @Override
     public void set(String property, Object value) {
         param(property, value == null ? null : value.toString());
+    }
+
+    public <T> T resource(String id, Class<T> type) {
+        Object r = resources.get(id);
+
+        if (r != null && (r.getClass().isAssignableFrom(type))) {
+            return (T) r;
+        }
+
+        return null;
+    }
+
+    public void resource(String id, Object resource) {
+        resources.put(id, resource);
     }
 }
