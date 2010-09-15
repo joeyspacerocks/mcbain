@@ -22,7 +22,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
 
 /**
  * Unit tests for the exact path router.
@@ -39,9 +38,9 @@ public class ExactPathRouterTest {
         router = new ExactPathRouter();
     }
 
-    public void shouldReturnNullWhenNoRouteFoundAndNoDefault() {
+    public void shouldReturnNoneWhenNoRouteFoundAndNoDefault() {
         RouteHandler handler = router.route(request);
-        assertNull(handler);
+        assertEquals(handler, RouteHandler.NONE);
     }
 
     public void shouldReturnDefaultWhenNoRouteFound() {
@@ -75,6 +74,6 @@ public class ExactPathRouterTest {
         router.add("/path2", pathHandler);
 
         RouteHandler handler = router.route(request);
-        assertNull(handler);
+        assertEquals(handler, RouteHandler.NONE);
     }
 }

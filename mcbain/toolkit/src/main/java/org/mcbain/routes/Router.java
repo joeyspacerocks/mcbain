@@ -49,7 +49,7 @@ public interface Router {
     /**
      * Identifies the route handler that should handle the request. If
      * none can be found the default handler should be returned. If no
-     * default handler has been set, null should be returned.
+     * default handler has been set, RouteHandler.NONE should be returned.
      *
      * If more than one route applies to the request, the order they
      * were added to the router should be used to decide which handler
@@ -60,7 +60,7 @@ public interface Router {
      * request.
      *
      * @param   request     Incoming request
-     * @return  Appropriate or default route handler, or null
+     * @return  Appropriate or default route handler, or RouteHandler.NONE
      */
 
     public RouteHandler route(Request request);

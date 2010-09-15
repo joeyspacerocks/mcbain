@@ -20,10 +20,17 @@ import org.mcbain.Request;
 import org.mcbain.response.Response;
 
 /**
- * Handles the resolution of a route by a router by producting a response.
+ * Handles the resolution of a route by a router by producing a response.
  */
 
 public interface RouteHandler {
+
+    public static final RouteHandler NONE = new RouteHandler() {
+        @Override
+        public Response handle(Request request) {
+            return null;
+        }
+    };
 
     public Response handle(Request request);
 }

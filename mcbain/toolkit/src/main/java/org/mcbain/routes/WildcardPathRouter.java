@@ -61,7 +61,7 @@ public class WildcardPathRouter implements Router {
     private static final Pattern numeric = Pattern.compile("\\d*");
 
     private PathNode pathsRoot = new PathNode();
-    private RouteHandler defaultHandler;
+    private RouteHandler defaultHandler = RouteHandler.NONE;
 
     @Override
     public Router add(String path, RouteHandler handler) {

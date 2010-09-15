@@ -31,7 +31,7 @@ import java.util.List;
 public class ChainRouter implements Router {
 
     private List<Router> chain = new ArrayList<Router>();
-    private RouteHandler defaultHandler;
+    private RouteHandler defaultHandler = RouteHandler.NONE;
 
     @Override
     public Router add(String path, RouteHandler handler) {
@@ -48,7 +48,7 @@ public class ChainRouter implements Router {
     public RouteHandler route(Request request) {
         for (Router router : chain) {
             RouteHandler handler = router.route(request);
-            if (handler != null) {
+            if (handler != RouteHandler.NONE) {
                 return handler;
             }
         }

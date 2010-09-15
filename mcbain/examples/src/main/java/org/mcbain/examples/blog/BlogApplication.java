@@ -26,6 +26,7 @@ import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
 import org.mcbain.response.Response;
 import org.mcbain.routes.MethodRouteHandler;
+import org.mcbain.routes.RouteHandler;
 import org.mcbain.routes.Router;
 import org.mcbain.routes.WildcardPathRouter;
 import org.mcbain.validation.PropertyValidator;
@@ -42,7 +43,7 @@ public class BlogApplication {
 	public Router buildRouter() {
 		final BlogService blogService = new BlogService();
 
-        return new WildcardPathRouter()
+        final Router mainRouter = new WildcardPathRouter()
             .add("/", new MethodRouteHandler() {
                 public Response get(Request request) {
                     return new RenderedResponse(new Renderer() {
@@ -54,32 +55,16 @@ public class BlogApplication {
             })
             .add("/blog/(*:blog)", new MethodRouteHandler() {
                 public Response get(Request request) {
-                    Blog blog = blogService.getBlog(request.param("blog"));
-
-                    if (blog == null) {
-                        return null;
-                    }
-
-    				return new RenderedResponse(new BlogHome(blog, null));
+    				return new RenderedResponse(new BlogHome(request.resource("blog", Blog.class), null));
                 }
             })
             .add("/blog/(*:blog)/newpost", new MethodRouteHandler() {
                 public Response get(Request request) {
-                    Blog blog = blogService.getBlog(request.param("blog"));
-
-                    if (blog == null) {
-                        return null;
-                    }
-
-                    return new RenderedResponse(new NewPost(blog));
+                    return new RenderedResponse(new NewPost(request.resource("blog", Blog.class)));
                 }
 
                 public Response post(Request request) {
-                    Blog blog = blogService.getBlog(request.param("blog"));
-
-                    if (blog == null) {
-                        return null;
-                    }
+                    Blog blog = request.resource("blog", Blog.class);
 
                     PropertyValidator validator = new PropertyValidator();
                     validator.addPropertyRule("title", new RequiredStringValidator());
@@ -97,11 +82,7 @@ public class BlogApplication {
             })
             .add("/blog/(*:blog)/(*:archive)/(*:post)", new MethodRouteHandler() {
                 public Response get(Request request) {
-                    Blog blog = blogService.getBlog(request.param("blog"));
-
-                    if (blog == null) {
-                        return null;
-                    }
+                    Blog blog = request.resource("blog", Blog.class);
 
                     Post post = blog.getPost(request.param("post"));
                     return (post == null ? null : new RenderedResponse(new FullPost(blog, post)));
@@ -109,14 +90,30 @@ public class BlogApplication {
             })
             .add("/blog/(*:blog)/(*:archive)", new MethodRouteHandler() {
                 public Response get(Request request) {
-                    Blog blog = blogService.getBlog(request.param("blog"));
-
-                    if (blog == null) {
-                        return null;
-                    }
-
                     String archive = request.param("archive").replace('-', '/');
-                    return new RenderedResponse(new BlogHome(blog, archive));
+                    return new RenderedResponse(new BlogHome(request.resource("blog", Blog.class), archive));
+                }
+            });
+
+        RouteHandler blogLocator = new RouteHandler() {
+            public Response handle(Request request) {
+                RouteHandler handler = mainRouter.route(request);
+                if (handler == RouteHandler.NONE) return null;
+
+                Blog blog = blogService.getBlog(request.param("blog"));
+                if (blog == null) return null;
+
+                request.resource("blog", blog);
+                return handler.handle(request);
+            }
+        };
+
+        return new WildcardPathRouter()
+            .add("/blog/(*:blog)", blogLocator)
+            .add("/blog/(*:blog)/**", blogLocator)
+            .defaultHandler(new RouteHandler() {
+                public Response handle(Request request) {
+                    return mainRouter.route(request).handle(request);
                 }
             });
 	}

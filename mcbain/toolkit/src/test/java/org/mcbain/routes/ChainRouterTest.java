@@ -21,7 +21,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
 
 /**
  * Tests the aggregate router that delegates to an internal list of routers.
@@ -39,8 +38,8 @@ public class ChainRouterTest {
         router = new ChainRouter();
     }
 
-    public void shouldReturnNullIfNoRoutersAddedAndNoDefault() {
-        assertNull(router.route(request));
+    public void shouldReturnNoneIfNoRoutersAddedAndNoDefault() {
+        assertEquals(router.route(request), RouteHandler.NONE);
     }
 
     public void shouldReturnDefaultIfNoRoutersAdded() {
