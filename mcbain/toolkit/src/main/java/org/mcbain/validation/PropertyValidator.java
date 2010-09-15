@@ -31,20 +31,24 @@ public class PropertyValidator implements Validator<PropertyAccessor> {
         ValidationResult result = new ValidationResult(id);
 
         for (Rule rule : rules) {
-            Object propertyValue = value.get(rule.property);
-            result.addResult(rule.validator.validate(rule.property, propertyValue));
+            result.addResult(rule.validate(value));
         }
 
         return result;
     }
 
-    public void addRule(String property, Validator validator) {
+    public void addPropertyRule(String property, Validator validator) {
         rules.add(new Rule(property, validator));
     }
     
     private class Rule {
         final String property;
         final Validator validator;
+
+        ValidationResult validate(PropertyAccessor value) {
+            Object propertyValue = value.get(property);
+            return (validator.validate(property, propertyValue));
+        }
 
         private Rule(String property, Validator validator) {
             this.property = property;

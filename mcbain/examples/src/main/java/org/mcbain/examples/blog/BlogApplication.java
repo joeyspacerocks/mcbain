@@ -28,6 +28,9 @@ import org.mcbain.response.Response;
 import org.mcbain.routes.MethodRouteHandler;
 import org.mcbain.routes.Router;
 import org.mcbain.routes.WildcardPathRouter;
+import org.mcbain.validation.PropertyValidator;
+import org.mcbain.validation.RequiredStringValidator;
+import org.mcbain.validation.ValidationResult;
 
 
 /**
@@ -78,8 +81,18 @@ public class BlogApplication {
                         return null;
                     }
 
-                    blog.addPost(request.param("title"), request.param("content"));
-                    return new RenderedResponse(new BlogHome(blog, null));
+                    PropertyValidator validator = new PropertyValidator();
+                    validator.addPropertyRule("title", new RequiredStringValidator());
+                    validator.addPropertyRule("content", new RequiredStringValidator());
+
+                    ValidationResult result = validator.validate("post", request);
+                    if (result.passed()) {
+                        blog.addPost(request.param("title"), request.param("content"));
+                        return new RenderedResponse(new BlogHome(blog, null));
+
+                    } else {
+                        return new RenderedResponse(new NewPost(blog));
+                    }
                 }
             })
             .add("/blog/(*:blog)/(*:archive)/(*:post)", new MethodRouteHandler() {
