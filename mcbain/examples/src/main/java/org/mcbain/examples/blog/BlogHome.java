@@ -16,11 +16,13 @@
 
 package org.mcbain.examples.blog;
 
+import org.mcbain.UrlBuilder;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
 import org.mcbain.template.Template;
+import org.mcbain.template.TemplateFactory;
 
 
 /**
@@ -32,20 +34,23 @@ public class BlogHome implements Renderer {
 
 	private Blog blog;
 	private String archive;
+    private UrlBuilder urlBuilder;
+    private TemplateFactory templateFactory;
 
 
-	public BlogHome(final Blog blog, final String archive) {
+    public BlogHome(final Blog blog, final String archive, UrlBuilder urlBuilder, TemplateFactory templateFactory) {
 		this.blog = blog;
 		this.archive = archive;
-	}
-
+        this.urlBuilder = urlBuilder;
+        this.templateFactory = templateFactory;
+    }
 
 	public void render(RenderContext context, Writer writer) {
-		Template template = context.template("blog");
+		Template template = templateFactory.instance("blog");
 
 		template.bind(
-			"border", new Border(blog),
-			"posts", new Posts(blog, archive == null ? blog.latestPosts() : blog.archivedPosts(archive)),
+			"border", new Border(blog, urlBuilder, templateFactory),
+			"posts", new Posts(blog, archive == null ? blog.latestPosts() : blog.archivedPosts(archive), urlBuilder, templateFactory),
 			"postTitle", archive == null ? "Recent Posts" : "Archive: " + archive
 		);
 

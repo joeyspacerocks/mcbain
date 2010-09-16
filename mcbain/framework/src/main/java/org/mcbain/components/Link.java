@@ -16,6 +16,7 @@
 
 package org.mcbain.components;
 
+import org.mcbain.UrlBuilder;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
@@ -32,11 +33,14 @@ public class Link implements Renderer {
 
     private String route;
     private Object[] parameters;
+    private UrlBuilder urlBuilder;
 
-	public Link() {
-	}
+    public Link(UrlBuilder urlBuilder) {
+        this.urlBuilder = urlBuilder;
+    }
 
-	public Link(String path) {
+	public Link(UrlBuilder urlBuilder, String path) {
+        this.urlBuilder = urlBuilder;
 		uri(path);
 	}
 
@@ -44,25 +48,13 @@ public class Link implements Renderer {
 		this.path = path;
     }
 
-    public Link route(String name, Object... parameters) {
-        this.route = name;
-        this.parameters = parameters;
-        return this;
-    }
-
-	public Link displayAs(String value) {
+	public Link text(String value) {
 		this.value = value;
         return this;
 	}
 
 	public void render(RenderContext context, Writer writer) {
-        String url;
-
-        if (route != null) {
-            url = context.linkRoute(route, parameters);
-        } else {
-            url = context.link(path);
-        }
+        String url = urlBuilder.buildPath(path);
 
         Element element = context.element();
 		element.attribute("href", url);

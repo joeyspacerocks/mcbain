@@ -83,7 +83,7 @@ public class WildcardPathRouter implements Router {
 
         PathNode node = pathsRoot.traverse(path.split("/"), 0, params);
 
-        if (node != null) {
+        if (node != null && node.handler != null) {
             try {
                 for (String key : params.keySet()) {
                     request.param(key, URLDecoder.decode(params.get(key), "UTF-8"));
@@ -183,12 +183,12 @@ public class WildcardPathRouter implements Router {
                     }
                 }
 
-               if (multiWildcard) {
+                if (multiWildcard) {
                     return traverse(sections, offset + 1, params);
                 }
 
                 return null;
-             }
+            }
 
             return null;
         }

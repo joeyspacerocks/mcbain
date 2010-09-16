@@ -162,4 +162,10 @@ public class WildcardPathRouterTest {
     public void shouldReplaceWildcardWithParameterWhenBuildinPath() {
         assertEquals(router.buildPath("/*", "path"), "/path");
     }
+
+    public void shouldReturnNoneWhenPartialMatchMade() {
+        Request request = new MockRequest("/path");
+        router.add("/path/leaf", new MockRouteHandler());
+        assertEquals(router.route(request), RouteHandler.NONE);
+    }
 }

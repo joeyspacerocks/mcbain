@@ -17,8 +17,6 @@
 package org.mcbain.examples.blog;
 
 import org.mcbain.Request;
-import org.mcbain.render.RenderContext;
-import org.mcbain.render.RenderedResponse;
 import org.mcbain.response.Response;
 import org.mcbain.routes.RouteHandler;
 import org.mcbain.routes.Router;
@@ -35,12 +33,11 @@ import java.io.IOException;
 
 public class ApplicationFilter implements Filter {
 
-	private TemplateFactory templates;
     private Router router;
 
     public void init(FilterConfig config) throws ServletException {
-        router = new BlogApplication().buildRouter();
-		templates = new TemplateFactory(config.getServletContext());
+        TemplateFactory templates = new TemplateFactory(config.getServletContext());
+        router = new BlogApplication().buildRouter(templates);
 	}
 
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
@@ -51,13 +48,7 @@ public class ApplicationFilter implements Filter {
         Response response = handler.handle(request);
 
 		if (response != null) {
-            if (response instanceof RenderedResponse) {
-                RenderContext rc = new RenderContext(request, templates, router);
-                ((RenderedResponse) response).commit(httpServletResponse, rc);
-                
-            } else {
-                response.commit(httpServletResponse);
-            }
+            response.commit(httpServletResponse);
 
         } else {
 			chain.doFilter(servletRequest, servletResponse);

@@ -16,12 +16,14 @@
 
 package org.mcbain.examples.blog;
 
+import org.mcbain.UrlBuilder;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.Post;
 import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
 import org.mcbain.template.Template;
+import org.mcbain.template.TemplateFactory;
 
 
 /**
@@ -32,19 +34,21 @@ public class FullPost implements Renderer {
 
 	private Blog blog;
 	private Post post;
+    private UrlBuilder urlBuilder;
+    private TemplateFactory templateFactory;
 
-
-	public FullPost(final Blog blog, final Post post) {
+    public FullPost(final Blog blog, final Post post, UrlBuilder urlBuilder, TemplateFactory templateFactory) {
 		this.blog = blog;
 		this.post = post;
-	}
-
+        this.urlBuilder = urlBuilder;
+        this.templateFactory = templateFactory;
+    }
 
 	public void render(RenderContext context, Writer writer) {
-		Template template = context.template("post");
+        Template template = templateFactory.instance("post");
 
-		template.bind(
-			"border", new Border(blog),
+        template.bind(
+			"border", new Border(blog, urlBuilder, templateFactory),
 			"title", post.getTitle(),
 			"content", post.getContent()
 		);

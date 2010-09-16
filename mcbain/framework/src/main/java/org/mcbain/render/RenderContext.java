@@ -16,11 +16,7 @@
 
 package org.mcbain.render;
 
-import org.mcbain.Request;
-import org.mcbain.routes.Router;
 import org.mcbain.template.Element;
-import org.mcbain.template.Template;
-import org.mcbain.template.TemplateFactory;
 import org.mcbain.util.ArrayStack;
 
 /**
@@ -29,38 +25,12 @@ import org.mcbain.util.ArrayStack;
  */
 
 public class RenderContext {
-	private TemplateFactory templates;
-	private Request request;
-	private Router router;
-
 	private ArrayStack<Element> elements;
 	private ArrayStack<Renderer> contents;
 
-	public RenderContext(Request request, TemplateFactory templates, Router router) {
-		this.templates = templates;
-		this.request = request;
-		this.router = router;
-
+	public RenderContext() {
 		elements = new ArrayStack<Element>();
 		contents = new ArrayStack<Renderer>();
-	}
-
-	public Template template(String name) {
-		return templates.instance(name);
-	}
-
-    // FIXME: broken - route refers to route name, not the path
-	public String linkRoute(String route, Object... parameters) {
-		return router.buildPath(route, parameters);
-	}
-
-    // FIXME: no servlet context applied
-    public String link(String path) {
-        return path; ///linkBuilder.link(path);
-    }
-
-	public Request request() {
-		return request;
 	}
 
 	public Element element() {
