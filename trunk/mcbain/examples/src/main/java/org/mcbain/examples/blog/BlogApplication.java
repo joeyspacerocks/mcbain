@@ -29,6 +29,7 @@ import org.mcbain.routes.MethodRouteHandler;
 import org.mcbain.routes.RouteHandler;
 import org.mcbain.routes.Router;
 import org.mcbain.routes.WildcardPathRouter;
+import org.mcbain.template.TemplateFactory;
 import org.mcbain.validation.PropertyValidator;
 import org.mcbain.validation.RequiredStringValidator;
 import org.mcbain.validation.ValidationResult;
@@ -40,27 +41,28 @@ import org.mcbain.validation.ValidationResult;
 
 public class BlogApplication {
 
-	public Router buildRouter() {
+	public Router buildRouter(final TemplateFactory templateFactory) {
 		final BlogService blogService = new BlogService();
+        final Router router = new WildcardPathRouter();
 
-        final Router mainRouter = new WildcardPathRouter()
+        router
             .add("/", new MethodRouteHandler() {
                 public Response get(Request request) {
                     return new RenderedResponse(new Renderer() {
                         public void render(RenderContext context, Writer writer) {
-                            context.template("index").render(context, writer);
+                            templateFactory.instance("index").render(context, writer);
                         }
                     });
                 }
             })
             .add("/blog/(*:blog)", new MethodRouteHandler() {
                 public Response get(Request request) {
-    				return new RenderedResponse(new BlogHome(request.resource("blog", Blog.class), null));
+    				return new RenderedResponse(new BlogHome(request.resource("blog", Blog.class), null, router, templateFactory));
                 }
             })
             .add("/blog/(*:blog)/newpost", new MethodRouteHandler() {
                 public Response get(Request request) {
-                    return new RenderedResponse(new NewPost(request.resource("blog", Blog.class)));
+                    return new RenderedResponse(new NewPost(request.resource("blog", Blog.class), router, templateFactory));
                 }
 
                 public Response post(Request request) {
@@ -73,10 +75,10 @@ public class BlogApplication {
                     ValidationResult result = validator.validate("post", request);
                     if (result.passed()) {
                         blog.addPost(request.param("title"), request.param("content"));
-                        return new RenderedResponse(new BlogHome(blog, null));
+                        return new RenderedResponse(new BlogHome(blog, null, router, templateFactory));
 
                     } else {
-                        return new RenderedResponse(new NewPost(blog));
+                        return new RenderedResponse(new NewPost(blog, router, templateFactory));
                     }
                 }
             })
@@ -85,19 +87,19 @@ public class BlogApplication {
                     Blog blog = request.resource("blog", Blog.class);
 
                     Post post = blog.getPost(request.param("post"));
-                    return (post == null ? null : new RenderedResponse(new FullPost(blog, post)));
+                    return (post == null ? null : new RenderedResponse(new FullPost(blog, post, router, templateFactory)));
                 }
             })
             .add("/blog/(*:blog)/(*:archive)", new MethodRouteHandler() {
                 public Response get(Request request) {
                     String archive = request.param("archive").replace('-', '/');
-                    return new RenderedResponse(new BlogHome(request.resource("blog", Blog.class), archive));
+                    return new RenderedResponse(new BlogHome(request.resource("blog", Blog.class), archive, router, templateFactory));
                 }
             });
 
         RouteHandler blogLocator = new RouteHandler() {
             public Response handle(Request request) {
-                RouteHandler handler = mainRouter.route(request);
+                RouteHandler handler = router.route(request);
                 if (handler == RouteHandler.NONE) return null;
 
                 Blog blog = blogService.getBlog(request.param("blog"));
@@ -113,7 +115,7 @@ public class BlogApplication {
             .add("/blog/(*:blog)/**", blogLocator)
             .defaultHandler(new RouteHandler() {
                 public Response handle(Request request) {
-                    return mainRouter.route(request).handle(request);
+                    return router.route(request).handle(request);
                 }
             });
 	}

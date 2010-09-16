@@ -16,6 +16,7 @@
 
 package org.mcbain.examples.blog;
 
+import org.mcbain.UrlBuilder;
 import org.mcbain.components.If;
 import org.mcbain.components.Link;
 import org.mcbain.components.Loop;
@@ -25,6 +26,7 @@ import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
 import org.mcbain.template.Template;
+import org.mcbain.template.TemplateFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -39,14 +41,18 @@ public class Posts implements Renderer {
 
 	private Blog blog;
 	private List<Post> posts;
+    private TemplateFactory templateFactory;
+    private UrlBuilder urlBuilder;
 
-	public Posts(final Blog blog, final List<Post> posts) {
+    public Posts(final Blog blog, final List<Post> posts, UrlBuilder urlBuilder, TemplateFactory templateFactory) {
 		this.blog = blog;
 		this.posts = posts;
-	}
+        this.templateFactory = templateFactory;
+        this.urlBuilder = urlBuilder;
+    }
 
 	public void render(RenderContext context, Writer writer) {
-		final Template template = context.template("posts");
+		final Template template = templateFactory.instance("posts");
 
 		template.bind(
 			"empty", new If(posts.isEmpty()),
@@ -55,8 +61,8 @@ public class Posts implements Renderer {
 					template.bind(
 						"title", post.getTitle(),
 						"body", post.getContent(),
-						"titleLink", new Link(postLink(post)),
-						"moreLink", new Link(postLink(post))
+						"titleLink", new Link(urlBuilder, postLink(post)),
+						"moreLink", new Link(urlBuilder, postLink(post))
 					);
 				}
 			}

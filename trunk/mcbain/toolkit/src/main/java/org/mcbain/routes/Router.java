@@ -17,13 +17,14 @@
 package org.mcbain.routes;
 
 import org.mcbain.Request;
+import org.mcbain.UrlBuilder;
 
 /**
  * A router takes an incoming request and locates a corresponding
  * route handler.
  */
 
-public interface Router {
+public interface Router extends UrlBuilder {
 
     /**
      * Adds a route handler for a path. The interpretation of the path
@@ -64,17 +65,4 @@ public interface Router {
      */
 
     public RouteHandler route(Request request);
-
-    /**
-     * Builds a path using the supplied path as a template and inserting
-     * any supplied parameters. This is typically used to build a url to
-     * a route that uses wildcards or pattern matching to identify portions
-     * of the url.
-     *
-     * @param   path        Path to merge parameters with
-     * @param   params      Array of zero or more parameters
-     * @return  Compiled path
-     */
-
-    public String buildPath(String path, Object... params);
 }

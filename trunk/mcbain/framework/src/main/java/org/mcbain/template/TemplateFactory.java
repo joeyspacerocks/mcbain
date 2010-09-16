@@ -32,9 +32,6 @@ import java.util.Map;
 
 /**
  * Responsible for loading and parsing XML templates into a Template.
- *
- * @author Joe Trewin
- * @version $Revision$
  */
 
 public class TemplateFactory {

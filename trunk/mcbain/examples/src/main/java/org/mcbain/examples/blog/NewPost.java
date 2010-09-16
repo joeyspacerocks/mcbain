@@ -16,6 +16,7 @@
 
 package org.mcbain.examples.blog;
 
+import org.mcbain.UrlBuilder;
 import org.mcbain.components.Form;
 import org.mcbain.components.Input;
 import org.mcbain.examples.blog.model.Blog;
@@ -23,6 +24,7 @@ import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
 import org.mcbain.template.Template;
+import org.mcbain.template.TemplateFactory;
 
 
 /**
@@ -32,17 +34,21 @@ import org.mcbain.template.Template;
 public class NewPost implements Renderer {
 
 	private Blog blog;
+    private UrlBuilder urlBuilder;
+    private TemplateFactory templateFactory;
 
-	public NewPost(final Blog blog) {
+    public NewPost(final Blog blog, UrlBuilder urlBuilder, TemplateFactory templateFactory) {
 		this.blog = blog;
-	}
+        this.urlBuilder = urlBuilder;
+        this.templateFactory = templateFactory;
+    }
 
 	public void render(final RenderContext context, Writer writer) {
-		final Template template = context.template("newpost");
+        Template template = templateFactory.instance("newpost");
 
 		template.bind(
-			"border", new Border(blog),
-			"form", new Form("/blog/" + blog.getName() + "/newpost"),
+			"border", new Border(blog, urlBuilder, templateFactory),
+			"form", new Form("/blog/" + blog.getName() + "/newpost", urlBuilder),
 			"title", new Input(),
 			"content", new Input()
 //			"errors", new Loop<InputError>(in.errors().errors()) {

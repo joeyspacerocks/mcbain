@@ -16,6 +16,7 @@
 
 package org.mcbain.examples.blog;
 
+import org.mcbain.UrlBuilder;
 import org.mcbain.components.Link;
 import org.mcbain.components.Loop;
 import org.mcbain.examples.blog.model.Blog;
@@ -23,6 +24,7 @@ import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
 import org.mcbain.template.Template;
+import org.mcbain.template.TemplateFactory;
 
 import static java.lang.System.currentTimeMillis;
 
@@ -35,25 +37,28 @@ import static java.lang.System.currentTimeMillis;
 public class Border implements Renderer {
 
 	private Blog blog;
+    private UrlBuilder urlBuilder;
+    private TemplateFactory templateFactory;
 
-	public Border(final Blog blog) {
+    public Border(final Blog blog, UrlBuilder urlBuilder, TemplateFactory templateFactory) {
 		this.blog = blog;
-	}
+        this.urlBuilder = urlBuilder;
+        this.templateFactory = templateFactory;
+    }
 
 	public void render(RenderContext context, Writer writer) {
 		long timestamp = currentTimeMillis();
 
-		final Template template = context.template("border");
+		final Template template = templateFactory.instance("border");
 
         final String name = blog.getName();
-        Link title = new Link("/blog/" + name);
-        title.displayAs(name);
+        Link title = new Link(urlBuilder, "/blog/" + name);
+        title.text(name);
 
 		Loop<String> archiveLoop = new Loop<String>(blog.getArchives()) {
 			public void currentValue(String value) {
-				Link archive = new Link();
-				archive.displayAs(value);
-				archive.uri("/blog/" + name + "/" + value.replace('/', '-'));
+				Link archive = new Link(urlBuilder, "/blog/" + name + "/" + value.replace('/', '-'));
+                archive.text(value);
 				template.bind("archive", archive);
 			}
 		};
@@ -61,7 +66,7 @@ public class Border implements Renderer {
 		template.bind(
 			"archives", archiveLoop,
 			"title", title,
-			"newpost", new Link("/blog/" + blog.getName() + "/newpost"),
+			"newpost", new Link(urlBuilder, "/blog/" + blog.getName() + "/newpost"),
 			"time", currentTimeMillis() - timestamp,
 			"content", context.contents()
 		);

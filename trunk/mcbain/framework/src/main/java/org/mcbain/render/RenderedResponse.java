@@ -24,14 +24,11 @@ import java.io.IOException;
 /**
  * Response handler that writes the output of a renderer to the response
  * output stream.
- *
- * FIXME: sort out interface to this response - specifically how/where the render context comes from
  */
 
 public class RenderedResponse implements Response {
 
     private Renderer renderer;
-    private RenderContext renderContext;
 
     public RenderedResponse(Renderer renderer) {
         this.renderer = renderer;
@@ -40,18 +37,12 @@ public class RenderedResponse implements Response {
     @Override
     public void commit(HttpServletResponse servletResponse) {
         Writer writer = new Writer();
-        renderer.render(renderContext, writer);
+        renderer.render(new RenderContext(), writer);
 
         try {
             servletResponse.getWriter().write(writer.toString());
         } catch (IOException e) {
             throw new RuntimeException("Error rendering response to output stream", e);
         }
-    }
-
-    public boolean commit(HttpServletResponse servletResponse, RenderContext rc) {
-        renderContext = rc;
-        commit(servletResponse);
-        return true;
     }
 }
