@@ -16,28 +16,32 @@
 
 package org.mcbain.validation;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Holds the result of applying a Validator to a value.
  */
 
 public class ValidationResult {
+    public static final ValidationResult NONE = new ValidationResult("_NONE_", null);
+    
     private String id;
+    private Object value;
     private boolean pass;
     private String failReason;
-    private List<ValidationResult> nestedResults;
+    private Map<String, ValidationResult> nestedResults;
 
     /**
      * Creates a validation result representing a successful validation check.
      *
      * @param   id      Identifier for value source (e.g. field name)
+     * @param   value   Value that has been validated
      * @return  Validation result
      */
 
-    public static ValidationResult pass(String id) {
-        return new ValidationResult(id);
+    public static ValidationResult pass(String id, Object value) {
+        return new ValidationResult(id, value);
     }
 
     /**
@@ -46,24 +50,35 @@ public class ValidationResult {
      * String.format.
      *
      * @param   id                  Identifier for value source (e.g. field name)
+     * @param   value               Value that has failed validation
      * @param   message             Failure message
      * @param   messageParameters   Additional parameters used to build the message
      * @return  Validation result
      */
 
-    public static ValidationResult fail(String id, String message, Object... messageParameters) {
-        return new ValidationResult(id, String.format(message, messageParameters));
+    public static ValidationResult fail(String id, Object value, String message, Object... messageParameters) {
+        return new ValidationResult(id, value, String.format(message, messageParameters));
     }
 
-    public ValidationResult(String id) {
+    public ValidationResult(String id, Object value) {
         this.id = id;
+        this.value = value;
         pass = true;
     }
 
-    public ValidationResult(String id, String failReason) {
+    public ValidationResult(String id, Object value, String failReason) {
         this.id = id;
+        this.value = value;
         this.failReason = failReason;
         pass = false;
+    }
+
+    public String id() {
+        return id;
+    }
+
+    public Object value() {
+        return value;
     }
 
     public boolean failed() {
@@ -75,8 +90,25 @@ public class ValidationResult {
     }
 
     public void addResult(ValidationResult result) {
-        nestedResults().add(result);
+        nestedResults().put(result.id(), result);
         pass = !result.failed() && pass;
+    }
+
+    /**
+     * Gets a nested result by id. If none exists for that id,
+     * ValidationResult.NONE is returned.
+     *
+     * @param   id      Id of nested result
+     * @return  Nested result, or ValidationResult.NONE
+     */
+    
+    public ValidationResult nestedResult(String id) {
+        ValidationResult result = (nestedResults == null ? null : nestedResults().get(id));
+        return result == null ? NONE : result;
+    }
+
+    public String failReason() {
+        return failReason;
     }
 
     @Override
@@ -84,9 +116,9 @@ public class ValidationResult {
         return pass ? "PASS" : "FAIL: " + failReason;
     }
     
-    private List<ValidationResult> nestedResults() {
+    private Map<String,ValidationResult> nestedResults() {
         if (nestedResults == null) {
-            nestedResults = new ArrayList<ValidationResult>();
+            nestedResults = new LinkedHashMap<String, ValidationResult>();
         }
         return nestedResults;
     }

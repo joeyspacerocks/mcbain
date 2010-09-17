@@ -28,7 +28,7 @@ public class PropertyValidator implements Validator<PropertyAccessor> {
 
     @Override
     public ValidationResult validate(String id, PropertyAccessor value) {
-        ValidationResult result = new ValidationResult(id);
+        ValidationResult result = new ValidationResult(id, value);
 
         for (Rule rule : rules) {
             result.addResult(rule.validate(value));

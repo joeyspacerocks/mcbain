@@ -31,10 +31,12 @@ public class Form implements Renderer {
 
 	private String path;
     private UrlBuilder urlBuilder;
+    private Object[] parameters;
 
-    public Form(String path, UrlBuilder urlBuilder) {
+    public Form(UrlBuilder urlBuilder, String path, Object... parameters) {
 		this.path = path;
         this.urlBuilder = urlBuilder;
+        this.parameters = parameters;
     }
 
 	public void render(RenderContext context, Writer writer) {
@@ -42,7 +44,7 @@ public class Form implements Renderer {
 
 		writer.tag(element.tag());
 
-		element.attribute("action", urlBuilder.buildPath(path));
+		element.attribute("action", urlBuilder.buildPath(path, parameters));
 		element.attribute("method", "POST");
 
 		writer.attributes(element);

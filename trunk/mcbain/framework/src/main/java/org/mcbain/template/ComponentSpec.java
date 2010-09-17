@@ -136,7 +136,7 @@ class ComponentSpec implements TemplatePart {
 			renderInternal(context, writer, template);
 		} catch (RuntimeException e) {
 			if (line > 0 && !(e instanceof TemplateContextException)) {
-				throw new TemplateContextException(e, line);
+				throw new TemplateContextException(e, context, template, line);
 			} else {
 				throw e;
 			}

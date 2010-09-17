@@ -73,6 +73,19 @@ public class Element {
 		return attributes().get(key);
 	}
 
+    /**
+     * Convenience method for adding a CSS class to an element's class attribute.
+     * If a non-empty value already exists, the new class is appended, otherwise
+     * a new attribute is added.
+     *
+     * @param   styleClass      CSS class name
+     */
+
+    public void styleClass(String styleClass) {
+        String existing = attribute("class");
+        attribute("class", existing != null && !existing.equals("") ? existing + " " + styleClass:  styleClass);
+    }
+
 	Map<String, String> attributes() {
 		if (attributes == null) {
 			if (proxy) {

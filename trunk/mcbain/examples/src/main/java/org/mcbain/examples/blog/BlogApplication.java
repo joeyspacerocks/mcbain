@@ -25,10 +25,7 @@ import org.mcbain.render.RenderedResponse;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
 import org.mcbain.response.Response;
-import org.mcbain.routes.MethodRouteHandler;
-import org.mcbain.routes.RouteHandler;
-import org.mcbain.routes.Router;
-import org.mcbain.routes.WildcardPathRouter;
+import org.mcbain.routes.*;
 import org.mcbain.template.TemplateFactory;
 import org.mcbain.validation.PropertyValidator;
 import org.mcbain.validation.RequiredStringValidator;
@@ -43,10 +40,10 @@ public class BlogApplication {
 
 	public Router buildRouter(final TemplateFactory templateFactory) {
 		final BlogService blogService = new BlogService();
-        final Router router = new WildcardPathRouter();
+        final NamedRouter router = new NamedRouter(new WildcardPathRouter());
 
         router
-            .add("/", new MethodRouteHandler() {
+            .add("home", "/", new MethodRouteHandler() {
                 public Response get(Request request) {
                     return new RenderedResponse(new Renderer() {
                         public void render(RenderContext context, Writer writer) {
@@ -55,14 +52,14 @@ public class BlogApplication {
                     });
                 }
             })
-            .add("/blog/(*:blog)", new MethodRouteHandler() {
+            .add("blog", "/blog/(*:blog)", new MethodRouteHandler() {
                 public Response get(Request request) {
     				return new RenderedResponse(new BlogHome(request.resource("blog", Blog.class), null, router, templateFactory));
                 }
             })
-            .add("/blog/(*:blog)/newpost", new MethodRouteHandler() {
+            .add("newpost", "/blog/(*:blog)/newpost", new MethodRouteHandler() {
                 public Response get(Request request) {
-                    return new RenderedResponse(new NewPost(request.resource("blog", Blog.class), router, templateFactory));
+                    return new RenderedResponse(new NewPost(request.resource("blog", Blog.class), router, templateFactory, ValidationResult.NONE));
                 }
 
                 public Response post(Request request) {
@@ -78,11 +75,11 @@ public class BlogApplication {
                         return new RenderedResponse(new BlogHome(blog, null, router, templateFactory));
 
                     } else {
-                        return new RenderedResponse(new NewPost(blog, router, templateFactory));
+                        return new RenderedResponse(new NewPost(blog, router, templateFactory, result));
                     }
                 }
             })
-            .add("/blog/(*:blog)/(*:archive)/(*:post)", new MethodRouteHandler() {
+            .add("post", "/blog/(*:blog)/(*:archive)/(*:post)", new MethodRouteHandler() {
                 public Response get(Request request) {
                     Blog blog = request.resource("blog", Blog.class);
 
@@ -90,10 +87,9 @@ public class BlogApplication {
                     return (post == null ? null : new RenderedResponse(new FullPost(blog, post, router, templateFactory)));
                 }
             })
-            .add("/blog/(*:blog)/(*:archive)", new MethodRouteHandler() {
+            .add("archive", "/blog/(*:blog)/(*:archive)", new MethodRouteHandler() {
                 public Response get(Request request) {
-                    String archive = request.param("archive").replace('-', '/');
-                    return new RenderedResponse(new BlogHome(request.resource("blog", Blog.class), archive, router, templateFactory));
+                    return new RenderedResponse(new BlogHome(request.resource("blog", Blog.class), request.param("archive"), router, templateFactory));
                 }
             });
 

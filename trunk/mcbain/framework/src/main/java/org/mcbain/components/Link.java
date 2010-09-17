@@ -31,7 +31,6 @@ public class Link implements Renderer {
 	private String path;
 	private String value;
 
-    private String route;
     private Object[] parameters;
     private UrlBuilder urlBuilder;
 
@@ -39,13 +38,21 @@ public class Link implements Renderer {
         this.urlBuilder = urlBuilder;
     }
 
-	public Link(UrlBuilder urlBuilder, String path) {
+	public Link(UrlBuilder urlBuilder, String path, Object... parameters) {
         this.urlBuilder = urlBuilder;
-		uri(path);
+        this.path = path;
+        this.parameters = parameters;
 	}
 
-	public void uri(String path) {
+	public Link path(String path, Object... parameters) {
 		this.path = path;
+        this.parameters = parameters;
+        return this;
+    }
+
+    public Link parameters(Object... parameters) {
+        this.parameters = parameters;
+        return this;
     }
 
 	public Link text(String value) {
@@ -54,7 +61,7 @@ public class Link implements Renderer {
 	}
 
 	public void render(RenderContext context, Writer writer) {
-        String url = urlBuilder.buildPath(path);
+        String url = urlBuilder.buildPath(path, parameters);
 
         Element element = context.element();
 		element.attribute("href", url);

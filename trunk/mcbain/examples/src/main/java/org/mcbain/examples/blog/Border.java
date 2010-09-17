@@ -52,21 +52,21 @@ public class Border implements Renderer {
 		final Template template = templateFactory.instance("border");
 
         final String name = blog.getName();
-        Link title = new Link(urlBuilder, "/blog/" + name);
-        title.text(name);
+        Link title = new Link(urlBuilder, "blog", name).text(name);
+
+        final Link archiveLink = new Link(urlBuilder, "archive");
 
 		Loop<String> archiveLoop = new Loop<String>(blog.getArchives()) {
 			public void currentValue(String value) {
-				Link archive = new Link(urlBuilder, "/blog/" + name + "/" + value.replace('/', '-'));
-                archive.text(value);
-				template.bind("archive", archive);
+                archiveLink.parameters(name, value).text(value);
+				template.bind("archive", archiveLink);
 			}
 		};
 
 		template.bind(
 			"archives", archiveLoop,
 			"title", title,
-			"newpost", new Link(urlBuilder, "/blog/" + blog.getName() + "/newpost"),
+			"newpost", new Link(urlBuilder, "newpost", blog.getName()),
 			"time", currentTimeMillis() - timestamp,
 			"content", context.contents()
 		);

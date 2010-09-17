@@ -28,8 +28,6 @@ import org.mcbain.render.Writer;
 import org.mcbain.template.Template;
 import org.mcbain.template.TemplateFactory;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 
 
@@ -54,30 +52,23 @@ public class Posts implements Renderer {
 	public void render(RenderContext context, Writer writer) {
 		final Template template = templateFactory.instance("posts");
 
+        final Link postLink = new Link(urlBuilder, "post");
+
 		template.bind(
 			"empty", new If(posts.isEmpty()),
 			"posts", new Loop<Post>(posts) {
 				public void currentValue(Post post) {
+                    postLink.parameters(blog.getName(), post.getArchiveDate(), post.getTitle());
 					template.bind(
 						"title", post.getTitle(),
 						"body", post.getContent(),
-						"titleLink", new Link(urlBuilder, postLink(post)),
-						"moreLink", new Link(urlBuilder, postLink(post))
+						"titleLink", postLink,
+						"moreLink", postLink
 					);
 				}
 			}
 		);
 
 		template.render(context, writer);
-	}
-
-	private String postLink(Post post) {
-		try {
-			String archive = post.getArchiveDate().replace('/', '-');
-			return "/blog/" + blog.getName() + "/" + archive + "/" + URLEncoder.encode(post.getTitle(), "UTF-8");
-
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
 	}
 }

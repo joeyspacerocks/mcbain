@@ -12,6 +12,9 @@ public interface UrlBuilder {
      * a route that uses wildcards or pattern matching to identify portions
      * of the url.
      *
+     * Note that implementations of this method should ensure that parameters
+     * are URL encoded before they are added to the path.
+     * 
      * @param   path        Path to merge parameters with
      * @param   params      Array of zero or more parameters
      * @return  Compiled path

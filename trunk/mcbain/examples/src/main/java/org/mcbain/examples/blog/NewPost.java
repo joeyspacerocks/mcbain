@@ -25,6 +25,7 @@ import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
 import org.mcbain.template.Template;
 import org.mcbain.template.TemplateFactory;
+import org.mcbain.validation.ValidationResult;
 
 
 /**
@@ -36,11 +37,13 @@ public class NewPost implements Renderer {
 	private Blog blog;
     private UrlBuilder urlBuilder;
     private TemplateFactory templateFactory;
+    private ValidationResult validationResult;
 
-    public NewPost(final Blog blog, UrlBuilder urlBuilder, TemplateFactory templateFactory) {
+    public NewPost(final Blog blog, UrlBuilder urlBuilder, TemplateFactory templateFactory, ValidationResult validationResult) {
 		this.blog = blog;
         this.urlBuilder = urlBuilder;
         this.templateFactory = templateFactory;
+        this.validationResult = validationResult;
     }
 
 	public void render(final RenderContext context, Writer writer) {
@@ -48,9 +51,9 @@ public class NewPost implements Renderer {
 
 		template.bind(
 			"border", new Border(blog, urlBuilder, templateFactory),
-			"form", new Form("/blog/" + blog.getName() + "/newpost", urlBuilder),
-			"title", new Input(),
-			"content", new Input()
+			"form", new Form(urlBuilder, "newpost", blog.getName()),
+			"title", new Input().value(validationResult.nestedResult("title")),
+			"content", new Input().value(validationResult.nestedResult("content"))
 //			"errors", new Loop<InputError>(in.errors().errors()) {
 //				public void currentValue(InputError value) {
 //					template.bind("error", value.message());

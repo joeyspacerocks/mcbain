@@ -32,9 +32,9 @@ public class IntegerRangeValidator implements Validator<Integer> {
 
     public ValidationResult validate(String id, Integer value) {
         if (value < min || value >= max) {
-            return ValidationResult.fail(id, "The value does not lie inside the range %d-%d", min, max);
+            return ValidationResult.fail(id, value, "The value does not lie inside the range %d-%d", min, max);
         }
 
-        return ValidationResult.pass(id);
+        return ValidationResult.pass(id, value);
     }
 }

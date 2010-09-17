@@ -159,8 +159,12 @@ public class WildcardPathRouterTest {
         assertEquals(router.buildPath("/path"), "/path");
     }
 
-    public void shouldReplaceWildcardWithParameterWhenBuildinPath() {
+    public void shouldReplaceWildcardWithParameterWhenBuildingPath() {
         assertEquals(router.buildPath("/*", "path"), "/path");
+    }
+
+    public void shouldReplaceNamedWildcardWithParameterWhenBuildingPath() {
+        assertEquals(router.buildPath("/(*:value)", "path"), "/path");
     }
 
     public void shouldReturnNoneWhenPartialMatchMade() {

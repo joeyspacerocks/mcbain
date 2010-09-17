@@ -20,6 +20,7 @@ import org.mcbain.render.RenderContext;
 import org.mcbain.render.Renderer;
 import org.mcbain.render.Writer;
 import org.mcbain.template.Element;
+import org.mcbain.validation.ValidationResult;
 
 
 /**
@@ -28,29 +29,22 @@ import org.mcbain.template.Element;
 
 public class Input implements Renderer {
 
-	private Object value;
-	private boolean valueSet;
+	private ValidationResult result = ValidationResult.NONE;
 
-    public Input() {
+    public Input value(ValidationResult result) {
+        this.result = result;
+        return this;
     }
-    
-	public Input(Object value) {
-		value(value);
-	}
-
-	public Input value(Object value) {
-		this.value = value;
-		valueSet = true;
-		return this;
-	}
-
 
 	// FIXME: unique id/name when in loop ...
 
 	public void render(RenderContext context, Writer writer) {
 		Element element = context.element();
 
-		Object renderValue = valueSet ? value : null; //in.value(element.id());
+        Object value = result.value();
+        if (result.failed()) {
+            element.styleClass("error");
+        }
 
 		if (element.tag().equals("textarea")) {
 			writer
@@ -58,11 +52,11 @@ public class Input implements Renderer {
 				.attribute("name", element.id())
 				.attribute("id", element.id())
 				.attributes(element)
-				.print(renderValue == null ? "" : renderValue.toString(), false)
+				.print(value == null ? "" : value.toString(), false)
 				.close();
 
 		} else {
-			element.attribute("value", renderValue);
+			element.attribute("value", value);
 
 			writer
 				.emptyTag("input")
@@ -70,5 +64,9 @@ public class Input implements Renderer {
 				.attribute("id", element.id())
 				.attributes(element);
 		}
+
+        if (result.failed()) {
+            writer.tag("span").attribute("class", "error-message").print(result.failReason(), false).close();
+        }
 	}
 }

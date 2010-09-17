@@ -33,23 +33,27 @@ public class NamedRouter extends DelegatingRouter {
         routes = new HashMap<String, Route>();
     }
 
-    public Router add(String name, String uri, RouteHandler handler) {
+    public NamedRouter add(String name, String uri, RouteHandler handler) {
         routes.put(name, new Route(uri, handler));
-        return add(uri, handler);
+        add(uri, handler);
+        return this;
     }
 
-    public String buildNamedPath(String name, Object... params) {
-        if (routes.containsKey(name)) {
-            return routes.get(name).buildLink(params);
-        } else {
-            return null;
+    @Override
+    public String buildPath(String path, Object... params) {
+        Route route = routes.get(path);
+
+        if (route == null) {
+            throw new IllegalArgumentException("Cannot build path for unknown route: " + path);
+        }
+
+        try {
+            return super.buildPath(route.path, params);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Error building path for route: " + path, e);
         }
     }
-
-    public RouteHandler routeByName(String name) {
-        return routes.get(name).handler;
-    }
-
+    
     private class Route {
         public String path;
         public RouteHandler handler;
