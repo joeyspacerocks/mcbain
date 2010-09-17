@@ -56,6 +56,7 @@ class ComponentSpec implements TemplatePart {
 	 * @param id	  Component specification id
 	 * @param parent  Parent fragment
 	 * @param element Markup element
+     * @param line    Line number in template declaring component spec 
 	 */
 
 	private ComponentSpec(String id, ComponentSpec parent, Element element, int line) {
@@ -72,6 +73,7 @@ class ComponentSpec implements TemplatePart {
 	 *
 	 * @param id	  Component specification id
 	 * @param element Markup element
+     * @param line    Line number in template declaring component spec
 	 * @return New child specification
 	 */
 

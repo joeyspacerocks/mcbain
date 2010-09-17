@@ -26,8 +26,8 @@ public interface Renderer {
 	/**
 	 * Renders using the supplied writer.
 	 *
-	 * @param context
-	 * @param writer  Writer to render to
+	 * @param context   Current render context
+	 * @param writer    Writer to render to
 	 */
 
 	public void render(RenderContext context, Writer writer);
