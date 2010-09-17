@@ -53,7 +53,8 @@ public class Template implements Renderer {
 	 * **
 	 * Binds a component collection from the supplied key/value pairs.
 	 *
-	 * @param content Array of objects, in String/Object pairs
+	 * @param   content Array of objects, in String/Object pairs
+     * @return  Template instance to allow method chaining
 	 */
 
 	public Template bind(Object... content) {

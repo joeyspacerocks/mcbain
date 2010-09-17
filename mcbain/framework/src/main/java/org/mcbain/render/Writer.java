@@ -52,7 +52,8 @@ public class Writer {
 	/**
 	 * Opens an empty tag - i.e. an element that doesn't contain a body.
 	 *
-	 * @return Writer
+	 * @param tag   Tag name
+     * @return Writer
 	 */
 
 	public Writer emptyTag(String tag) {
@@ -65,6 +66,7 @@ public class Writer {
 	/**
 	 * Opens a tag - i.e. an element that could contain a body.
 	 *
+     * @param tag   Tag name
 	 * @return Writer
 	 */
 

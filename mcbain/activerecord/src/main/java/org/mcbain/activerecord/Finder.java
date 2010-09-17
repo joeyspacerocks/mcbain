@@ -30,7 +30,7 @@ public class Finder<T> {
     }
 
     public T byId(long id) {
-        return (T) engine().fetchById(type, id);
+        return engine().fetchById(type, id);
     }
 
     public List<T> all() {
