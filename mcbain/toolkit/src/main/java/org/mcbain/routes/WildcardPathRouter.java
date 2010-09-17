@@ -18,13 +18,14 @@ package org.mcbain.routes;
 
 import org.mcbain.Request;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import static org.mcbain.URLEncoder.decode;
+import static org.mcbain.URLEncoder.encode;
 
 /**
  * Router that matches request URIs to paths containing wildcards.
@@ -84,12 +85,8 @@ public class WildcardPathRouter implements Router {
         PathNode node = pathsRoot.traverse(path.split("/"), 0, params);
 
         if (node != null && node.handler != null) {
-            try {
-                for (String key : params.keySet()) {
-                    request.param(key, URLDecoder.decode(params.get(key), "UTF-8"));
-                }
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException("Encoding 'UTF-8' not available", e);
+            for (String key : params.keySet()) {
+                request.param(key, decode(params.get(key)));
             }
 
             return node.handler;
@@ -98,6 +95,8 @@ public class WildcardPathRouter implements Router {
         return defaultHandler;
     }
 
+    // TODO: path building should cache for fast building
+    
     @Override
     public String buildPath(String path, Object... params) {
         if (!path.contains("*") && !path.contains("#")) {
@@ -109,8 +108,13 @@ public class WildcardPathRouter implements Router {
         
         for (String section : path.substring(1).split("/")) {
             result.append("/");
-            if (section.equals("*") || section.equals("**")) {
-                result.append(params[parami++]);
+            if (section.equals("*") || section.equals("**") || section.startsWith("(*:") || section.startsWith("(**:")) {
+                if (parami >= params.length) {
+                    throw new RuntimeException("Error building path '" + path + " - expected at least " + parami + ", got " + params.length);
+                }
+
+                String value = encode(params[parami++].toString());
+                result.append(value);
             } else {
                 result.append(section);
             }

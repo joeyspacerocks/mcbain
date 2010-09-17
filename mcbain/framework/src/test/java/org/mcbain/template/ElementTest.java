@@ -119,6 +119,19 @@ public class ElementTest {
 		assertNames(proxy, "name1", "name2");
 	}
 
+    public void shouldSetStyleClassAttributeWhenAttributeHasNoValue() {
+        Element element = new Element("tag", "id");
+        element.styleClass("value");
+        assertEquals(element.attribute("class"), "value");
+    }
+
+    public void shouldAddStyleClassToExistingAttributeValue() {
+        Element element = new Element("tag", "id");
+        element.attribute("class", "existing");
+        element.styleClass("value");
+        assertEquals(element.attribute("class"), "existing value");
+    }
+
 	private void assertNames(Element element, String... expected) {
 		Set<String> names = element.attributeNames();
 		assertEquals(names.size(), expected.length);

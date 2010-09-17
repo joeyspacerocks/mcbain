@@ -16,6 +16,10 @@
 
 package org.mcbain.template;
 
+import org.mcbain.render.RenderContext;
+
+import static java.lang.String.format;
+
 /**
  * Exception wrapper providing additional context to exceptions thrown during
  * the rendering of a template.
@@ -24,16 +28,20 @@ package org.mcbain.template;
 public class TemplateContextException extends RuntimeException {
 
 	private Throwable cause;
-	private int line;
+    private RenderContext context;
+    private Template template;
+    private int line;
 
-	public TemplateContextException(Throwable cause, int line) {
-		this.cause = cause;
-		this.line = line;
-	}
+    public TemplateContextException(Throwable cause, RenderContext context, Template template, int line) {
+        this.cause = cause;
+        this.context = context;
+        this.template = template;
+        this.line = line;
+    }
 
-	@Override
+    @Override
 	public String getMessage() {
-		return "Exception occurred on template line " + line;
+		return format("Error rendering template on line %d (bound element '%s')", line, context.element().id());
 	}
 
 	@Override

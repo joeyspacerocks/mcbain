@@ -34,7 +34,7 @@ public class Post {
 		this.title = title;
 		this.content = content;
 		this.creation = postDate;
-		this.archiveDate = new SimpleDateFormat("yyyy/MM").format(creation);
+		this.archiveDate = new SimpleDateFormat("yyyyMM").format(creation);
 	}
 
 	public String getTitle() {

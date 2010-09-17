@@ -26,9 +26,9 @@ public class RequiredStringValidator implements Validator<String> {
     @Override
     public ValidationResult validate(String id, String value) {
         if (value == null || value.equals("")) {
-            return fail(id, "Required value is missing");
+            return fail(id, value, "Required value is missing");
         } else {
-            return pass(id);
+            return pass(id, value);
         }
     }
 }
