@@ -52,8 +52,6 @@ public class Border implements Renderer {
 		final Template template = templateFactory.instance("border");
 
         final String name = blog.getName();
-        Link title = new Link(urlBuilder, "blog", name).text(name);
-
         final Link archiveLink = new Link(urlBuilder, "archive");
 
 		Loop<String> archiveLoop = new Loop<String>(blog.getArchives()) {
@@ -65,8 +63,8 @@ public class Border implements Renderer {
 
 		template.bind(
 			"archives", archiveLoop,
-			"title", title,
-			"newpost", new Link(urlBuilder, "newpost", blog.getName()),
+			"title", new Link(urlBuilder, "blog", name).text(name),
+			"newpost", new Link(urlBuilder, "newpost", name),
 			"time", currentTimeMillis() - timestamp,
 			"content", context.contents()
 		);
