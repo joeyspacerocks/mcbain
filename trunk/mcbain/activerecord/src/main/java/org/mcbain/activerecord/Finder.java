@@ -16,6 +16,8 @@
 
 package org.mcbain.activerecord;
 
+import org.mcbain.util.Reflection;
+
 import java.util.List;
 
 import static org.mcbain.activerecord.ActiveRecord.engine;
