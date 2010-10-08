@@ -19,8 +19,7 @@ package org.mcbain;
 import org.mcbain.binding.PropertyAccessor;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Encapsulates an incoming HTTP request.
@@ -81,13 +80,32 @@ public class Request implements PropertyAccessor {
     }
 
     @Override
-    public Object get(String property) {
+    public Object getProperty(String property) {
         return param(property);
     }
 
     @Override
-    public void set(String property, Object value) {
+    public void setProperty(String property, Object value) {
         param(property, value == null ? null : value.toString());
+    }
+
+    @Override
+    public boolean hasProperty(String property) {
+        return params.containsKey(property) || (request.getParameter(property) != null);
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public List<String> propertyNames() {
+        List<String> properties = new ArrayList<String>();
+        Enumeration parameters = request.getParameterNames();
+
+        if (parameters != null) {
+            properties.addAll(Collections.<String>list(parameters));
+        }
+
+        properties.addAll(params.keySet());
+
+        return properties;
     }
 
     public <T> T resource(String id, Class<T> type) {

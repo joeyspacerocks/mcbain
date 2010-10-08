@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package org.mcbain;
+package org.mcbain.util;
 
 import org.testng.annotations.Test;
 
 /**
- *
+ * Crude reflection performance tests.
  */
 
 @Test
-public class ReflectionTest {
+public class ReflectionPerformanceTest {
 
 	public void test() throws Exception {
 		Sample object = new Sample();
@@ -65,7 +65,6 @@ public class ReflectionTest {
 		}
 		System.out.println(loops + " reflective method calls with lookup:" + (System.currentTimeMillis() - start) + " milliseconds.");
 	}
-
 
 	public class Sample {
 		public String test(String value) {
