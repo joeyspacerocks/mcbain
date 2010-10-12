@@ -25,12 +25,12 @@ public class Post {
 	private Date creation;
 	private String archiveDate;
 
-	public Post(Blog blog, String title, String content) {
-		this(blog, title, content, new Date());
-	}
+    public Post() {
+        this.creation = new Date();
+        this.archiveDate = new SimpleDateFormat("yyyyMM").format(creation);
+    }
 
-	public Post(Blog blog, String title, String content, Date postDate) {
-		//this.blog = blog;
+    public Post(String title, String content, Date postDate) {
 		this.title = title;
 		this.content = content;
 		this.creation = postDate;
@@ -41,9 +41,17 @@ public class Post {
 		return title;
 	}
 
-	public String getContent() {
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
 		return content;
 	}
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
 	public Date getCreation() {
 		return creation;
