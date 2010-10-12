@@ -17,6 +17,8 @@
 package org.mcbain.examples.blog;
 
 import org.mcbain.Request;
+import org.mcbain.binding.BeanPropertyAccessor;
+import org.mcbain.binding.BeanRequestParser;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.BlogService;
 import org.mcbain.examples.blog.model.Post;
@@ -96,14 +98,16 @@ public class BlogApplication {
                 }
 
                 public Renderer post(Blog blog, Request request) {
+                    Post post = new BeanRequestParser<Post>(Post.class).parse(request);
+
                     PropertyValidator validator = new ValidatorBuilder()
                         .check("title").isNotEmpty()
                         .check("content").isNotEmpty()
                         .build();
 
-                    ValidationResult result = validator.validate("post", request);
+                    ValidationResult result = validator.validate("post", new BeanPropertyAccessor(post));
                     if (result.passed()) {
-                        blog.addPost(request.param("title"), request.param("content"));
+                        blog.addPost(post);
                         return new BlogHome(blog, null, router, templateFactory);
 
                     } else {

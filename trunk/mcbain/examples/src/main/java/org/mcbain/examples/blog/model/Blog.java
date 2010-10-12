@@ -67,13 +67,14 @@ public class Blog {
 		return result;
 	}
 
-	public void addPost(String title, String content) {
-		addPost(new Post(this, title, content));
-	}
+    public void addPost(Post post) {
+        posts.add(post);
 
-	public void addPost(String title, String content, Date postDate) {
-		addPost(new Post(this, title, content, postDate));
-	}
+        String archive = post.getArchiveDate();
+
+        if (!archiveDates.contains(archive))
+            archiveDates.add(0, archive);
+    }
 
 	public void modifyPost(String originalTitle, String title, String content) {
 		Post post = getPost(originalTitle);
@@ -92,14 +93,5 @@ public class Blog {
 		}
 
 		return null;
-	}
-
-	private void addPost(Post post) {
-		posts.add(post);
-
-		String archive = post.getArchiveDate();
-
-		if (!archiveDates.contains(archive))
-			archiveDates.add(0, archive);
 	}
 }
