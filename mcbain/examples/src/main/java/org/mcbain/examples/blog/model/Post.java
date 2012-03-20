@@ -16,6 +16,11 @@
 
 package org.mcbain.examples.blog.model;
 
+import org.mcbain.binding.BeanPropertyAccessor;
+import org.mcbain.validation.PropertyValidator;
+import org.mcbain.validation.ValidationResult;
+import org.mcbain.validation.ValidatorBuilder;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -69,4 +74,15 @@ public class Post {
 	public boolean inArchive(String date) {
 		return (archiveDate.equals(date));
 	}
+
+    // To be refactored into ActiveRecord base class
+
+    public ValidationResult validate() {
+        PropertyValidator validator = new ValidatorBuilder()
+            .check("title").isNotEmpty()
+            .check("content").isNotEmpty()
+            .build();
+
+        return validator.validate("post", new BeanPropertyAccessor(this));
+    }
 }

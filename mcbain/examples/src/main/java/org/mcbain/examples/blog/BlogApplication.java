@@ -17,7 +17,6 @@
 package org.mcbain.examples.blog;
 
 import org.mcbain.Request;
-import org.mcbain.binding.BeanPropertyAccessor;
 import org.mcbain.binding.BeanRequestParser;
 import org.mcbain.examples.blog.model.Blog;
 import org.mcbain.examples.blog.model.BlogService;
@@ -32,9 +31,7 @@ import org.mcbain.routes.NamedRouter;
 import org.mcbain.routes.Router;
 import org.mcbain.routes.WildcardPathRouter;
 import org.mcbain.template.TemplateFactory;
-import org.mcbain.validation.PropertyValidator;
 import org.mcbain.validation.ValidationResult;
-import org.mcbain.validation.ValidatorBuilder;
 
 
 /**
@@ -100,12 +97,7 @@ public class BlogApplication {
                 public Renderer post(Blog blog, Request request) {
                     Post post = new BeanRequestParser<Post>(Post.class).parse(request);
 
-                    PropertyValidator validator = new ValidatorBuilder()
-                        .check("title").isNotEmpty()
-                        .check("content").isNotEmpty()
-                        .build();
-
-                    ValidationResult result = validator.validate("post", new BeanPropertyAccessor(post));
+                    ValidationResult result = post.validate();
                     if (result.passed()) {
                         blog.addPost(post);
                         return new BlogHome(blog, null, router, templateFactory);
